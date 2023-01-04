@@ -1,0 +1,6 @@
+*para sincronizar
+>View>command palet>Git: Clone>> Agregamos la direccion del repositorio
+>git config --global user.name "nombre de usuario de github)
+>git config --global user.email "mail con el que se loguea a github)
+>realizar commit y ctrl+Enter
+>Pushear

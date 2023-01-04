@@ -46,7 +46,11 @@ router.get('/ordenMtto',(req,res)=>{
             for(let i=0;i<result.length;i++){
                 equipo.push(result[i])
             }
-            res.render('./users/mantenimiento/agregar',{equipo:equipo,idSector:idSector,sector:sector,nombre:`${req.session.apellido}, ${req.session.nombre}`});
+            res.render('./users/mantenimiento/agregar',{
+              equipo:equipo,
+              idSector:idSector,
+              sector:sector,
+              nombre:`${req.session.apellido}, ${req.session.nombre}`});
         }
   
     })
@@ -55,6 +59,71 @@ router.get('/ordenMtto',(req,res)=>{
     res.render('login');
   }
   
+})
+router.get('/listarOrden:?',(req,res)=>{
+  if (req.session.loggedin) {
+    let idSector = req.query.id;
+    let sector= req.query.nombre;
+    let sql1 = "SELECT * FROM ordentrabajo WHERE sector=?";
+    conexion.query(sql1,[sector],(error,result,files)=>{
+        if(!error){
+            let tiempoTotal=0
+            let resultados=[];
+            let abiertas=0
+            let cerradas=0
+            let enProceso=0
+            for(let i=0;i<result.length;i++){
+            let f = new Date(result[i].fecha);
+            let fecha = f.getDate()+"/"+f.getMonth()+1+"/"+f.getUTCFullYear();
+            let finicio  = new Date(result[i].horaInicio);
+            let ffin  = new Date(result[i].horaFin);
+            let inicio=finicio.getDate()+"/"+finicio.getMonth()+"/"+finicio.getUTCFullYear()+" - "+finicio.getHours()+":"+finicio.getMinutes();
+            let fin=ffin.getDate()+"/"+ffin.getMonth()+"/"+ffin.getUTCFullYear()+" - "+ffin.getHours()+":"+ffin.getMinutes();
+            let resultado={
+                idOrden: result[i].idOrden,
+                detecto: result[i].detecto,
+                equipo: result[i].equipo,
+                fecha: fecha,
+                turno: result[i].turno,
+                paradaProceso: result[i].paradaProceso,
+                prioridad: result[i].prioridad,
+                tipo: result[i].tipoParada,
+                horaInicio: inicio,
+                horaFin: fin,
+                descripcion:  result[i].descripcion,
+                tiempoTotal:(ffin-finicio)/1000/60,
+                estado:result[i].estado,
+                tel:result[i].tel,
+                avisar:result[i].avisar
+            }
+            if(result[i].estado=="Pendiente"){
+                abiertas++;
+            }if(result[i].estado=="Cerrado"){
+                cerradas++;
+            }if(result[i].estado=="En Proceso"){
+                enProceso++;
+            }
+            tiempoTotal+=(ffin-finicio)/1000/60;
+            resultados.push(resultado);
+        }
+            res.render('./users/mantenimiento/listar',{
+                orden:resultados,
+                idSector:parseInt(idSector),
+                tt:tiempoTotal,
+                abiertas:abiertas,
+                cerradas:cerradas,
+                enProceso:enProceso,   
+                sector:sector
+               
+            });
+         }
+        else{
+            console.log("Error de conexion");
+        }
+    })
+  } else {
+    res.render('login')
+  }
 })
 router.post('/ordenMtto',(req,res)=>{
   if (req.session.loggedin) {
@@ -80,6 +149,19 @@ router.post('/ordenMtto',(req,res)=>{
     }})
   } else {
     res.render('login');
+  }
+})
+router.delete('/ordenMtto:?',(req,res)=>{
+  if (req.session.loggedin) {
+    let id = req.body.id;
+    let idSector = req.body.idSector;
+
+    const sql = `DELETE FROM ordentrabajo WHERE idOrden = ${id}`
+    conexion.query(sql,(error,filas)=>{
+      res.redirect(`mtto?mensaje=Se elimino correctamente la OT Nro ${id}`)
+    })
+  } else {
+    res.render('login')
   }
 })
 

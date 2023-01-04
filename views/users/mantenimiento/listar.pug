@@ -1,0 +1,125 @@
+doctype html
+html(lang="es")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Polimetal S.A
+        link(rel="stylesheet" href="/stylesheets/styleIndex.css")
+
+        link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css")
+        link(rel="stylesheet", href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css")
+        link(rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/font-awesome-line-awesome/css/all.min.css")
+        link(rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css")
+        link(href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet')
+
+
+    body 
+        div(class="container")
+            a(href="/") 
+                div(style="text-align: center;")
+                    img(src="/images/logo.jpg" alt="logo" class="img-fluid")
+            a(href="mtto", style="display: inline")
+                   h1(style="text-align:center") 
+                    i(class='bx bx-arrow-back bx-tada bx-flip-vertical')
+            div(style="text-align: center;")
+                h2= "Listado de Ordenes - Sector "+sector
+            div(class="cards")
+                div(class="card-single")
+                    div
+                        h1= abiertas
+                        span Ordenes Abiertas
+                    div
+                        span(class="las la-file-alt")
+                
+                div(class="card-single")
+                    div
+                        h1= cerradas
+                        span Ordenes Cerradas
+                    div
+                        span(class="las la-check-circle")
+                
+                div(class="card-single")
+                    div
+                        h1= enProceso
+                        span Ordenes en Proceso
+                    div
+                        span(class="las la-check-circle")
+                
+                div(class="card-single")
+                    div
+                        h1= tt
+                            
+                        span Minutos acumulados
+                    div
+                        span(class="las la-clock")
+
+            
+            div()
+                table(id="t1" class="table table-striped" style="width:100%")
+                    thead(id="thmtto")
+                        th Id 
+                        th Detecto 
+                        th Avisar
+                        th Equipo
+                        th Fecha 
+                        th Turno 
+                        th Parada de Proc.
+                        th Prioridad 
+                        th Tipo 
+                        th Hs Inicio 
+                        th Hs Fin 
+                        th Descripcion
+                        th Total
+                        th Estado
+                        th Accion
+                        th Enviar
+                        
+                    tbody 
+                        each i in orden
+                            tr     
+                                td= i.idOrden
+                                td= i.detecto 
+                                td= i.avisar
+                                td= i.equipo 
+                                td= i.fecha 
+                                td= i.turno 
+                                td= i.paradaProceso 
+                                td= i.prioridad 
+                                td= i.tipo 
+                                td= i.horaInicio 
+                                td= i.horaFin 
+                                td= i.descripcion  
+                                td= i.tiempoTotal
+                                td(class=i.estado)= i.estado
+                                td
+                                   a(href="/editOrder?idOrden="+i.idOrden+"&idSector="+idSector+"&sector="+sector class="d-inline-block")
+                                        h2(class="editIcon")
+                                            i(class='bx bxs-edit')
+                                   
+                                   form(action="ordenMtto?_method=DELETE" method="POST" class="d-inline-block" id="formDelete")
+                                        input(type="hidden", name="id" value=i.idOrden)
+                                        input(type="hidden", name="idSector" value=i.idSector)
+                                        button(type="submit")   
+                                            h2(class="editIcon")
+                                                i(class='bx bxs-x-circle' style='color:#f50505') 
+                                td
+                                   a(target="blank" class="d-inline-block" href="http://wa.me/"+i.tel+"?text="+"***"+"Nueva Orden Generada en: "+sector+"***"+"%0A"+"Orden: "+i.idOrden+"%0A"+"Detecto: "+i.detecto+"%0A"+"Equipo: "+i.equipo+"%0A"+"Parada de Proceso: "+i.paradaProceso+"%0A"+"Tipo de Parada: "+i.tipo+"%0A"+"Descripcion: "+i.descripcion+"%0A"+"Hora de Inicio: "+i.horaInicio )
+                                        h2(class="editIcon")    
+                                            i(class='bx bxl-whatsapp' style='color:#11a042')
+            br
+            hr
+
+        script(src="https://unpkg.com/boxicons@2.0.9/dist/boxicons.js")    
+        script(src="https://code.jquery.com/jquery-3.5.1.js")
+        script(src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js")
+        script(src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js")   
+        script. 
+            $(document).ready(function() {
+                $('#t1').DataTable();
+                } );  
+                                     
+    footer 
+        br 
+        div(class="col-12")
+            h6 &copy Copyright 2021 | Polimetal S.A                                

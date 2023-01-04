@@ -136,3 +136,8 @@ td.Cerrado{
     left:0;
     bottom:0;
     }
+#formDelete button{
+    border:none;
+    background-color:transparent;
+    
+}
