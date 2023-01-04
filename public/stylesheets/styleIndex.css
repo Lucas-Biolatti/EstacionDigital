@@ -1,0 +1,138 @@
+:root{
+    --primary:#111b54;
+    --light:#ffffff;
+    --gray_:#efefef;
+    
+}
+body{
+    
+    font-weight: 300;
+    color: var(--primary);
+    scroll-behavior: auto;
+    
+ }
+a{
+    text-decoration: none;
+}
+
+a:hover{
+    text-decoration:underline;
+}
+.bg-primary{
+    background-color: var(--primary) !important;
+}
+#sidebar-container{
+    min-height: 100vh;
+}
+#sidebar-container .logo{
+    padding: .875rem 1.25rem;
+}
+#sidebar-container .menu{
+    width: 15rem  ;
+}
+footer {
+    padding-top: 60px;
+    text-align: center;
+   }
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 3rem;
+    padding: 1rem 0.5rem;
+}
+.card-single{
+    display: flex;
+    justify-content: space-between; 
+    padding: 2rem;
+    background-image: radial-gradient(circle at 50% -20.71%, #edf3ff 0, #b5c9f2 50%, #79a1e2 100%);
+    border-radius: 2rem;
+    
+}
+.card-single span:first-child{
+    font-size: 3rem;
+    color:white
+   
+}
+.card-single span:last-child{
+    color: white;
+}
+#menus{
+    width: 100%;
+   
+    overflow-y: scroll;
+    height: 100%;
+    overflow-x: scroll;
+}
+#imgInicio{
+    opacity: 80%;
+    height: 250px;
+    border-radius: 50%;
+}
+td.En.Proceso{
+    color: yellow;
+    font-style: italic;
+    font-weight: bold;
+}
+
+td.Pendiente{
+    color: red;
+    font-style: italic;
+    font-weight: bold;
+}
+
+td.Cerrado{
+    color:rgb(2, 148, 2);
+    font-style: italic;
+    font-weight: bold;
+}
+
+.chartAM{
+    text-align: center;
+    width: 60%;
+}
+#selected{
+    border-style:outset;
+    border-radius: 20px 0% 0% 20px;
+    border-color: var(--light);
+    text-align: center;
+    border-right: none;
+    font-style: italic;
+    background-color: #2036b4;
+    color: var(--light);
+}
+#verde{
+    background-color: rgb(8, 189, 8);
+    font-weight: bold;
+}
+#amarillo{
+    background-color: yellow;
+    font-weight: bold;
+}
+#tabla2 td{
+    text-align: center;
+    font-style: italic;
+    font-size:small;
+}
+#tabla2 input{
+    font-size:medium;
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+.btn-group, .btn-group-vertical{
+    position: absolute !important;
+}
+.btn-amarillo{
+    background-color: yellow;
+}
+#etiqueta{
+    text-align:center; 
+    background:linear-gradient(black,rgb(53, 52, 52));
+    color: white;
+    font-style: italic;
+}
+.logout {
+    position:absolute;
+    left:0;
+    bottom:0;
+    }

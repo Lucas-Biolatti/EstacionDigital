@@ -1,0 +1,76 @@
+doctype html
+html(lang="es")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Polimetal S.A | Mantenimiento
+        link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous")
+        script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous")
+        link(href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet")
+        link(rel="stylesheet", href="/stylesheets/styleIndex.css")
+        link(href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet')
+    body
+        div(class="d-flex")
+            div(id="sidebar-container" class="bg-primary")
+                div(class="logo")
+                    img(src="favicon.ico" alt="" class="d-inline-block")
+                    h4(class="text-light font-weight-bold d-inline-block") Polimetal S.A
+                div(class="menu")
+                    a(href="/" class="d-block p-3 text-light")
+                        i(class="icon ion-md-home m-2 lead") Inicio
+                    a(href="/users/mtto" class="d-block p-3 " id="selected")
+                        i(class="icon ion-md-construct m-2 lead") Mantenimiento
+                    a(href="/users/syso" class="d-block p-3 text-light")
+                        i(class="icon ion-md-warning m-2 lead") Higiene y Seguridad
+                    a(href="/users/autonomo" class="d-block p-3 text-light")
+                        i(class="icon ion-md-walk m-2 lead") Mtto Autonomo 
+                    ul(class="logout")
+                        li  
+                            div(style="text-align: center")
+                                img(src="/images/usuario.png", alt="", width="50px")
+                            p(class="d-block p-3 text-light")= nombre
+                            a(href="/logout" class="d-block p-3 text-light" )
+                                i(class="icon ion-md-log-in m-2 lead" )="    Logout"
+            div(class="w-100 " id="menus")
+                
+                div(class="container" style="padding: 20px;")
+                    div(class="alert alert-success" role="alert")= mensaje
+                        
+                         
+                       
+                    a(href="/") 
+                        div(style="text-align: center;")
+                            img(src="/images/logo.jpg" alt="logo" class="img-fluid")
+                
+                    div(style="text-align: center;")
+                        h2 Ordenes de Trabajo
+                    div(class="table-responsive")
+                        table(class="table table-striped table-hover")
+                            thead 
+                                th Id 
+                                th Sector 
+                                th Mtto 
+                                
+                            tbody 
+                                each i in sector
+                                    tr 
+                                        td= i.idSector
+                                        td= i.Descripcion
+                                        td 
+                                            a(href="/users/ordenMtto?id="+i.idSector+"&nombre="+i.Descripcion)
+                                                button(class="button btn-primary") Nueva Orden  
+                                            a(href="buscarOrden?id="+i.idSector+"&nombre="+i.Descripcion)
+                                                button(class="button btn-success") Ver Todas  
+                                        
+                            
+                                    
+                    br
+                    hr
+                
+                
+                                                
+                footer
+                    br 
+                    div(class="col-12")
+                        h6 &copy Copyright 2021 | Polimetal S.A                                
