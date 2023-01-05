@@ -93,14 +93,14 @@ html(lang="es")
                                 td= i.tiempoTotal
                                 td(class=i.estado)= i.estado
                                 td
-                                   a(href="/editOrder?idOrden="+i.idOrden+"&idSector="+idSector+"&sector="+sector class="d-inline-block")
+                                   a(href="editarOrden?idOrden="+i.idOrden+"&idSector="+idSector+"&sector="+sector class="d-inline-block")
                                         h2(class="editIcon")
                                             i(class='bx bxs-edit')
                                    
-                                   form(action="ordenMtto?_method=DELETE" method="POST" class="d-inline-block" id="formDelete")
+                                   form(action="ordenMtto?_method=DELETE" method="POST"  id="formDelete")
                                         input(type="hidden", name="id" value=i.idOrden)
                                         input(type="hidden", name="idSector" value=i.idSector)
-                                        button(type="submit")   
+                                        button( type="button" onclick="confirmar()")   
                                             h2(class="editIcon")
                                                 i(class='bx bxs-x-circle' style='color:#f50505') 
                                 td
@@ -109,7 +109,7 @@ html(lang="es")
                                             i(class='bx bxl-whatsapp' style='color:#11a042')
             br
             hr
-
+        script(src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.16/dist/sweetalert2.all.min.js")
         script(src="https://unpkg.com/boxicons@2.0.9/dist/boxicons.js")    
         script(src="https://code.jquery.com/jquery-3.5.1.js")
         script(src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js")
@@ -118,8 +118,31 @@ html(lang="es")
             $(document).ready(function() {
                 $('#t1').DataTable();
                 } );  
+            function confirmar(){
+                
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire(
+                        'Deleted!',
+                        'Your file has been deleted.',
+                        'success',
+                            );
+                          document.getElementById("formDelete").submit();                      
+                        }
+                       
+                    })
+            }
                                      
     footer 
         br 
         div(class="col-12")
             h6 &copy Copyright 2021 | Polimetal S.A                                
+        

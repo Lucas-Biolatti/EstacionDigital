@@ -10,7 +10,7 @@ function fecha(x){
 }
 //MANTENIMIENTO
 router.get('/mtto:?',(req,res)=>{
-  //lISTAR SECTORES Y REDIRIGIR
+  //Renderizar index de Mantenimiento
   if (req.session.loggedin) {
     let sql1 = "SELECT * FROM sector";
     let sector = [];
@@ -28,13 +28,14 @@ router.get('/mtto:?',(req,res)=>{
       await res.render("./users/mantenimiento/mtto",{sector:sector,
         nombre:`${req.session.apellido}, ${req.session.nombre}`,
       mensaje:mensaje});   
-      console.log(mensaje) 
+      
     })
   }else{
     res.render('login')
   }
 })
 router.get('/ordenMtto',(req,res)=>{
+  //Renderizar formulario de orden de trabajo
   if (req.session.loggedin) {
     let idSector = url.parse(req.url,true).query.id;
     let sector = url.parse(req.url,true).query.nombre;
@@ -61,6 +62,7 @@ router.get('/ordenMtto',(req,res)=>{
   
 })
 router.get('/listarOrden:?',(req,res)=>{
+  //listado de Ordenes y sumatoria de minutos
   if (req.session.loggedin) {
     let idSector = req.query.id;
     let sector= req.query.nombre;
@@ -118,7 +120,52 @@ router.get('/listarOrden:?',(req,res)=>{
             });
          }
         else{
-            console.log("Error de conexion");
+            res.send("Error de conexion:"+error);
+        }
+    })
+  } else {
+    res.render('login')
+  }
+})
+router.get('/editarOrden',(req,res)=>{
+  if (req.session.loggedin) {
+    let idOrden = url.parse(req.url,true).query.idOrden;
+    let idSector = url.parse(req.url,true).query.idSector;
+
+    let sql2 = "SELECT * FROM equipo WHERE Sector=?";
+    let equipo = [];
+    conexion.query(sql2,[parseInt(idSector)],(error,result,files)=>{
+        if(!error){
+            for(let i=0;i<result.length;i++){
+                equipo.push(result[i])
+            }
+        }
+    })
+
+    let sql = "SELECT * FROM `ordentrabajo` WHERE `idOrden`=?";
+    conexion.query(sql,[parseInt(idOrden)],(error,result,file)=>{
+        if(!error){
+        let dia = (result[0].fecha.getUTCDate()<10?'0':'')+result[0].fecha.getUTCDate();
+        let mes = ((result[0].fecha.getMonth()+1)<10?'0':'')+(result[0].fecha.getMonth()+1);
+        let f = result[0].fecha.getUTCFullYear()+"-"+mes+"-"+dia;
+        //hs inicio
+        let diahi = (result[0].horaInicio.getUTCDate()<10?'0':'')+result[0].horaInicio.getUTCDate();
+        let meshi = ((result[0].horaInicio.getMonth()+1)<10?'0':'')+(result[0].horaInicio.getMonth()+1);
+        let fhi = result[0].horaInicio.getUTCFullYear()+"-"+meshi+"-"+diahi+"T"+result[0].horaInicio.getHours()+":"+((result[0].horaInicio.getMinutes()<10?'0':'')+result[0].horaInicio.getMinutes());
+        
+        //hs fin
+        let diahf = (result[0].horaFin.getUTCDate()<10?'0':'')+result[0].horaFin.getUTCDate();
+        let meshf = ((result[0].horaFin.getMonth()+1)<10?'0':'')+(result[0].horaFin.getMonth()+1);
+        let fhf = result[0].horaFin.getUTCFullYear()+"-"+meshf+"-"+diahf+"T"+result[0].horaFin.getHours()+":"+((result[0].horaFin.getMinutes()<10?'0':'')+result[0].horaFin.getMinutes());
+        
+        res.render('./users/mantenimiento/editar',{
+            result:result,
+            idSector:idSector,
+            idOrden:idOrden,
+            equipo:equipo,
+            f:f,
+            fhi:fhi,
+            fhf:fhf});
         }
     })
   } else {
@@ -126,6 +173,7 @@ router.get('/listarOrden:?',(req,res)=>{
   }
 })
 router.post('/ordenMtto',(req,res)=>{
+  // Guardar Orden de Trabajo
   if (req.session.loggedin) {
     let sql = "INSERT INTO `ordentrabajo`(`detecto`,`avisar`,`tel`, `sector`, `equipo`, `fecha`, `turno`, `paradaProceso`, `prioridad`, `tipoParada`, `horaInicio`, `horaFin`, `descripcion`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
     conexion.query(sql,[
@@ -152,9 +200,10 @@ router.post('/ordenMtto',(req,res)=>{
   }
 })
 router.delete('/ordenMtto:?',(req,res)=>{
+  //Eliminar orden de trabajo
   if (req.session.loggedin) {
     let id = req.body.id;
-    let idSector = req.body.idSector;
+    
 
     const sql = `DELETE FROM ordentrabajo WHERE idOrden = ${id}`
     conexion.query(sql,(error,filas)=>{
@@ -164,10 +213,42 @@ router.delete('/ordenMtto:?',(req,res)=>{
     res.render('login')
   }
 })
-
+router.put('/editarOrden',(req,res)=>{
+  if (req.session.loggedin) {
+        
+        let sqlupdate = "UPDATE `ordentrabajo` SET `detecto`=?,`equipo`=?,`fecha`=?,`turno`=?,`paradaProceso`=?,`prioridad`=?,`tipoParada`=?,`horaInicio`=?,`horaFin`=?,`descripcion`=? WHERE `idOrden`=?";
+        let resultados = [
+            req.body.detecto,
+            req.body.equipo,
+            req.body.fecha,
+            req.body.turno,
+            req.body.paradaProceso,
+            req.body.prioridad,
+            req.body.tipoParada,
+            req.body.horaInicio,
+            req.body.horaFin,
+            req.body.descripcion,
+            parseInt(req.body.idOrden),
+            
+        ];
+        
+        conexion.query(sqlupdate,resultados,(error,rows)=>{
+            if(!error){
+           
+            res.redirect(`mtto?mensaje=Se modifico correctamente la Orden Nro ${req.body.idOrden}`)
+            }else{
+              res.redirect(`mtto?mensaje=Error al intentar modificar!`)
+               
+            }
+          })
+  } else {
+    res.render('login')
+  }
+})
 
 //SYSO
 router.get('/syso', (req,res)=>{
+  //Renderizar index de Seguridad
   if (req.session.loggedin) {
     let sql1 = "SELECT * FROM sector";
     let sql2= "SELECT * FROM accidentes";
@@ -215,6 +296,7 @@ router.get('/syso', (req,res)=>{
 
 // AUTONOMO
 router.get('/autonomo',(req,res)=>{
+  //Renderizar index de AM
   if (req.session.loggedin) {
     res.render('./users/autonomo/index',{
       nombre:`${req.session.apellido}, ${req.session.nombre}`,
@@ -280,7 +362,7 @@ router.get('/ordenes',(req,res)=>{
           
           res.send(data);
       }
-      else console.log("Error al conectar con BD OT")
+      else res.send("Error:"+error)
   })
 })
 router.get('/tarjetas',(req,res)=>{

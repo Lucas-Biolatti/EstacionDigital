@@ -20,6 +20,10 @@ html
 				label(for="password")
 					i(class="fas fa-lock")
 				input(type="password" name="password" placeholder="Password" id="password" required)
+				if (mensaje)
+					p= mensaje
+				else 
+					p
 				
 				input(type="submit" value="Login")
 			
