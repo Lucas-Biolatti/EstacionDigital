@@ -36,7 +36,7 @@ router.post('/auth', function(request, response) {
 				// Redirect to home page
 				response.redirect('/');
 			} else {
-				response.send('Incorrect Username and/or Password!');
+				response.render('login',{mensaje:'Usuario o contraseña incorrecta'});
 			}			
 			response.end();
 		});
