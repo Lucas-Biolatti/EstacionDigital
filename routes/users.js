@@ -1,4 +1,5 @@
 var express = require('express');
+const { start } = require('repl');
 const url = require('url');
 var router = express.Router();
 var conexion = require('../db/db')
@@ -7,6 +8,12 @@ function fecha(x){
   let f = new Date(x);
   let fecha = f.getDate()+"/"+f.getMonth()+"/"+f.getUTCFullYear();
   return fecha;
+};
+function fechaEdit(x){
+  let dia = (x.getUTCDate()<10?'0':'')+x.getUTCDate();
+  let mes = ((x.getMonth()+1)<10?'0':'')+(x.getMonth()+1);
+  let f = x.getUTCFullYear()+"-"+mes+"-"+dia;
+  return f;
 }
 //MANTENIMIENTO
 router.get('/mtto:?',(req,res)=>{
@@ -33,7 +40,7 @@ router.get('/mtto:?',(req,res)=>{
   }else{
     res.render('login')
   }
-})
+});
 router.get('/ordenMtto',(req,res)=>{
   //Renderizar formulario de orden de trabajo
   if (req.session.loggedin) {
@@ -60,7 +67,7 @@ router.get('/ordenMtto',(req,res)=>{
     res.render('login');
   }
   
-})
+});
 router.get('/listarOrden:?',(req,res)=>{
   //listado de Ordenes y sumatoria de minutos
   if (req.session.loggedin) {
@@ -126,7 +133,7 @@ router.get('/listarOrden:?',(req,res)=>{
   } else {
     res.render('login')
   }
-})
+});
 router.get('/editarOrden',(req,res)=>{
   if (req.session.loggedin) {
     let idOrden = url.parse(req.url,true).query.idOrden;
@@ -171,7 +178,7 @@ router.get('/editarOrden',(req,res)=>{
   } else {
     res.render('login')
   }
-})
+});
 router.post('/ordenMtto',(req,res)=>{
   // Guardar Orden de Trabajo
   if (req.session.loggedin) {
@@ -198,7 +205,7 @@ router.post('/ordenMtto',(req,res)=>{
   } else {
     res.render('login');
   }
-})
+});
 router.delete('/ordenMtto:?',(req,res)=>{
   //Eliminar orden de trabajo
   if (req.session.loggedin) {
@@ -212,7 +219,7 @@ router.delete('/ordenMtto:?',(req,res)=>{
   } else {
     res.render('login')
   }
-})
+});
 router.put('/editarOrden',(req,res)=>{
   if (req.session.loggedin) {
         
@@ -244,7 +251,7 @@ router.put('/editarOrden',(req,res)=>{
   } else {
     res.render('login')
   }
-})
+});
 
 //SYSO
 router.get('/syso', (req,res)=>{
@@ -292,7 +299,54 @@ router.get('/syso', (req,res)=>{
   }else{
     res.render('login')
   }
-})
+});
+router.get('/accidente',(req,res)=>{
+   if (req.session.loggedin) {
+    let idSector = req.query.id;
+    let sector = req.query.sector;
+   
+            res.render('./users/syso/agregarAccidente',{
+              idSector:idSector,
+              sector:sector,
+              nombre:`${req.session.apellido}, ${req.session.nombre}`});
+   } else {
+    res.render('login');
+   }
+        
+});
+router.post('/accidente',async (req,res)=>{
+if (req.session.loggedin) {
+    let sql = "INSERT INTO `accidentes`( `nombre`, `fecha`, `tipo`, `que`, `cuando`, `donde`, `quien`, `cual`, `como`, `observaciones`, `sector`) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+    await  conexion.query(sql,[
+      req.body.nombre,
+      req.body.fecha,
+      req.body.tipo,
+      req.body.que,
+      req.body.cuando,
+      req.body.donde,
+      req.body.quien,
+      req.body.cual,
+      req.body.como,
+      req.body.observacion,
+      req.body.sector],(error,row,file)=>{
+      if(!error){
+            let f = new Date(req.body.fecha);
+            let fecha = f.getDate()+"/"+f.getMonth()+1+"/"+f.getUTCFullYear();
+            let desc = req.body.que+" "+req.body.cuando+" "+req.body.donde+" "+req.body.quien+" "+req.body.cual+" "+req.body.como+".";
+            //("mailto:horquera@polimetalruedas.com.ar?subject=Nuevo Accidente"+"-"+req.body.sector+"&body=Nombre del observador: "+req.body.nombre+"%0A"+"Fecha: "+req.body.fecha+"%0A"+"Tipo: "+req.body.tipo+"%0A"+"Descripcion: "+desc+"%0A"+"Observaciones: "+req.body.observacion+"%0A"+"%0A"+"Saludos Cordiales.")
+            res.redirect('syso');
+        }
+      
+      else{
+            console.log(error);
+        }
+    })
+        
+    
+} else {
+  res.render('login');
+}
+});
 
 // AUTONOMO
 router.get('/autonomo',(req,res)=>{
@@ -304,7 +358,7 @@ router.get('/autonomo',(req,res)=>{
   }else{
     res.render('login')
   }
-})
+});
 
 //DATOS PARA USAR CON FETCH
 router.get('/items',(req,res)=>{
@@ -316,7 +370,7 @@ router.get('/items',(req,res)=>{
       }
       
   })
-})
+});
 router.get('/sector',(req,res)=>{
   let sql1 = "SELECT * FROM sector";
   conexion.query(sql1,(error,result,files)=>{
@@ -326,7 +380,7 @@ router.get('/sector',(req,res)=>{
           alert("No se pudo obtener los sectores");
       }
   })
-})
+});
 router.get('/nomina',(req,res)=>{
   let sql1 = "SELECT * FROM nomina";
   conexion.query(sql1,(error,result,files)=>{
@@ -336,7 +390,7 @@ router.get('/nomina',(req,res)=>{
           alert("No se pudo obtener la nomina");
       }
   })
-})
+});
 
 router.get('/ordenes',(req,res)=>{
   const sql="SELECT * FROM ordentrabajo WHERE NOT estado='cerrado'"
@@ -364,7 +418,7 @@ router.get('/ordenes',(req,res)=>{
       }
       else res.send("Error:"+error)
   })
-})
+});
 router.get('/tarjetas',(req,res)=>{
   const sql="select * from tarjetasAm where 1"
   conexion.query(sql,(error,fields)=>{
@@ -372,5 +426,8 @@ router.get('/tarjetas',(req,res)=>{
           res.send(fields);
       }
   })
-})
+});
+router.get('/enviarWS',(req,res)=>{
+  res.render('./vistasmtto/enviarWathsapp')
+});
 module.exports = router;
