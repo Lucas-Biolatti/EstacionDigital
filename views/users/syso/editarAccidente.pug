@@ -7,7 +7,7 @@ html(lang="es")
         title Reporte de Accidentes | Polimetal
         link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous")
         script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous")
-        link(rel="stylesheet" href="/stylesheets/styleIndex.css")
+        link(rel="stylesheet" href="../style1.css")
          
     body 
         div(class="container")
@@ -16,29 +16,29 @@ html(lang="es")
                     img(src="/images/logo.jpg" alt="logo" class="img-fluid")
         
             div(style="text-align: center;")
-                h2() Reporte de Siniestro
-                img(src="/images/camilla.png", alt="", class="img-fluid")
-                a(href="syso", style="display: inline")
-                    img(src="/images/home.png") 
+                
+                
+                h2()= "Editar Reporte de Accidente N°"+idAccidente
+                
             div                                              
                 h4(style="font-style: italic;") Identificacion
                 hr
         
-            form(class="row g-3" method="post" action="accidente" id="formAccidente")
+            form(class="row g-3" method="post" action="editarAccidente?_method=PUT")
+                input(type="hidden", name="idAccidente" value=idAccidente)
                 input(type="hidden", name="idSector" value=idSector)
-                input(type="hidden", name="sector" value=sector)
                 div(class="col-md-4")
                     label(for="nombre" class="form-label") Nombre del Observador
-                    input(type="text" class="form-control" id="detecto" name="nombre" required value=nombre)
+                    input(type="text" class="form-control" id="detecto" name="nombre" required value=result[0].nombre)
                 
                 div(class="col-md-4")
                     label(for="fecha" class="form-label") Fecha
-                    input(type="date" class="form-control" id="fecha" name="fecha" required)
+                    input(type="date" class="form-control" id="fecha" name="fecha" required value=fecha)
                 
                 div(class="col-md-4")
                     label(for="tipo" class="form-label") Tipo de Siniestro
-                    select(id="tipo" class="form-select" name="tipo" required)
-                        option(selected) Elejir un tipo...
+                    select(id="tipo" class="form-select" name="tipo" required )
+                        option(selected)=result[0].tipo
                         option Accidente
                         option Incidente
                         option In Itinere
@@ -51,41 +51,40 @@ html(lang="es")
                 
                 div(class="col-md-4")
                     label(for="que" class="form-label") Que?
-                    input(type="text" class="form-control" id="que" name="que" required placeholder="¿Que ocurrio?")
+                    input(type="text" class="form-control" id="que" name="que" required placeholder="¿Que ocurrio?" value=result[0].que)
 
                 div(class="col-md-4")
                     label(for="cuando" class="form-label") Cuando?
-                    input(type="text" class="form-control" id="cuando" name="cuando" required placeholder="¿En que momento y horario ocurrio?")
+                    input(type="text" class="form-control" id="cuando" name="cuando" required placeholder="¿En que momento y horario ocurrio?" value=result[0].cuando)
 
                 div(class="col-md-4")
                     label(for="donde" class="form-label") Donde?
-                    input(type="text" class="form-control" id="donde" name="donde" required placeholder="¿En que lugar ocurrio?")
+                    input(type="text" class="form-control" id="donde" name="donde" required placeholder="¿En que lugar ocurrio?" value=result[0].donde)
 
                 div(class="col-md-4")
                     label(for="quien" class="form-label") Quien?
-                    input(type="text" class="form-control" id="quien" name="quien" required placeholder="¿A quien le sucedio?")
+                    input(type="text" class="form-control" id="quien" name="quien" required placeholder="¿A quien le sucedio?" value=result[0].quien)
 
                 div(class="col-md-4")
                     label(for="cual" class="form-label") Cual?
-                    input(type="text" class="form-control" id="cual" name="cual" required placeholder="¿Que operacion estaba realizando?")   
+                    input(type="text" class="form-control" id="cual" name="cual" required placeholder="¿Que operacion estaba realizando?" value=result[0].cual)   
 
                 div(class="col-md-4")
                     label(for="como" class="form-label") Como?
-                    input(type="text" class="form-control" id="como" name="como" required placeholder="¿Como ocurrio el siniestro?") 
+                    input(type="text" class="form-control" id="como" name="como" required placeholder="¿Como ocurrio el siniestro?" value=result[0].como) 
                 
                 
                 
                 div(class="col-12")
                     label(for="descripcion" class="form-label") Descripcion del Problema
-                    p(id="descripcion" name="descripcion" required)
+                    p(id="descripcion" name="descripcion")
 
                 div(class="col-12")
                     label(for="observacion" class="form-label") Observaciones
-                    input(type="text" class="form-control" id="observacion" placeholder="Ingrese si tiene alguna observacion" name="observacion" required)
+                    input(type="text" class="form-control" id="observacion" placeholder="Ingrese si tiene alguna observacion" name="observacion" required value=result[0].observaciones)
                 
                 div(class="col-12")
-                    input(type="submit" value="Guardar" class="button btn-primary")
-                    a(id="emailA") 
+                    input(type="submit" value="Guardar Modificacion" class="button btn-primary")
             script. 
                 
 
@@ -102,25 +101,12 @@ html(lang="es")
                     let como = document.getElementById("como").value;
 
                     let contenido = que+" "+cuando+" "+donde+" "+quien+" "+cual+" "+como;
-                    descripcionInput.innerHTML += contenido;
-                    
-                });
-                
-                const form = document.getElementById('formAccidente');
-                const sendMail = document.getElementById('emailA');
+                    descripcionInput.innerHTML = contenido;
+                    console.log(contenido);
 
-                function enviarEmail(event){
-                    event.preventDefault();
-                    const fd = new FormData(this);
-                    
-                    sendMail.setAttribute(
-                        'href',
-                        `mailto:horquera@polimetalruedas.com.ar?subject= Nuevo Accidente - ${fd.get('sector')}&body=Nombre del observador: ${fd.get('nombre')}%0AFecha: ${fd.get('fecha')}%0ATipo: ${fd.get('tipo')}%0ADescripcion: ${fd.get('que')} ${fd.get('cuando')} ${fd.get('donde')} ${fd.get('quien')} ${fd.get('cual')} ${fd.get('como')}%0AObservaciones: ${fd.get('observacion')}%0A%0ASaludos Cordiales.`
-                    )
-                    sendMail.click();
-                    form.submit();
-                }
-                form.addEventListener('submit', enviarEmail)
+                })
+
+
                 
         footer 
             br 

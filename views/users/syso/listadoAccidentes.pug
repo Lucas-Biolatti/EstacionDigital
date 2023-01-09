@@ -1,0 +1,103 @@
+doctype html
+html(lang="es")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Polimetal S.A
+        link(rel="stylesheet" href="/stylesheets/styleIndex.css")
+
+        link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css")
+        link(rel="stylesheet", href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css")
+        
+        link(href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet')
+
+
+    body 
+        div(class="container" style="padding: 20px;")
+            div(class="alert alert-success" role="alert")= mensaje
+            div(style="text-align: center;")
+                img(src="/images/logo.jpg" alt="logo" class="img-fluid")
+            a(href="syso", style="display: inline")
+                   h1(style="text-align:center") 
+                    i(class='bx bx-arrow-back bx-tada bx-flip-vertical')
+        
+            div(style="text-align: center;")
+                h2 Listado de Accidentes
+            hr    
+            div(class="container")
+                table(id="t1" class="table table-striped" style="width:100%")
+                    thead(id="th")
+                        th Id
+                        th Sector
+                        th Observador 
+                        th Fecha
+                        th Tipo
+                        th Descripcion del fenomeno 
+                        th Observaciones
+                        th Estado 
+                        th Accion
+                        
+                    tbody 
+                        each i in result
+                            tr     
+                                td= i.idAccidente
+                                td= i.sector 
+                                td= i.nombre 
+                                td= i.fecha 
+                                td= i.tipo 
+                                td= i.que+" "+i.cuando+" "+i.donde+" "+i.quien+" "+i.cual+" "+i.como+"." 
+                                td= i.observaciones
+                                td(class=i.estado)=i.estado
+                                td
+                                    if (i.nombre==i.nombreSession)
+                                        a(href="editarAccidente?idAccidente="+i.idAccidente+"&idSector="+i.sector)
+                                        
+                                            h2(class="editIcon")
+                                                i(class='bx bxs-edit')
+                                    
+                                        form(action="eliminarAccidente?_method=DELETE", method="post", id="formDelete")
+                                            input(type="hidden", name="idAccidente" value=i.idAccidente)
+                                            input(type="hidden", name="sector" value="i.sector")
+                                            button( type="button" onclick="confirmar()")   
+                                                h2(class="editIcon")
+                                                    i(class='bx bxs-x-circle' style='color:#f50505') 
+                                    else 
+            br
+            hr
+        script(src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.16/dist/sweetalert2.all.min.js")
+        script(src="https://unpkg.com/boxicons@2.0.9/dist/boxicons.js")    
+        script(src="https://code.jquery.com/jquery-3.5.1.js")
+        script(src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js")
+        script(src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js")   
+        script. 
+            $(document).ready(function() {
+                $('#t1').DataTable();
+                } );  
+                function confirmar(){
+                
+                    Swal.fire({
+                    title: '¿Esta Seguro?',
+                    text: "Una vez eliminado no podra revertir los cambios!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, Eliminar!'
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire(
+                        'Eliminado!',
+                        'El accidente fue eliminado.',
+                        'Completado',
+                            );
+                          document.getElementById("formDelete").submit();                      
+                        }
+                       
+                    })
+            }
+                                     
+    footer 
+        br 
+        div(class="col-12")
+            h6 &copy Copyright 2021 | Polimetal S.A                                

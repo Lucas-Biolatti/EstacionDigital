@@ -300,6 +300,7 @@ router.get('/syso', (req,res)=>{
     res.render('login')
   }
 });
+// Accidentes
 router.get('/accidente',(req,res)=>{
    if (req.session.loggedin) {
     let idSector = req.query.id;
@@ -333,7 +334,7 @@ if (req.session.loggedin) {
             let f = new Date(req.body.fecha);
             let fecha = f.getDate()+"/"+f.getMonth()+1+"/"+f.getUTCFullYear();
             let desc = req.body.que+" "+req.body.cuando+" "+req.body.donde+" "+req.body.quien+" "+req.body.cual+" "+req.body.como+".";
-            //("mailto:horquera@polimetalruedas.com.ar?subject=Nuevo Accidente"+"-"+req.body.sector+"&body=Nombre del observador: "+req.body.nombre+"%0A"+"Fecha: "+req.body.fecha+"%0A"+"Tipo: "+req.body.tipo+"%0A"+"Descripcion: "+desc+"%0A"+"Observaciones: "+req.body.observacion+"%0A"+"%0A"+"Saludos Cordiales.")
+            
             res.redirect('syso');
         }
       
@@ -347,6 +348,105 @@ if (req.session.loggedin) {
   res.render('login');
 }
 });
+router.get('/listaAccidentes',(req,res)=>{
+  if (req.session.loggedin) {
+    let sql = "SELECT * FROM accidentes WHERE 1";
+    let mensaje = req.query.mensaje;
+    conexion.query(sql,(error,result)=>{
+        
+        if(!error){
+            let resultados=[];
+        for(let i=0;i<result.length;i++){
+            let f = new Date(result[i].fecha);
+            let fecha = `${f.getDate()}/${f.getMonth()+1}/${f.getUTCFullYear()}`;
+            
+            let resultado={
+                idAccidente:result[i].idAccidente,
+                nombre:`${result[i].nombre}`,
+                fecha:fecha,
+                tipo:result[i].tipo,
+                que:result[i].que,
+                cuando:result[i].cuando,
+                donde:result[i].donde,
+                quien:result[i].quien,
+                cual:result[i].cual,
+                como:result[i].como,
+                observaciones:result[i].observaciones,
+                sector:result[i].sector,
+                estado:result[i].estado,
+                fecha_cierre:result[i].fecha_inicio,
+                cuatrom:result[i].cuatrom,
+                cincow:result[i].cincow,
+                acciones:result[i].acciones,
+                nombreSession: `${req.session.apellido}, ${req.session.nombre}`
+
+            }
+            resultados.push(resultado);
+            
+        }
+            res.render('./users/syso/listadoAccidentes',{result:resultados,mensaje:mensaje});
+        }else{
+            console.log("Error de coneixion con la tabla accidentes");
+        }
+    })
+  } else {
+    res.render('login')
+  }
+});
+router.get('/editarAccidente',(req,res)=>{
+  if (req.session.loggedin) {
+    let idAccidente=req.query.idAccidente;
+    let idSector=req.query.idSector;
+    let mensaje = req.query.mensaje;
+    const sql="select * FROM accidentes WHERE idAccidente=?"
+    conexion.query(sql,[idAccidente],(error,result,files)=>{
+        if(!error){
+            let dia = (result[0].fecha.getUTCDate()<10?'0':'')+result[0].fecha.getUTCDate();
+            let mes = ((result[0].fecha.getMonth()+1)<10?'0':'')+(result[0].fecha.getMonth()+1);
+            let f = result[0].fecha.getUTCFullYear()+"-"+mes+"-"+dia;
+            res.render('./users/syso/editarAccidente',{result:result,idAccidente:idAccidente,idSector:idSector,fecha:f,mensaje:mensaje});        
+        }
+
+    })
+  } else {
+    res.render('login')
+  }
+});
+router.put('/editarAccidente',(req,res)=>{
+  
+    let sql = "UPDATE accidentes SET nombre=?,fecha=?,tipo=?,que=?, cuando=?, donde=?,quien=?, cual=?, como=?,observaciones=? WHERE idAccidente=?"
+        conexion.query(sql,[
+          req.body.nombre,
+          req.body.fecha,
+          req.body.tipo,
+          req.body.que,
+          req.body.cuando,
+          req.body.donde,
+          req.body.quien,
+          req.body.cual,
+          req.body.como,
+          req.body.observacion,
+          req.body.idAccidente],(error,rows)=>{
+        if (!error) {
+            res.redirect(`listaAccidentes?mensaje=Se Actualizo la informacion del accidente Nro ${req.body.idAccidente}`)
+            
+        }
+    })
+   
+});
+router.delete('/eliminarAccidente',(req,res)=>{
+  if (req.session.loggedin) {
+    let id = req.body.idAccidente;
+    
+
+    const sql = `DELETE FROM accidentes WHERE idAccidente = ${id}`
+    conexion.query(sql,(error,filas)=>{
+      res.redirect(`listaAccidentes?mensaje=Se elimino correctamente la OT Nro ${id}`)
+    })
+  } else {
+    res.render('login')
+  }
+})
 
 // AUTONOMO
 router.get('/autonomo',(req,res)=>{
