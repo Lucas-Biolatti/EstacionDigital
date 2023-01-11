@@ -4,3 +4,15 @@
 >git config --global user.email "mail con el que se loguea a github)
 >realizar commit y ctrl+Enter
 >Pushear
+
+////////////////////////////////////////
+Respaldo
+🚫 ✔
+Nombre: `${req.session.apellido}, ${req.session.nombre}`
+
+if (req.session.loggedin) {
+    
+    
+  } else {
+    res.render('login');
+  }

@@ -15,6 +15,7 @@ function fechaEdit(x){
   let f = x.getUTCFullYear()+"-"+mes+"-"+dia;
   return f;
 }
+//const nombre = `${req.session.apellido}, ${req.session.nombre}`
 //MANTENIMIENTO
 router.get('/mtto:?',(req,res)=>{
   //Renderizar index de Mantenimiento
@@ -122,7 +123,8 @@ router.get('/listarOrden:?',(req,res)=>{
                 abiertas:abiertas,
                 cerradas:cerradas,
                 enProceso:enProceso,   
-                sector:sector
+                sector:sector,
+                nombre:`${req.session.apellido}, ${req.session.nombre}`
                
             });
          }
@@ -264,7 +266,7 @@ router.get('/syso', (req,res)=>{
     let accidentes=0;
     let actos=0;
 
-    conexion.query(sql2,(error,result)=>{
+     conexion.query(sql2,(error,result)=>{
         if(!error){
             for(let i=0;i<result.length;i++){
                 accidentes++
@@ -272,7 +274,7 @@ router.get('/syso', (req,res)=>{
             
         }
     })
-   conexion.query(sql3,(error,result)=>{
+    conexion.query(sql3,(error,result)=>{
         if(!error){
         for(let i=0;i<result.length;i++){
             actos++
@@ -281,7 +283,7 @@ router.get('/syso', (req,res)=>{
     })
 
     
-   conexion.query(sql1,(error,result,files)=>{
+    conexion.query(sql1,(error,result,files)=>{
         if(!error){
             
             for(let i=0;i<result.length;i++){
@@ -294,13 +296,15 @@ router.get('/syso', (req,res)=>{
       sector:sector,
       accidentes:accidentes,
       actos:actos,
-      nombre:`${req.session.apellido}, ${req.session.nombre}`});    
+      nombre:`${req.session.apellido}, ${req.session.nombre}`,
+      mensaje:req.query.mensaje})
+      
     })
   }else{
     res.render('login')
   }
 });
-// Accidentes
+        // Accidentes
 router.get('/accidente',(req,res)=>{
    if (req.session.loggedin) {
     let idSector = req.query.id;
@@ -446,6 +450,134 @@ router.delete('/eliminarAccidente',(req,res)=>{
   } else {
     res.render('login')
   }
+});
+        //Actos Inseguros
+router.get('/actosInseguros',(req,res)=>{
+  if (req.session.loggedin) {
+    let idSector = req.query.id;
+    let sector = req.query.sector;
+   
+            res.render('./users/syso/agregarActo',{
+              idSector:idSector,
+              sector:sector,
+              nombre:`${req.session.apellido}, ${req.session.nombre}`});
+        
+  } else {
+    res.render('login')
+  }
+});
+router.post('/actosInseguros',(req,res)=>{
+  if (req.session.loggedin) {
+    
+    let sql = "INSERT INTO `actosinseguros`(`nombre`, `fecha`, `tipo`, `subTipo`, `descripcion`, `propuesta`, `accion`, `sector`) VALUES (?,?,?,?,?,?,?,?)";
+    conexion.query(sql,[
+      req.body.nombre,
+      req.body.fecha,
+      req.body.tipo,
+      req.body.subtipo,
+      req.body.descripcion,
+      req.body.propuesta,
+      req.body.accion,
+      req.body.sector],(error,row,file)=>{
+      
+          if(!error){
+            res.redirect(`syso?mensaje=Se agrego exitosamente el acto o condicion insegura en ${req.body.sector}`);
+          }
+          else{
+            res.redirect(`syso?mensaje=No se pudo agregar el acto o condicion insegura en ${req.body.sector}`);
+          }
+      })
+        
+    
+  } else {
+    res.render('login');
+  }
+});
+router.get('/listaActos',(req,res)=>{
+  if (req.session.loggedin) {
+    const sql = "SELECT * FROM `actosinseguros` WHERE 1";
+    conexion.query(sql,(error,result,files)=>{
+        if(!error){
+            let resultados=[];
+            for(let i=0;i<result.length;i++){
+                let f = new Date(result[i].fecha);
+                let fecha = `${f.getDate()}/${f.getMonth()+1}/${f.getUTCFullYear()}`;
+                let resultado={
+                    idActoInseguro:result[i].idActoInseguro,
+                    observador:result[i].nombre,
+                    sector:result[i].sector,
+                    fecha:fecha,
+                    tipo:result[i].tipo,
+                    subTipo:result[i].subTipo,
+                    descripcion:result[i].descripcion,
+                    propuesta:result[i].propuesta,
+                    accion:result[i].accion,
+                    estado:result[i].estado,
+                    fecha_cierre:result[i].fecha_cierre,
+                    accion_def:result[i].accion_def,
+                    evidencia:result[i].evidencia
+                }
+                resultados.push(resultado)
+            }
+            res.render("./users/syso/listadoActos",{
+              actosInseguros:resultados,
+              nombre: `${req.session.apellido}, ${req.session.nombre}`,
+              mensaje:req.query.mensaje});
+        }else{
+            console.log(error)
+        }
+    })
+  } else {
+    res.render('login')
+  }
+});
+router.get('/editarActo',(req,res)=>{
+  if (req.session.loggedin) {
+    const sector= req.query.idSector;
+    const idActo= req.query.idIncidente;
+    const sql = "SELECT * FROM actosinseguros WHERE idActoInseguro=?"
+    conexion.query(sql,[idActo],(error,results)=>{
+        let f=fechaEdit(results[0].fecha);
+        res.render('./users/syso/editarIncidente',{results:results,sector:sector,f:f,idActo:idActo})
+    })
+  } else {
+    res.render('login')
+  }
+});
+router.put('/editarActo',(req,res)=>{
+  if (req.session.loggedin) {
+    let sql="UPDATE actosinseguros SET nombre=?, fecha=?, tipo=?, subTipo=?, descripcion=?, propuesta=?, accion=? WHERE idActoInseguro=?"
+  conexion.query(sql,[
+    req.body.nombre,
+    req.body.fecha,
+    req.body.tipo,
+    req.body.subtipo,
+    req.body.descripcion,
+    req.body.propuesta,
+    req.body.accion,
+    req.body.acto],(error,rows)=>{
+          if (!error) {
+              res.redirect(`listaActos?mensaje=Se actualizaron los datos del incidente o condicion Nro ${req.body.acto} del sector ${req.body.sector}`)
+          }else{
+            res.redirect(`listaActos?mensaje=No fue posible actualizar:${error}`)
+          }
+      })
+        
+    
+  } else {
+    res.render('login')
+  }
+})
+router.delete('/eliminarActo',(req,res)=>{
+  if (req.session.loggedin) {
+    let id = req.body.idActoInseguro;
+    const sql = `DELETE FROM actosinseguros WHERE idActoInseguro = ${id}`
+    conexion.query(sql,(error,filas)=>{
+      res.redirect(`listaActos?mensaje=Se elimino correctamente el acto o condicion insegura Nro ${id}`)
+    })
+  } else {
+    res.render('login')
+  }
 })
 
 // AUTONOMO
@@ -454,11 +586,176 @@ router.get('/autonomo',(req,res)=>{
   if (req.session.loggedin) {
     res.render('./users/autonomo/index',{
       nombre:`${req.session.apellido}, ${req.session.nombre}`,
+      mensaje: req.query.mensaje
     })
   }else{
     res.render('login')
   }
 });
+router.get('/agregarTarjeta',(req,res)=>{
+  if (req.session.loggedin) {
+    let sector = req.query.sector;
+    let id= req.query.id
+
+    let sql="SELECT * FROM equipo WHERE sector=?"
+    conexion.query(sql,[id],(error,result)=>{
+        if(!error){
+            res.render('./users/autonomo/agregar',{
+              result:result,
+              id:id,
+              sector:sector,
+              nombre:`${req.session.apellido}, ${req.session.nombre}`});
+        }else console.error("Error al recibir datos de Equipos");
+    })
+  } else {
+    res.render('login');
+  }
+});
+router.post('/agregarTarjeta',(req,res)=>{
+  if (req.session.loggedin) {
+    
+    const sql="INSERT INTO tarjetasAm (sector,fecha,tipo,detecto,equipo,prioridad,disposicion,descripcion) VALUES (?,?,?,?,?,?,?,?)";
+    
+            conexion.query(sql,[
+              req.body.sector,
+              req.body.fecha,
+              req.body.tipo,
+              req.body.detecto,
+              req.body.equipo,
+              req.body.prioridad,
+              req.body.disposicion,
+              req.body.descripcion],(error)=>{
+                if (!error) {
+                    res.redirect(`autonomo?mensaje=✔Se Agrego correctamente la Tarjeta en el sector ${req.body.sector}✔`);
+                }else{
+                    res.redirect(`autonomo?mensaje=🚫No Se Pudo Agregar la Tarjeta🚫`)
+                }
+            })
+   
+  } else {
+    res.render('login')
+  }
+});
+router.get('/listadoTarjetas',(req,res)=>{
+  if (req.session.loggedin) {
+    let sector = req.query.sector;
+    const sql = "select * from tarjetasAm where sector=? and tipo='Mantenimiento Autonomo'"
+    const sql1 = "select * from tarjetasAm where sector=? and tipo='Mantenimiento Profesional'"
+     let resultadosazul=[];
+     let pendAzul=0;
+     let cerradoAzul=0;
+     let pendRojo=0;
+     let cerradoRojo=0;
+     let resultadosrojo=[];
+     //listado azules por sector
+    conexion.query(sql,[sector],(error,results)=>{
+       if (!error) {
+       
+            for (let i = 0; i < results.length; i++) {
+                let f=fecha(results[i].fecha)
+                let fcierre = fecha(results[i].fecha_cierre);
+                if (results[i].estado == "Cerrado") {
+                    cerradoAzul++;
+                }else pendAzul++;
+                resultado = {
+                    id:results[i].id,
+                    fecha:f,
+                    sector:results[i].sector,
+                    tipo:results[i].tipo,
+                    detecto:results[i].detecto,
+                    equipo:results[i].equipo,
+                    prioridad:results[i].prioridad,
+                    disposicion:results[i].disposicion,
+                    descripcion:results[i].descripcion,
+                    estado:results[i].estado,
+                    fecha_cierre:fcierre,
+                    ejecutor:results[i].ejecutor,
+                    acciones:results[i].acciones,
+                    duracion:results[i].duracion
+                }
+
+            resultadosazul.push(resultado) 
+            }
+            
+        } else console.log(error);
+    })
+    //listado Rojas por sector
+    conexion.query(sql1,[sector],(error,results)=>{
+        if (!error) {
+            
+        
+             for (let i = 0; i < results.length; i++) {
+                 let f=fecha(results[i].fecha);
+                 let fcierre=fecha(results[i].fecha_cierre);
+                 if (results[i].estado == "Cerrado") {
+                    cerradoRojo++;
+                }else pendRojo++;
+                 resultado = {
+                     id:results[i].id,
+                     fecha:f,
+                     sector:results[i].sector,
+                     tipo:results[i].tipo,
+                     detecto:results[i].detecto,
+                     equipo:results[i].equipo,
+                     prioridad:results[i].prioridad,
+                     disposicion:results[i].disposicion,
+                     descripcion:results[i].descripcion,
+                     estado:results[i].estado,
+                     fecha_cierre:fcierre,
+                     ejecutor:results[i].ejecutor,
+                     acciones:results[i].acciones,
+                     duracion:results[i].duracion
+                 }
+ 
+             resultadosrojo.push(resultado) 
+             }
+             res.render('./users/autonomo/listar',{
+                 rojo:resultadosrojo,
+                 azul:resultadosazul,
+                 pendAzul:pendAzul,
+                 cerradoAzul:cerradoAzul,
+                 sector:sector,
+                 pendRojo:pendRojo,
+                 cerradoRojo:cerradoRojo,
+                 nombre:`${req.session.apellido}, ${req.session.nombre}`});
+         } else console.log(error);
+     })
+    
+  } else {
+    res.render('login');
+  }
+})
+router.get('/editarTarjeta',(req,res)=>{
+  if (req.session.loggedin) {
+    let id = req.query.id;
+    let sector = req.query.sector;
+    let sql = "select * from tarjetasAm where id=?"
+    let equipos = [];
+    conexion.query("select * from equipo where sectorDesc = ?",[sector],(error,resultados)=>{
+       for (let i = 0; i < resultados.length; i++) {
+            equipos.push(resultados[i]);    
+        }
+    });
+    conexion.query(sql,[id],(error,results)=>{
+        if (!error) {
+            
+            let f = fechaEdit(results[0].fecha);
+            let fecha_cierre = fecha(results[0].fecha_cierre);
+            res.render('./users/autonomo/editarTarjeta',{
+                results:results,
+                id:id,
+                fecha:f,
+                fecha_cierre:fecha_cierre,
+                sector:sector,
+                equipos:equipos,
+                })
+        }
+    })
+    
+  } else {
+    res.render('login');
+  }
+})
 
 //DATOS PARA USAR CON FETCH
 router.get('/items',(req,res)=>{

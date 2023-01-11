@@ -1,0 +1,212 @@
+<!doctype html>
+html(lang="es")
+  head
+    
+    meta(charset="utf-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    
+    link(href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet")
+    link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet")
+    link(href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel="stylesheet")
+    link(rel="stylesheet", href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css")
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css")
+    title Polimetal S.A|AM 
+    link(rel="stylesheet" href="/stylesheets/styleIndex.css")
+  body
+   
+    div(class="d-flex")
+        div(id="sidebar-container" class="bg-primary")
+            div(class="logo")
+                img(src="/images/favicon.ico" alt="" class="d-inline-block")
+                h4(class="text-light font-weight-bold d-inline-block") Polimetal S.A
+            div(class="menu")
+                a(href="/" class="d-block p-3 text-light" )
+                    i(class="icon ion-md-home m-2 lead") Inicio
+                a(href="/users/mtto" class="d-block p-3 text-light")
+                    i(class="icon ion-md-construct m-2 lead") Mantenimiento
+                a(href="/users/syso" class="d-block p-3 text-light")
+                    i(class="icon ion-md-warning m-2 lead") Higiene y Seguridad
+                a(href="/users/autonomo" class="d-block p-3 text-light" id="selected")
+                    i(class="icon ion-md-walk m-2 lead") Mtto Autonomo
+                
+                
+                ul(class="logout")
+                    li  
+                        div(style="text-align: center")
+                            img(src="/images/usuario.png", alt="" width="50px")
+                        p(class="d-block p-3 text-light")= nombre
+                        a(href="/logout" class="d-block p-3 text-light" )
+                            i(class="icon ion-md-log-in m-2 lead" )="    Logout"
+                        
+                
+        
+        div(class="w-100")
+            .container
+                h2(id="sector")= sector
+                div(class="row")
+                    a(href="autonomo", style="display: inline")
+                        h1 
+                            i(class='bx bx-arrow-back bx-tada bx-flip-vertical')
+                    div(class="col-2 p-2 m-2" style="border:solid;border-radius:5%;border-color:blue")
+                        p Azules Pendientes 
+                        p(style="text-align:center; font-weight:bold")=pendAzul
+                    div(class="col-2 p-2 m-2" style="border:solid;border-radius:5%;border-color:blue")
+                        P Azules Cerradas 
+                        p(style="text-align:center; font-weight:bold")=cerradoAzul
+                    div(class="col-2 p-2 m-2" style="border:solid;border-radius:5%;border-color:red")
+                        P Rojas Pendientes 
+                        p(style="text-align:center; font-weight:bold")=pendRojo
+                    div(class="col-2 p-2 m-2" style="border:solid;border-radius:5%;border-color:red")
+                        P Rojas Cerradas 
+                        p(style="text-align:center; font-weight:bold")=cerradoRojo
+                div( class="chartAM") 
+                    canvas(id="myChart")
+                    
+            hr
+            br
+            h2 Tarjetas Azules
+            
+            div(class="table-responsive")
+                table(class="table table-hover" style="text-align:center" id="t1")
+                    thead(style="background-color:#094A81;color:white")  
+                        th Id 
+                        th Estado
+                        th Fecha 
+                        th Detecto 
+                        th Equipo 
+                        th Prioridad 
+                        th Disposicion 
+                        th Descripcion 
+                        th Fecha de cierre 
+                        th Ejecutor 
+                        th Acciones 
+                        th Duracion 
+                        th Acciones
+                    tbody
+                        each i in azul 
+                            tr 
+                                td= i.id
+                                td= i.estado
+                                td= i.fecha
+                                td= i.detecto
+                                td= i.equipo
+                                td= i.prioridad
+                                td= i.disposicion
+                                td= i.descripcion
+                                td= i.fecha_cierre
+                                td= i.ejecutor
+                                td= i.acciones
+                                td= i.duracion
+                                td
+                                    if (nombre==i.detecto)  
+                                        a(href="editarTarjeta?sector="+sector+"&id="+i.id) Editar
+                                    a(href="resolverTarjeta?sector="+sector+"&id="+i.id) Cerrar
+            br
+            hr
+            hr
+            br
+            h2(style="color:red") Tarjetas Rojas                    
+            div(class="table-responsive")
+                table(class="table  table-hover" style="text-align:center" id="t2")
+                    thead(style="background-color:#B92319;color:white")  
+                        th Id 
+                        th Estado
+                        th Fecha 
+                        th Detecto 
+                        th Equipo 
+                        th Prioridad 
+                        th Disposicion 
+                        th Descripcion 
+                        th Fecha de cierre 
+                        th Ejecutor 
+                        th Acciones 
+                        th Duracion
+                        th Acciones 
+                    tbody
+                        each i in rojo 
+                            tr 
+                                td= i.id
+                                td(class=i.estado)= i.estado
+                                td= i.fecha
+                                td= i.detecto
+                                td= i.equipo
+                                td= i.prioridad
+                                td= i.disposicion
+                                td= i.descripcion
+                                td= i.fecha_cierre
+                                td= i.ejecutor
+                                td= i.acciones
+                                td= i.duracion
+                                td
+                                    if (nombre==i.detecto)   
+                                        a(href="editarTarjeta?sector="+sector+"&id="+i.id) Editar
+                                    a(href="cerrarTarjeta?sector="+sector+"&id="+i.id) Cerrar
+
+
+    script(src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js") 
+    script(src="https://code.jquery.com/jquery-3.5.1.js")
+    script(src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js")
+    script(src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js")   
+    script. 
+        $(document).ready(function() {
+            $('#t1').DataTable();
+            } );  
+        $(document).ready(function() {
+            $('#t2').DataTable();
+            } );
+        
+        
+        
+        fetch('tarjetas')
+            .then(response => response.json())
+            .then(datos =>{
+                let sector = document.getElementById("sector").innerHTML;
+                let azulesAbiertas=0;
+                let azulesCerradas=0;
+                let rojasAbiertas=0;
+                let rojasCerradas=0;
+                for(let i=0; i<datos.length; i++){
+                    if(datos[i].tipo == 'Mantenimiento Autonomo' && datos[i].estado == 'Pendiente' && sector==datos[i].sector){
+                        azulesAbiertas++
+                    }else if(datos[i].tipo == 'Mantenimiento Autonomo' && datos[i].estado == 'Cerrado' && sector==datos[i].sector){
+                        azulesCerradas++
+                    }else if(datos[i].tipo == 'Mantenimiento Profesional' && datos[i].estado == 'Pendiente' && sector==datos[i].sector){
+                        rojasAbiertas++
+                    }else if(datos[i].tipo == 'Mantenimiento Profesional' && datos[i].estado == 'Cerrado' && sector==datos[i].sector){
+                        rojasCerradas++
+                    }
+                }
+                    const labels = [
+                        'Azules',
+                        'Rojas',
+                    ];
+
+                    const data = {
+                        labels: labels,
+                        datasets: [{
+                        label: 'Tarjetas Abiertas',
+                        backgroundColor: 'rgb(185, 25, 35)',
+                        borderColor: 'rgb(185, 25, 35)',
+                        data: [azulesAbiertas, rojasAbiertas],
+                        },{
+                        label: 'Tarjetas Cerradas',
+                        backgroundColor: 'rgb(89, 153, 87)',
+                        borderColor: 'rgb(89, 153, 87)',
+                        data: [azulesCerradas,rojasCerradas ],
+                        }]
+                    };
+
+                    const config = {
+                        type: 'bar',
+                        data: data,
+                        options: {}
+                    };
+                    const myChart = new Chart(
+                        document.getElementById('myChart'),
+                        config
+                    );
+                            
+                        })  
+            
+        
+        

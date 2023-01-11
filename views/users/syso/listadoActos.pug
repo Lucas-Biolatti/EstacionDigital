@@ -16,14 +16,15 @@ html(lang="es")
     body 
         div(class="container" style="padding: 20px;")
             div(class="alert alert-success" role="alert")= mensaje
-            div(style="text-align: center;")
-                img(src="/images/logo.jpg" alt="logo" class="img-fluid")
+            a(href="/") 
+                div(style="text-align: center;")
+                    img(src="/images/logo.jpg" alt="logo" class="img-fluid")
             a(href="syso", style="display: inline")
                    h1(style="text-align:center") 
                     i(class='bx bx-arrow-back bx-tada bx-flip-vertical')
         
             div(style="text-align: center;")
-                h2 Listado de Accidentes
+                h2 Listado de Actos o Condiciones Inseguras
             hr    
             div(class="container")
                 table(id="t1" class="table table-striped" style="width:100%")
@@ -33,37 +34,36 @@ html(lang="es")
                         th Observador 
                         th Fecha
                         th Tipo
-                        th Descripcion del fenomeno 
-                        th Observaciones
-                        th Estado 
+                        th Subtipo
+                        th Descripcion 
+                        th Propuesta 
+                        th Accion Tomada 
                         th Accion
                         
                     tbody 
-                        each i in result
+                        each i in actosInseguros
                             tr     
-                                td= i.idAccidente
+                                td= i.idActoInseguro
                                 td= i.sector 
-                                td= i.nombre 
+                                td= i.observador 
                                 td= i.fecha 
                                 td= i.tipo 
-                                td= i.que+" "+i.cuando+" "+i.donde+" "+i.quien+" "+i.cual+" "+i.como+"." 
-                                td= i.observaciones
-                                td(class=i.estado)=i.estado
+                                td= i.subTipo
+                                td= i.descripcion
+                                td= i.propuesta
+                                td= i.accion
                                 td
-                                    if (i.nombre==i.nombreSession)
-                                        
-                                    
-                                        form(action="eliminarAccidente?_method=DELETE", method="post", id="formDelete")
-                                            a(href="editarAccidente?idAccidente="+i.idAccidente+"&idSector="+i.sector style="display: inline-block")
-                                        
-                                                h3(class="editIcon" )
+                                    if (nombre==i.observador)
+                                        form(action="eliminarActo?_method=DELETE", method="post" id="formDelete") 
+                                            a(href="editarActo?idIncidente="+i.idActoInseguro+"&idSector="+i.sector style="display: inline-block")
+                                                h3(class="editIcon")
                                                     i(class='bx bxs-edit')
-                                            input(type="hidden", name="idAccidente" value=i.idAccidente)
-                                            input(type="hidden", name="sector" value="i.sector")
+                                            input(type="hidden", name="idActoInseguro" value=i.idActoInseguro)
+                                            input(type="hidden", name="sector" value=i.sector)
                                             button( type="button" onclick="confirmar()" style="display: inline-block")   
                                                 h3(class="editIcon"  )
                                                     i(class='bx bxs-x-circle' style='color:#f50505') 
-                                    else 
+                                    else
             br
             hr
         script(src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.16/dist/sweetalert2.all.min.js")
@@ -75,7 +75,7 @@ html(lang="es")
             $(document).ready(function() {
                 $('#t1').DataTable();
                 } );  
-                function confirmar(){
+            function confirmar(){
                 
                     Swal.fire({
                     title: '¿Esta Seguro?',

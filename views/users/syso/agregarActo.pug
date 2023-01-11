@@ -1,0 +1,105 @@
+doctype html
+html(lang="es")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Actos Inseguros | Polimetal
+        link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous")
+        script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous")
+        link(rel="stylesheet" href="/stylesheets/styleIndex.css")
+        script(src="https://unpkg.com/boxicons@2.0.9/dist/boxicons.js")
+    body 
+        div(class="container")
+            div(style="text-align: center;")
+                
+                img(src="/images/logo.jpg" alt="logo" class="img-fluid")
+        
+            div(style="text-align: center;")
+                h2() Reporte de Actos y Condiciones Inseguras
+                img(src="/images/actosInseguros.jpg", alt="", class="img-fluid")
+               
+                a(href="syso", style="display: inline")
+                    box-icon(name='home' flip='horizontal')
+            div                                              
+                h4(style="font-style: italic;") Identificacion
+                hr
+        
+            form(class="row g-3" method="post" action="actosInseguros")
+                input(type="hidden", name="sector" value=sector)
+                input(type="hidden", name="idSector" value=idSector)
+                div(class="col-md-4")
+                    label(for="nombre" class="form-label") Nombre del Observador
+                    input(type="text" class="form-control" id="detecto" name="nombre" required value= nombre)
+                
+                div(class="col-md-4")
+                    label(for="fecha" class="form-label") Fecha
+                    input(type="date" class="form-control" id="fecha" name="fecha" required)
+                
+                div(class="col-md-4")
+                    label(for="tipo" class="form-label") Tipo de Deteccion
+                    select(id="tipo" class="form-select" name="tipo" required)
+                        option(selected) Elejir un tipo...
+                        option Acto Inseguro
+                        option Condicion Insegura
+                        
+                       
+                div(class="col-md-4")
+                    label(for="subtipo" class="form-label") Sub-Tipo
+                    select(id="subtipo" class="form-select" name="subtipo" required)
+                        option ...
+                
+                
+                div                                              
+                h4(style="font-style: italic;") Descripcion
+                hr
+
+                div(class="col-12")
+                    label(for="descripcion" class="form-label") Descripcion de lo Observado
+                    input(type="text" class="form-control" id="descripcion" name="descripcion" required)
+
+                div(class="col-12")
+                    label(for="propuesta" class="form-label") Propuesta de Solucion
+                    input(type="text" class="form-control" id="propuesta" name="propuesta" required)
+                
+                div(class="col-12")
+                    label(for="accion" class="form-label") Accion Tomada por el Observador
+                    input(type="text" class="form-control" id="accion" name="accion" required)
+                
+                div(class="col-12")
+                    input(type="submit" value="Guardar" class="button btn-primary")
+            script. 
+                
+                
+                let tipo = document.getElementById("tipo");
+
+                tipo.addEventListener('change',(e)=>{
+                    let actoInseguro = ["Orden y limpieza","EPP","Posicion de trabajo","Incumplimiento de procedimientos"];
+                    let condicionInsegura = ["Orden y limpieza","Maquinas","Equipos","Herramientas"];
+                           
+                        if(document.getElementById("tipo").value=="Acto Inseguro"){
+                         let contenido;
+                            for(let i=0;i<actoInseguro.length;i++){
+                               contenido += `<option> ${actoInseguro[i]} </option>`;
+                                
+                            }
+                             document.getElementById("subtipo").innerHTML = contenido;  
+                            
+
+                        }else if(document.getElementById("tipo").value=="Condicion Insegura"){
+                            let contenido;
+                            for(let i=0;i<condicionInsegura.length;i++){
+                                contenido += `<option> ${condicionInsegura[i]} </option>`;
+                            }
+                            document.getElementById("subtipo").innerHTML = contenido; 
+                        }
+
+
+                })
+
+
+                
+        footer 
+            br 
+            div(class="col-12")
+                h6 &copy Copyright 2021 | Polimetal S.A

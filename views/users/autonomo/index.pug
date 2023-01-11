@@ -41,7 +41,8 @@ html(lang="es")
         
         div(class="w-100")
             div(class="container")
-                div(style="text-align: center; width:auto;heigh:auto;padding-top:5rem")
+                div(class="alert alert-success" role="alert")= mensaje
+                div(style="text-align: center; width:auto;heigh:auto;")
                     img(src="/images/logo.jpg" alt="")
                 h2(style="text-align:center") Mantenimiento Autonomo
                 table(class="table table-striped table-hover" style="text-align:center")
@@ -53,7 +54,7 @@ html(lang="es")
         
     script. 
         let sector = document.getElementById("tab");
-        fetch('/users/sector')
+        fetch('sector')
             .then(response=>response.json())
             .then(data =>{
                 for(let i=0;i<data.length;i++){
@@ -62,8 +63,8 @@ html(lang="es")
                             <td>${data[i].idSector}</td>
                             <td>${data[i].Descripcion}</td>
                             <td>
-                                <a href="/nuevaTarjeta?sector=${data[i].Descripcion}&id=${data[i].idSector}"><i class='bx bx-plus-medical bx-sm'></i>
-                                <a href="/listadoTarjetas?sector=${data[i].Descripcion}&id=${data[i].idSector}"><button class="btn btn-success">Listado</button>
+                                <a href="agregarTarjeta?sector=${data[i].Descripcion}&id=${data[i].idSector}"><i class='bx bx-plus-medical bx-sm'></i>
+                                <a href="listadoTarjetas?sector=${data[i].Descripcion}&id=${data[i].idSector}"><button class="btn btn-success">Listado</button>
                             </td>
                         </tr>
                     `

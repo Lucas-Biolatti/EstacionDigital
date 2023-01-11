@@ -93,16 +93,18 @@ html(lang="es")
                                 td= i.tiempoTotal
                                 td(class=i.estado)= i.estado
                                 td
-                                   a(href="editarOrden?idOrden="+i.idOrden+"&idSector="+idSector+"&sector="+sector class="d-inline-block")
-                                        h2(class="editIcon")
-                                            i(class='bx bxs-edit')
-                                   
-                                   form(action="ordenMtto?_method=DELETE" method="POST"  id="formDelete")
-                                        input(type="hidden", name="id" value=i.idOrden)
-                                        input(type="hidden", name="idSector" value=i.idSector)
-                                        button( type="button" onclick="confirmar()")   
-                                            h2(class="editIcon")
-                                                i(class='bx bxs-x-circle' style='color:#f50505') 
+                                    if (nombre == i.detecto)
+                                        a(href="editarOrden?idOrden="+i.idOrden+"&idSector="+idSector+"&sector="+sector class="d-inline-block")
+                                                h2(class="editIcon")
+                                                    i(class='bx bxs-edit')
+                                        
+                                        form(action="ordenMtto?_method=DELETE" method="POST"  id="formDelete")
+                                                input(type="hidden", name="id" value=i.idOrden)
+                                                input(type="hidden", name="idSector" value=i.idSector)
+                                                button( type="button" onclick="confirmar()")   
+                                                    h2(class="editIcon")
+                                                        i(class='bx bxs-x-circle' style='color:#f50505')
+                                    else
                                 td
                                    a(target="blank" class="d-inline-block" href="http://wa.me/"+i.tel+"?text="+"***"+"Nueva Orden Generada en: "+sector+"***"+"%0A"+"Orden: "+i.idOrden+"%0A"+"Detecto: "+i.detecto+"%0A"+"Equipo: "+i.equipo+"%0A"+"Parada de Proceso: "+i.paradaProceso+"%0A"+"Tipo de Parada: "+i.tipo+"%0A"+"Descripcion: "+i.descripcion+"%0A"+"Hora de Inicio: "+i.horaInicio )
                                         h2(class="editIcon")    
