@@ -42,7 +42,9 @@ html(lang="es")
         
         div(class="w-100")
             .container
-                h2(id="sector")= sector
+                div
+                    h2(id="sector")= sector
+
                 div(class="row")
                     a(href="autonomo", style="display: inline")
                         h1 
@@ -99,8 +101,19 @@ html(lang="es")
                                 td= i.duracion
                                 td
                                     if (nombre==i.detecto)  
-                                        a(href="editarTarjeta?sector="+sector+"&id="+i.id) Editar
-                                    a(href="resolverTarjeta?sector="+sector+"&id="+i.id) Cerrar
+                                        
+                                        form(action="eliminarTarjeta?_method=DELETE", method="post" id="formDelete")
+                                            a(href="editarTarjeta?sector="+sector+"&id="+i.id class="d-inline-block")
+                                                h4(class="editIcon")
+                                                    i(class='bx bxs-edit')
+                                            input(type="hidden", name="id" value=i.id)
+                                            input(type="hidden", name="sector" vaulue=i.sector)
+                                            button( type="button" onclick="confirmar()")   
+                                                    h4(class="editIcon")
+                                                        i(class='bx bxs-x-circle' style='color:#f50505')
+                                    a(href="resolverTarjeta?sector="+sector+"&id="+i.id  class="d-inline-block")
+                                        h4  
+                                            i(class='bx bxs-check-square' style='color:#32b120' )
             br
             hr
             hr
@@ -138,11 +151,22 @@ html(lang="es")
                                 td= i.acciones
                                 td= i.duracion
                                 td
-                                    if (nombre==i.detecto)   
-                                        a(href="editarTarjeta?sector="+sector+"&id="+i.id) Editar
-                                    a(href="cerrarTarjeta?sector="+sector+"&id="+i.id) Cerrar
+                                    if (nombre==i.detecto)  
+                                        
+                                        form(action="eliminarTarjeta?_method=DELETE", method="post" id="formDelete")
+                                            a(href="editarTarjeta?sector="+sector+"&id="+i.id class="d-inline-block")
+                                                h4(class="editIcon")
+                                                    i(class='bx bxs-edit')
+                                            input(type="hidden", name="id" value=i.id)
+                                            input(type="hidden", name="sector" vaulue=i.sector)
+                                            button( type="button" onclick="confirmar()")   
+                                                    h4(class="editIcon")
+                                                        i(class='bx bxs-x-circle' style='color:#f50505')
+                                    a(href="resolverTarjeta?sector="+sector+"&id="+i.id  class="d-inline-block")
+                                        h4  
+                                            i(class='bx bxs-check-square' style='color:#32b120' )
 
-
+    script(src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.16/dist/sweetalert2.all.min.js")
     script(src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js") 
     script(src="https://code.jquery.com/jquery-3.5.1.js")
     script(src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js")
@@ -206,7 +230,29 @@ html(lang="es")
                         config
                     );
                             
-                        })  
+                        })
+                    function confirmar(){
+                
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "You won't be able to revert this!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, delete it!'
+                            }).then((result) => {
+                            if (result.isConfirmed) {
+                                Swal.fire(
+                                'Deleted!',
+                                'Your file has been deleted.',
+                                'success',
+                                    );
+                                document.getElementById("formDelete").submit();                      
+                                }
+                            
+                            })
+                        } 
             
         
         
