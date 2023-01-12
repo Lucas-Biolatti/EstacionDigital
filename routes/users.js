@@ -724,7 +724,7 @@ router.get('/listadoTarjetas',(req,res)=>{
   } else {
     res.render('login');
   }
-})
+});
 router.get('/editarTarjeta',(req,res)=>{
   if (req.session.loggedin) {
     let id = req.query.id;
@@ -752,6 +752,47 @@ router.get('/editarTarjeta',(req,res)=>{
         }
     })
     
+  } else {
+    res.render('login');
+  }
+});
+router.put('/editarTarjeta',(req,res)=>{
+  if (req.session.loggedin) {
+    const sql="UPDATE tarjetasAm SET sector=?, fecha=?, tipo=?, detecto=?, equipo=?, prioridad=?, disposicion=?, descripcion=? WHERE id=?"
+    
+            conexion.query(sql,[
+              req.body.sector,
+              req.body.fecha,
+              req.body.tipo,
+              req.body.detecto,
+              req.body.equipo,
+              req.body.prioridad,
+              req.body.disposicion,
+              req.body.descripcion,
+              req.body.id],(error)=>{
+                if (!error) {
+                    res.redirect(`autonomo?mensaje=✔Tarjeta Nro${req.body.id} Modificada Exitosamente✔`);
+                }else{
+                  res.redirect(`autonomo?mensaje=🚫No se pudo modificar Tarjeta🚫`);
+                }
+            })
+        
+    
+  } else {
+    res.render('login');
+  }
+});
+router.delete('/eliminarTarjeta',(req,res)=>{
+  if (req.session.loggedin) {
+    let id= req.body.id;
+    const sql = "DELETE * FROM tarjetasAm WHERE id=?"
+      conexion.query(sql,[id],(error)=>{
+        if (!error) {
+          res.redirect()
+        } else {
+          
+        }
+      })
   } else {
     res.render('login');
   }
