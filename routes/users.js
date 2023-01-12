@@ -785,13 +785,14 @@ router.put('/editarTarjeta',(req,res)=>{
 router.delete('/eliminarTarjeta',(req,res)=>{
   if (req.session.loggedin) {
     let id= req.body.id;
-    const sql = "DELETE * FROM tarjetasAm WHERE id=?"
+    const sql = "DELETE FROM tarjetasAm WHERE id=?"
       conexion.query(sql,[id],(error)=>{
         if (!error) {
-          res.redirect()
-        } else {
-          
-        }
+          res.redirect(`autonomo?mensaje=✔Tarjeta Nro${req.body.id} Eliminada Exitosamente✔`);
+      }else{
+        res.redirect(`autonomo?mensaje=🚫No se pudo eliminar Tarjeta🚫`);
+        
+      }
       })
   } else {
     res.render('login');
