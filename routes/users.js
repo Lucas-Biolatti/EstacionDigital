@@ -866,7 +866,5 @@ router.get('/tarjetas',(req,res)=>{
       }
   })
 });
-router.get('/enviarWS',(req,res)=>{
-  res.render('./vistasmtto/enviarWathsapp')
-});
+
 module.exports = router;
