@@ -1,0 +1,147 @@
+doctype html
+html(lang="es")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Polimetal S.A
+        
+        link(href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet")
+        link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css")
+        link(rel="stylesheet", href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css")
+        link(rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css")
+        link(rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css")
+        link(href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet')
+        script(src="https://kit.fontawesome.com/d3705cd4bb.js" crossorigin="anonymous")
+        link(rel="stylesheet" href="/stylesheets/styleIndex.css")
+
+    body
+        div(class="d-flex")
+            div(id="sidebar-container" class="bg-primary")
+                div(class="logo")
+                img(src="favicon.ico" alt="" class="d-inline-block")
+                h4(class="text-light font-weight-bold d-inline-block") Polimetal S.A
+                div(class="menu")
+                    a(href="/" class="d-block p-3 " id="selected")
+                        i(class="icon ion-md-home m-2 lead") 
+                            |
+                            |Inicio
+                    a(href="/users/mtto" class="d-block p-3 text-light")
+                        i(class="icon ion-md-construct m-2 lead") 
+                            |
+                            |Accidentes
+                    a(href="/users/syso" class="d-block p-3 text-light")
+                        i(class="icon ion-md-warning m-2 lead") 
+                            |
+                            |Incidentes
+                    a(href="/users/autonomo" class="d-block p-3 text-light")
+                        i(class="icon ion-md-walk m-2 lead") Mtto Autonomo
+                    
+                    
+                    ul(class="logout")
+                        li  
+                            div(style="text-align: center")
+                                img(src="images/usuario.png", alt="" width="50px")
+                            p(class="d-block p-3 text-light")= nombre
+                            a(href="/logout" class="d-block p-3 text-light" )
+                                i(class="icon ion-md-log-in m-2 lead" )="    Logout"
+               
+            
+            div(class="w-100") 
+            
+                .container    
+                div(style="text-align: center;")
+                    img(src="./images/logo.jpg" alt="logo" class="img-fluid")
+                
+                div(style="text-align: center;")
+                    h2 Listado de Accidentes
+                hr    
+                
+                div(class="container")
+                    div(class="row")
+                        div(class="table-responsive")
+                            table(id="t1" class="table table-striped " style="width:100%" cellspacing="6")
+                                thead(id="th")
+                                    th Id
+                                    th Sector
+                                    th Observador 
+                                    th Fecha
+                                    th Tipo
+                                    th Descripcion del fenomeno 
+                                    th Observaciones
+                                    th Estado
+                                    th Fecha cierre 
+                                    th 4m
+                                    th 5w
+                                    th Acciones
+                                    th Accion
+                                    
+                                tbody 
+                                    each i in result
+                                        tr     
+                                            td= i.idAccidente
+                                            td= i.sector 
+                                            td= i.nombre 
+                                            td= i.fecha 
+                                            td= i.tipo 
+                                            td= i.que+" "+i.cuando+" "+i.donde+" "+i.quien+" "+i.cual+" "+i.como+"." 
+                                            td= i.observaciones
+                                            td(class=i.estado)=i.estado
+                                            td=  i.fecha_cierre 
+                                            td
+                                                a(href=i.cuatrom)
+                                                    h3
+                                                        i(class='bx bxs-file-pdf')
+                                            td 
+                                                a(href=i.cincow)
+                                                    h3 
+                                                        i(class='bx bxs-file-pdf')
+                                            td= i.acciones
+                                            td
+                                                a(href="/resolverAccidente?idAccidente="+i.idAccidente+"&idSector="+i.sector)
+                                                    h2(class="editIcon")
+                                                        i(class='bx bxs-edit') 
+                br
+                hr
+
+                
+                  
+                script(src="https://code.jquery.com/jquery-3.5.1.js")
+                script(src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js")
+                script(src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js")
+                cript(type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js")
+                script(type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js")
+                script(type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js")
+                script(type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js")
+                script(type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js")
+                script(type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js")
+                script(type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js")   
+                script. 
+                    $(document).ready(function() {
+                        $('#t1').DataTable({
+                            
+                            responsive:"true",
+                            dom:"Bfrtilp",
+                            buttons :[
+                                {
+                                extend: 'pdfHtml5',
+                                text: 'Pdf',
+                                className:'btn btn-danger'
+                                
+                                },
+                                {
+                                extend: 'print',
+                                text: 'Imprimir',
+                                className:'btn-amarillo',
+                                title:'Listado de Accidentes'
+                                
+                                }
+                            ],
+                        
+                        });
+                        } );  
+                                                    
+                footer 
+                    br 
+                    div(class="col-12")
+                        h6 &copy Copyright 2021 | Polimetal S.A                                

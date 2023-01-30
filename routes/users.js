@@ -19,7 +19,7 @@ function fechaEdit(x){
 //MANTENIMIENTO
 router.get('/mtto:?',(req,res)=>{
   //Renderizar index de Mantenimiento
-  if (req.session.loggedin) {
+  if (req.session.loggedin && req.session.rol=="users") {
     let sql1 = "SELECT * FROM sector";
     let sector = [];
     let mensaje = req.query.mensaje
@@ -39,12 +39,13 @@ router.get('/mtto:?',(req,res)=>{
       
     })
   }else{
-    res.render('login')
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`})
   }
 });
 router.get('/ordenMtto',(req,res)=>{
   //Renderizar formulario de orden de trabajo
-  if (req.session.loggedin) {
+  if (req.session.loggedin && req.session.rol=="users") {
     let idSector = url.parse(req.url,true).query.id;
     let sector = url.parse(req.url,true).query.nombre;
     let sql2 = "SELECT * FROM equipo WHERE Sector=?";
@@ -71,7 +72,7 @@ router.get('/ordenMtto',(req,res)=>{
 });
 router.get('/listarOrden:?',(req,res)=>{
   //listado de Ordenes y sumatoria de minutos
-  if (req.session.loggedin) {
+  if (req.session.loggedin && req.session.rol=="users") {
     let idSector = req.query.id;
     let sector= req.query.nombre;
     let sql1 = "SELECT * FROM ordentrabajo WHERE sector=?";
@@ -137,7 +138,7 @@ router.get('/listarOrden:?',(req,res)=>{
   }
 });
 router.get('/editarOrden',(req,res)=>{
-  if (req.session.loggedin) {
+  if (req.session.loggedin && req.session.rol=="users") {
     let idOrden = url.parse(req.url,true).query.idOrden;
     let idSector = url.parse(req.url,true).query.idSector;
 
@@ -183,7 +184,7 @@ router.get('/editarOrden',(req,res)=>{
 });
 router.post('/ordenMtto',(req,res)=>{
   // Guardar Orden de Trabajo
-  if (req.session.loggedin) {
+  if (req.session.loggedin && req.session.rol=="users") {
     let sql = "INSERT INTO `ordentrabajo`(`detecto`,`avisar`,`tel`, `sector`, `equipo`, `fecha`, `turno`, `paradaProceso`, `prioridad`, `tipoParada`, `horaInicio`, `horaFin`, `descripcion`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
     conexion.query(sql,[
     req.body.detecto,
@@ -210,7 +211,7 @@ router.post('/ordenMtto',(req,res)=>{
 });
 router.delete('/ordenMtto:?',(req,res)=>{
   //Eliminar orden de trabajo
-  if (req.session.loggedin) {
+  if (req.session.loggedin && req.session.rol=="users") {
     let id = req.body.id;
     
 
@@ -223,7 +224,7 @@ router.delete('/ordenMtto:?',(req,res)=>{
   }
 });
 router.put('/editarOrden',(req,res)=>{
-  if (req.session.loggedin) {
+  if (req.session.loggedin && req.session.rol=="users") {
         
         let sqlupdate = "UPDATE `ordentrabajo` SET `detecto`=?,`equipo`=?,`fecha`=?,`turno`=?,`paradaProceso`=?,`prioridad`=?,`tipoParada`=?,`horaInicio`=?,`horaFin`=?,`descripcion`=? WHERE `idOrden`=?";
         let resultados = [
@@ -258,7 +259,7 @@ router.put('/editarOrden',(req,res)=>{
 //SYSO
 router.get('/syso', (req,res)=>{
   //Renderizar index de Seguridad
-  if (req.session.loggedin) {
+  if (req.session.loggedin && req.session.rol=="users") {
     let sql1 = "SELECT * FROM sector";
     let sql2= "SELECT * FROM accidentes";
     let sql3= "SELECT * FROM actosinseguros";
@@ -306,7 +307,7 @@ router.get('/syso', (req,res)=>{
 });
         // Accidentes
 router.get('/accidente',(req,res)=>{
-   if (req.session.loggedin) {
+   if (req.session.loggedin && req.session.rol=="users") {
     let idSector = req.query.id;
     let sector = req.query.sector;
    
@@ -320,7 +321,7 @@ router.get('/accidente',(req,res)=>{
         
 });
 router.post('/accidente',async (req,res)=>{
-if (req.session.loggedin) {
+if (req.session.loggedin && req.session.rol=="users") {
     let sql = "INSERT INTO `accidentes`( `nombre`, `fecha`, `tipo`, `que`, `cuando`, `donde`, `quien`, `cual`, `como`, `observaciones`, `sector`) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
     await  conexion.query(sql,[
       req.body.nombre,
@@ -353,7 +354,7 @@ if (req.session.loggedin) {
 }
 });
 router.get('/listaAccidentes',(req,res)=>{
-  if (req.session.loggedin) {
+  if (req.session.loggedin && req.session.rol=="users") {
     let sql = "SELECT * FROM accidentes WHERE 1";
     let mensaje = req.query.mensaje;
     conexion.query(sql,(error,result)=>{
@@ -398,7 +399,7 @@ router.get('/listaAccidentes',(req,res)=>{
   }
 });
 router.get('/editarAccidente',(req,res)=>{
-  if (req.session.loggedin) {
+  if (req.session.loggedin && req.session.rol=="users") {
     let idAccidente=req.query.idAccidente;
     let idSector=req.query.idSector;
     let mensaje = req.query.mensaje;
@@ -417,7 +418,7 @@ router.get('/editarAccidente',(req,res)=>{
   }
 });
 router.put('/editarAccidente',(req,res)=>{
-  
+  if (req.session.loggedin && req.session.rol=="users") {
     let sql = "UPDATE accidentes SET nombre=?,fecha=?,tipo=?,que=?, cuando=?, donde=?,quien=?, cual=?, como=?,observaciones=? WHERE idAccidente=?"
         conexion.query(sql,[
           req.body.nombre,
@@ -436,10 +437,15 @@ router.put('/editarAccidente',(req,res)=>{
             
         }
     })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+    
    
 });
 router.delete('/eliminarAccidente',(req,res)=>{
-  if (req.session.loggedin) {
+  if (req.session.loggedin && req.session.rol=="users") {
     let id = req.body.idAccidente;
     
 
@@ -453,7 +459,7 @@ router.delete('/eliminarAccidente',(req,res)=>{
 });
         //Actos Inseguros
 router.get('/actosInseguros',(req,res)=>{
-  if (req.session.loggedin) {
+  if (req.session.loggedin && req.session.rol=="users") {
     let idSector = req.query.id;
     let sector = req.query.sector;
    
@@ -467,7 +473,7 @@ router.get('/actosInseguros',(req,res)=>{
   }
 });
 router.post('/actosInseguros',(req,res)=>{
-  if (req.session.loggedin) {
+  if (req.session.loggedin && req.session.rol=="users") {
     
     let sql = "INSERT INTO `actosinseguros`(`nombre`, `fecha`, `tipo`, `subTipo`, `descripcion`, `propuesta`, `accion`, `sector`) VALUES (?,?,?,?,?,?,?,?)";
     conexion.query(sql,[
@@ -494,7 +500,7 @@ router.post('/actosInseguros',(req,res)=>{
   }
 });
 router.get('/listaActos',(req,res)=>{
-  if (req.session.loggedin) {
+  if (req.session.loggedin && req.session.rol=="users") {
     const sql = "SELECT * FROM `actosinseguros` WHERE 1";
     conexion.query(sql,(error,result,files)=>{
         if(!error){
@@ -532,7 +538,7 @@ router.get('/listaActos',(req,res)=>{
   }
 });
 router.get('/editarActo',(req,res)=>{
-  if (req.session.loggedin) {
+  if (req.session.loggedin && req.session.rol=="users") {
     const sector= req.query.idSector;
     const idActo= req.query.idIncidente;
     const sql = "SELECT * FROM actosinseguros WHERE idActoInseguro=?"
@@ -545,7 +551,7 @@ router.get('/editarActo',(req,res)=>{
   }
 });
 router.put('/editarActo',(req,res)=>{
-  if (req.session.loggedin) {
+  if (req.session.loggedin && req.session.rol=="users") {
     let sql="UPDATE actosinseguros SET nombre=?, fecha=?, tipo=?, subTipo=?, descripcion=?, propuesta=?, accion=? WHERE idActoInseguro=?"
   conexion.query(sql,[
     req.body.nombre,
@@ -569,7 +575,7 @@ router.put('/editarActo',(req,res)=>{
   }
 })
 router.delete('/eliminarActo',(req,res)=>{
-  if (req.session.loggedin) {
+  if (req.session.loggedin && req.session.rol=="users") {
     let id = req.body.idActoInseguro;
     const sql = `DELETE FROM actosinseguros WHERE idActoInseguro = ${id}`
     conexion.query(sql,(error,filas)=>{

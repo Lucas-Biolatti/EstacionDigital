@@ -1,0 +1,70 @@
+doctype html
+html(lang="es")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Polimetal S.A
+        
+        link(href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet")
+        link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css")
+        link(rel="stylesheet", href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css")
+        link(rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css")
+        link(rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css")
+        link(href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet')
+        script(src="https://kit.fontawesome.com/d3705cd4bb.js" crossorigin="anonymous")
+        link(rel="stylesheet" href="/stylesheets/styleIndex.css")
+
+    body
+        div(class="d-flex")
+            div(id="sidebar-container" class="bg-primary")
+                div(class="logo")
+                img(src="favicon.ico" alt="" class="d-inline-block")
+                h4(class="text-light font-weight-bold d-inline-block") Polimetal S.A
+                div(class="menu")
+                    a(href="/" class="d-block p-3 " id="selected")
+                        i(class="icon ion-md-home m-2 lead") 
+                            |
+                            |Inicio
+                    a(href="Seguridad/accidentes" class="d-block p-3 text-light")
+                        i(class="icon ion-md-construct m-2 lead") 
+                            |
+                            |Accidentes
+                    a(href="accidentes" class="d-block p-3 text-light")
+                        i(class="icon ion-md-warning m-2 lead") 
+                            |
+                            |Incidentes
+                    a(href="/users/autonomo" class="d-block p-3 text-light")
+                        i(class="icon ion-md-walk m-2 lead") Mtto Autonomo
+                    
+                    
+                    ul(class="logout")
+                        li  
+                            div(style="text-align: center")
+                                img(src="images/usuario.png", alt="" width="50px")
+                            p(class="d-block p-3 text-light")= nombre
+                            a(href="/logout" class="d-block p-3 text-light" )
+                                i(class="icon ion-md-log-in m-2 lead" )="    Logout"
+               
+            
+            div(class="w-100") 
+             div(class="container")
+                    div(style="text-align: center; width:auto;heigh:auto;padding-top:5rem")
+                        img(src="images/logo.jpg" alt="")
+                        h2(style="padding-top:2rem")
+                            |Bienvenido 
+                            em=nombre 
+                            |
+                            |al modulo de seguridad
+                        img(src="images/polimetal.jpg", alt="", id="imgInicio")
+                                 
+                                    
+                
+
+                
+                  
+                
+        script(src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js")
+                 
+                
+                

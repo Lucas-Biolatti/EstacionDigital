@@ -60,6 +60,7 @@ router.get('/', function(request, response) {
 						}
 					response.end();
 });
+
 router.get('/logout',async (req,res)=>{
 	await req.session.destroy();
 	await res.redirect('/login');
