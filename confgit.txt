@@ -10,9 +10,10 @@ Respaldo
 🚫 ✔
 Nombre: `${req.session.apellido}, ${req.session.nombre}`
 
-if (req.session.loggedin) {
+if (req.session.loggedin && req.session.rol=="users") {
     
     
   } else {
-    res.render('login');
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
