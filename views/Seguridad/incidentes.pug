@@ -26,15 +26,15 @@ html(lang="es")
                         i(class="icon ion-md-home m-2 lead") 
                             |
                             |Inicio
-                    a(href="accidentes" class="d-block p-3 " id="selected") 
+                    a(href="accidentes" class="d-block p-3  text-light" ) 
                         i(class="icon ion-md-construct m-2 lead") 
                             |
                             |Accidentes
-                    a(href="incidentes" class="d-block p-3 text-light")
+                    a(href="incidentes" class="d-block p-3"  id="selected")
                         i(class="icon ion-md-warning m-2 lead") 
                             |
                             |Incidentes
-                    a(href="#" class="d-block p-3 text-light")
+                    a(href="/users/autonomo" class="d-block p-3  text-light")
                         i(class="icon ion-md-walk m-2 lead") Mtto Autonomo
                     
                     
@@ -64,39 +64,38 @@ html(lang="es")
                                 thead(id="th")
                                     th Id
                                     th Sector
+                                    th Estado
                                     th Observador 
                                     th Fecha
                                     th Tipo
-                                    th Descripcion del fenomeno 
-                                    th Observaciones
-                                    th Estado
-                                    th Fecha cierre 
-                                    th 4m
-                                    th 5w
-                                    th Acciones
+                                    th Subtipo 
+                                    th Descripcion
+                                    th Propuesta
                                     th Accion
+                                    th Fecha de cierre
+                                    th 
+                                    th 
+                                    th 
                                     
                                 tbody 
                                     each i in result
                                         tr     
-                                            td= i.idAccidente
+                                            td= i.idActoInseguro
                                             td= i.sector 
+                                            td(class=i.estado)=i.estado
                                             td= i.nombre 
                                             td= i.fecha 
                                             td= i.tipo 
-                                            td= i.que+" "+i.cuando+" "+i.donde+" "+i.quien+" "+i.cual+" "+i.como+"." 
-                                            td= i.observaciones
-                                            td(class=i.estado)=i.estado
-                                            td=  i.fecha_cierre 
+                                            td= i.subTipo 
+                                            td= i.descripcion
+                                            td=i.propuesta
+                                            td= i.accion 
+                                            td= i.fecha_cierre
+                                            td= i.accion_def
                                             td
-                                                a(href=i.cuatrom)
+                                                a(href=i.evidencia)
                                                     h3
                                                         i(class='bx bxs-file-pdf')
-                                            td 
-                                                a(href=i.cincow)
-                                                    h3 
-                                                        i(class='bx bxs-file-pdf')
-                                            td= i.acciones
                                             td
                                                 a(href="resolverAccidente?idAccidente="+i.idAccidente+"&idSector="+i.sector)
                                                     h2(class="editIcon")
