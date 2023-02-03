@@ -49,14 +49,26 @@ html(lang="es")
             
             div(class="w-100") 
              div(class="container")
-                    div(style="text-align: center; width:auto;heigh:auto;padding-top:5rem")
-                        img(src="images/logo.jpg" alt="")
-                        h2(style="padding-top:2rem")
-                            |Bienvenido 
-                            em=nombre 
-                            |
-                            |al modulo de seguridad
-                        img(src="images/polimetal.jpg", alt="", id="imgInicio")
+                    if (mensaje)
+                        div(class="alert alert-success" role="alert")= mensaje
+                        div(style="text-align: center; width:auto;heigh:auto;padding-top:5rem")
+                            img(src="images/logo.jpg" alt="")
+                            h2(style="padding-top:2rem")
+                                |Bienvenido 
+                                em=nombre 
+                                |
+                                |al modulo de seguridad
+                            img(src="images/polimetal.jpg", alt="", id="imgInicio")
+                    else 
+                           
+                        div(style="text-align: center; width:auto;heigh:auto;padding-top:5rem")
+                            img(src="images/logo.jpg" alt="")
+                            h2(style="padding-top:2rem")
+                                |Bienvenido 
+                                em=nombre 
+                                |
+                                |al modulo de seguridad
+                            img(src="images/polimetal.jpg", alt="", id="imgInicio")
                                  
                                     
                 

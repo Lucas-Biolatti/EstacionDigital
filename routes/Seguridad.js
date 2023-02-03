@@ -59,8 +59,7 @@ router.get('/accidentes',(req,res)=>{
       res.render('login',{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
     }
-  });
-
+});
 router.get('/incidentes',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="Seguridad") {
     const sql = "SELECT * FROM actosinseguros"
@@ -97,7 +96,7 @@ router.get('/incidentes',(req,res)=>{
     res.render('login',{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
-})
+});
 router.get('/resolverAccidente',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="Seguridad") {
     let id = req.query.idAccidente;
@@ -126,8 +125,8 @@ router.get('/resolverAccidente',(req,res)=>{
     res.render('login',{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
-})
-router.post('/resolverAccidente',(req,res)=>{
+});
+router.put('/resolverAccidente',(req,res)=>{
   const id = req.body.idAccidente;
   const sql = "UPDATE accidentes SET `estado`=?,`fecha_cierre`=?,`cuatrom`=?,`cincow`=?,`acciones`=?, `valoracion`=? WHERE `idAccidente`=?"
   const filecausa = req.files.filecausa;
@@ -136,19 +135,20 @@ router.post('/resolverAccidente',(req,res)=>{
   conexion.query(sql,[
     req.body.estado,
     req.body.fecha_cierre,
-    `${filecausa.name}_${id}`,
-    `${fileraiz.name}_${id}`,
+    `${id}_${filecausa.name}`,
+    `${id}_${fileraiz.name}`,
     req.body.acciones,
     req.body.valoracion,
     id
   ],(error,rows)=>{
     if (!error) {
-      filecausa.mv('./public/accidentes/'+id+'_'+filecausa.name);
-      fileraiz.mv('./public/accidentes/'+id+'_'+fileraiz.name);
-      res.render('Seguridad/resolverAccidente',{
-        mensaje:`Se actualizaron correctamente los datos del siniestro Nro${id} `
-      })
-    }else{console.log(error)}
+      filecausa.mv(`./public/accidentes/${id}_${filecausa.name}`);
+      fileraiz.mv(`./public/accidentes/${id}_${fileraiz.name}`);
+      res.redirect(`/?mensaje:Se actualizaron correctamente los datos del siniestro Nro${id}`)
+      }
+    else{console.log(error)}
   })
-})
+});
+
+
 module.exports = router;

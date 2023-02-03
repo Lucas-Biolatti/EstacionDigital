@@ -39,7 +39,7 @@ html(lang="es")
         
             hr
             h2(class="bg-dark bg-gradient text-white") Descripción de la Resolucion
-            form(action="resolverAccidente", method="post", enctype="multipart/form-data")
+            form(action="resolverAccidente?_method=PUT", method="post", enctype="multipart/form-data")
 
                 div(class="row")
                     input(type="hidden", name="idAccidente", value=result.idAccidente)
