@@ -17,3 +17,5 @@ if (req.session.loggedin && req.session.rol=="users") {
     res.render('login',{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
+
+const sql2 = `UPDATE datos_matriceria SET fecha=${req.body.fecha}, molde=${req.body.molde}, fns=${req.body.fns}, fni=${req.body.fni}, fsb=${req.body.fsb}, fporta=${req.body.fporta}, observaciones=${req.body.observaciones} WHERE `

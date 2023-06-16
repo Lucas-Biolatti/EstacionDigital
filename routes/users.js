@@ -837,6 +837,7 @@ router.get('/nomina',(req,res)=>{
   })
 });
 
+
 router.get('/ordenes',(req,res)=>{
   const sql="SELECT * FROM ordentrabajo WHERE NOT estado='cerrado'"
   conexion.query(sql,(error,fields)=>{

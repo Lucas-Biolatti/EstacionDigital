@@ -11,6 +11,7 @@ var upload = require('express-fileupload');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var SeguridadRouter = require('./routes/Seguridad');
+var MantenimientoRouter = require('./routes/Mantenimiento');
 var app = express();
 
 // view engine setup
@@ -28,11 +29,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public/accidentes')));
 app.use(upload());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/Seguridad',SeguridadRouter);
+app.use('/Mantenimiento',MantenimientoRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

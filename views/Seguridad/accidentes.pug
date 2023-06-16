@@ -19,7 +19,7 @@ html(lang="es")
         div(class="d-flex")
             div(id="sidebar-container" class="bg-primary")
                 div(class="logo")
-                img(src="favicon.ico" alt="" class="d-inline-block")
+                img(src="/favicon.ico" alt="" class="d-inline-block")
                 h4(class="text-light font-weight-bold d-inline-block") Polimetal S.A
                 div(class="menu")
                     a(href="/" class="d-block p-3 text-light" )
@@ -41,7 +41,7 @@ html(lang="es")
                     ul(class="logout")
                         li  
                             div(style="text-align: center")
-                                img(src="images/usuario.png", alt="" width="50px")
+                                img(src="/images/usuario.png", alt="" width="50px")
                             p(class="d-block p-3 text-light")= nombre
                             a(href="/logout" class="d-block p-3 text-light" )
                                 i(class="icon ion-md-log-in m-2 lead" )="    Logout"
@@ -49,7 +49,7 @@ html(lang="es")
             
             div(class="w-100") 
             
-             .container   
+               
                 div(class="alert alert-success" role="alert")= mensaje 
                 div(style="text-align: center;")
                     img(src="/images/logo.jpg" alt="logo" class="img-fluid")
@@ -59,9 +59,9 @@ html(lang="es")
                 hr    
                 
                 div(class="container")
-                    div(class="row")
-                        div(class="table-responsive")
-                            table(id="t1" class="table table-striped " style="width:100%" cellspacing="6")
+                    
+                        
+                            table(id="t1" class="table table-striped " )
                                 thead(id="th")
                                     th Id
                                     th Sector
@@ -90,13 +90,24 @@ html(lang="es")
                                             td(class=i.estado)=i.estado
                                             td=  i.fecha_cierre 
                                             td
-                                                a(href=i.cuatrom)
-                                                    h3
-                                                        i(class='bx bxs-file-pdf')
+                                                if (i.cuatrom)
+                                                    a(href=`/${i.cuatrom}`)
+                                                        h3
+                                                            i(class='bx bxs-file-pdf')
+                                                else    
+                                                    a(href=i.cuatrom)
+                                                        h3
+                                                            i(class='bx bxs-file-pdf')
+
                                             td 
-                                                a(href=i.cincow)
-                                                    h3 
-                                                        i(class='bx bxs-file-pdf')
+                                                if (i.cincow)
+                                                    a(href=`/${i.cincow}`)
+                                                        h3 
+                                                            i(class='bx bxs-file-pdf')
+                                                else 
+                                                    a(href=i.cincow)
+                                                        h3 
+                                                            i(class='bx bxs-file-pdf')
                                             td= i.acciones
                                             td
                                                 a(href="resolverAccidente?idAccidente="+i.idAccidente+"&idSector="+i.sector)

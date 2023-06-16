@@ -150,5 +150,49 @@ router.put('/resolverAccidente',(req,res)=>{
   })
 });
 
+//Para usar con fetch
+router.get('/listadoaccidentes',(req,res)=>{
+  if (req.session.loggedin  && req.session.rol=="Seguridad") {
+    const sql = "SELECT * FROM accidentes ORDER BY idAccidente DESC"
+    conexion.query(sql,(error,result)=>{
+      if (!error) {
+        let resultados=[];
+        for (let i = 0; i < result.length; i++) {
+          let r = {
+            idAccidente:result[i].idAccidente,
+            nombre:result[i].nombre,
+            fecha:fecha(result[i].fecha),
+            tipo:result[i].tipo,
+            que:result[i].que,
+            cuando:result[i].cuando,
+            donde:result[i].donde,
+            quien:result[i].quien,
+            cual:result[i].cual,
+            como:result[i].como,
+            observaciones:result[i].observaciones,
+            sector:result[i].sector,
+            estado:result[i].estado,
+            fecha_cierre:result[i].fecha_cierre,
+            cuatrom:result[i].cuatrom,
+            cincow:result[i].cincow,
+            acciones:result[i].acciones
+          }
+          resultados.push(r)
+          
+        }
+      
+        res.send(resultados)  
+      }else{
+        console.log(error)
+      }
+    })
+      
+  
+  } else {
+    res.render('login',{
+    mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+})
+
 
 module.exports = router;
