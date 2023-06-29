@@ -49,56 +49,110 @@ html(lang="es")
             
             div(class="w-100")
                 div(class="container" )
-                    a(href="/") 
-                        div(style="text-align: center;")
-                            img(src="/images/logo.jpg" alt="logo" class="img-fluid")
-                
-                    div(style="text-align: center;")
-                        h2= "Listado de Ordenes - Sector "+sector
+                    if (mensaje)
+                        div(class="alert alert-success" role="alert")= mensaje
+
+                        a(href="/") 
+                            div(style="text-align: center;")
+                                img(src="/images/logo.jpg" alt="logo" class="img-fluid")
                     
-                    div(class="container")
-                        table(id="t1" class="table table-striped" style="width:100%")
-                            thead(id="thmtto")
-                                th Id
-                                th Sector 
-                                th Detecto 
-                                th Equipo
-                                th Fecha 
-                                th Turno 
-                                th Parada de Proc.
-                                th Prioridad 
-                                th Tipo 
-                                th Hs Inicio 
-                                th Hs Fin 
-                                th Descripcion
-                                th Total
-                                th Estado
-                                th Accion
-                                
-                            tbody 
-                                each i in orden
-                                    tr     
-                                        td= i.idOrden
-                                        td= i.sector
-                                        td= i.detecto 
-                                        td= i.equipo 
-                                        td= i.fecha 
-                                        td= i.turno 
-                                        td= i.paradaProceso 
-                                        td= i.prioridad 
-                                        td= i.tipo 
-                                        td= i.horaInicio 
-                                        td= i.horaFin 
-                                        td= i.descripcion  
-                                        td= i.tiempoTotal
-                                        td= i.estado
-                                        td
-                                            a(href="/resolverOrden?idOrden="+i.idOrden)
-                                                    h2(class="editIcon")
-                                                        i(class='bx bxs-edit') 
-                    br
-                    hr
-                    h2 Todas las ordenes 
+                        div(style="text-align: center;")
+                            h2= "Listado de Ordenes - Sector "+sector
+                        
+                        div(class="container")
+                            table(id="t1" class="table table-striped" style="width:100%")
+                                thead(id="thmtto")
+                                    th Id
+                                    th Sector 
+                                    th Detecto 
+                                    th Equipo
+                                    th Fecha 
+                                    th Turno 
+                                    th Parada de Proc.
+                                    th Prioridad 
+                                    th Tipo 
+                                    th Hs Inicio 
+                                    th Hs Fin 
+                                    th Descripcion
+                                    th Total
+                                    th Estado
+                                    th Accion
+                                    
+                                tbody 
+                                    each i in orden
+                                        tr     
+                                            td= i.idOrden
+                                            td= i.sector
+                                            td= i.detecto 
+                                            td= i.equipo 
+                                            td= i.fecha 
+                                            td= i.turno 
+                                            td= i.paradaProceso 
+                                            td= i.prioridad 
+                                            td= i.tipo 
+                                            td= i.horaInicio 
+                                            td= i.horaFin 
+                                            td= i.descripcion  
+                                            td= i.tiempoTotal
+                                            td= i.estado
+                                            td
+                                                a(href="resolverOrden?idOrden="+i.idOrden)
+                                                        h2(class="editIcon")
+                                                            i(class='bx bxs-edit') 
+                        br
+                        hr
+                        h2 Todas las ordenes 
+                    else 
+                        a(href="/") 
+                            div(style="text-align: center;")
+                                img(src="/images/logo.jpg" alt="logo" class="img-fluid")
+                    
+                        div(style="text-align: center;")
+                            h2= "Listado de Ordenes - Sector "+sector
+                        
+                        div(class="container")
+                            table(id="t1" class="table table-striped" style="width:100%")
+                                thead(id="thmtto")
+                                    th Id
+                                    th Sector 
+                                    th Detecto 
+                                    th Equipo
+                                    th Fecha 
+                                    th Turno 
+                                    th Parada de Proc.
+                                    th Prioridad 
+                                    th Tipo 
+                                    th Hs Inicio 
+                                    th Hs Fin 
+                                    th Descripcion
+                                    th Total
+                                    th Estado
+                                    th Accion
+                                    
+                                tbody 
+                                    each i in orden
+                                        tr     
+                                            td= i.idOrden
+                                            td= i.sector
+                                            td= i.detecto 
+                                            td= i.equipo 
+                                            td= i.fecha 
+                                            td= i.turno 
+                                            td= i.paradaProceso 
+                                            td= i.prioridad 
+                                            td= i.tipo 
+                                            td= i.horaInicio 
+                                            td= i.horaFin 
+                                            td= i.descripcion  
+                                            td= i.tiempoTotal
+                                            td= i.estado
+                                            td
+                                                a(href="resolverOrden?idOrden="+i.idOrden)
+                                                        h2(class="editIcon")
+                                                            i(class='bx bxs-edit') 
+                        br
+                        hr
+                        h2 Todas las ordenes 
 
                     script(src="https://unpkg.com/boxicons@2.0.9/dist/boxicons.js")    
                     script(src="https://code.jquery.com/jquery-3.5.1.js")

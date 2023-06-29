@@ -76,7 +76,7 @@ html(lang="es")
                                     
                     br
                     hr
-                    h2 Todas las Ordenes 
+                    h2 Todas las Ordenes Pendientes
                 
                 table(id="t1" class="table table-hover" style="width:100%; " )
                     
@@ -110,7 +110,8 @@ html(lang="es")
                             
                             let dataset=[];
                             for(let i=0;i<datos.length;i++){
-                            var dat=[
+                                if(datos[i].estado="Pendiente"){
+                                    var dat=[
                                 datos[i].idOrden,
                                 datos[i].sector,
                                 datos[i].avisar,
@@ -120,8 +121,10 @@ html(lang="es")
                                 datos[i].descripcion,
                                 datos[i].estado,
                                 datos[i].accion,
-                            ]
+                                ]
                                 dataset.push(dat);
+                                }
+                            
                             }
                             console.log(dataset);
                             $(document).ready(function () {
