@@ -143,3 +143,11 @@ td.Cerrado{
     
     
 }
+#icono {
+    display: inline-flex;
+    
+    padding-bottom: 100%;
+    padding-right: 100%;
+    
+    
+}

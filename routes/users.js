@@ -255,6 +255,36 @@ router.put('/editarOrden',(req,res)=>{
     res.render('login')
   }
 });
+router.get('/verOrden',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="users") {
+      let idOrden = url.parse(req.url,true).query.idOrden;
+      const sqlorden = "SELECT * FROM ordentrabajo WHERE idOrden = ?"
+      conexion.query(sqlorden,[idOrden],(error,result)=>{
+      if(!error && result.length>0){
+          let dia = (result[0].fecha.getUTCDate()<10?'0':'')+result[0].fecha.getUTCDate();
+          let mes = ((result[0].fecha.getMonth()+1)<10?'0':'')+(result[0].fecha.getMonth()+1);
+          let f = dia+"/"+mes+"/"+result[0].fecha.getUTCFullYear();
+          let hi= result[0].horaInicio.getHours()+":"+result[0].horaInicio.getMinutes();
+          let hf= result[0].horaFin.getHours()+":"+result[0].horaFin.getMinutes();
+          let total=(result[0].horaFin-result[0].horaInicio)/1000/60;
+          res.render('./users/mantenimiento/verOrden',{
+              result:result,
+              f:f,
+              hi:hi,
+              hf:hf,
+              fecha_cierre: fecha(result[0].fecha_cierre),
+              total:total,
+              idOrden:idOrden,
+              Nombre: `${req.session.apellido}, ${req.session.nombre}`});
+      }else{res.send(`<h1>No se encontraron resultados</h1>`)};
+  })
+  
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+  
+})
 
 //SYSO
 router.get('/syso', (req,res)=>{

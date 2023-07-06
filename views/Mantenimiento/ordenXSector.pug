@@ -26,16 +26,16 @@ html(lang="es")
                         i(class="icon ion-md-home m-2 lead") 
                             |
                             |Inicio
-                    a(href="ordenTrabajo" class="d-block p-3 " id="selected")
+                    a(href="#" class="d-block p-3 " id="selected")
                         i(class="icon ion-md-construct m-2 lead") 
                             |
                             |Ordenes de Trabajo
-                    a(href="" class="d-block p-3 text-light")
-                        i(class="icon ion-md-warning m-2 lead") 
-                            |
-                            |Incidentes
                     a(href="#" class="d-block p-3 text-light")
-                        i(class="icon ion-md-walk m-2 lead") Mtto Autonomo
+                         
+                            |
+                            |
+                    a(href="#" class="d-block p-3 text-light")
+                        
                     
                     
                     ul(class="logout")
@@ -48,7 +48,7 @@ html(lang="es")
                
             
             div(class="w-100")
-                div(class="container" )
+                div(class="")
                     if (mensaje)
                         div(class="alert alert-success" role="alert")= mensaje
 
@@ -94,14 +94,14 @@ html(lang="es")
                                             td= i.horaFin 
                                             td= i.descripcion  
                                             td= i.tiempoTotal
-                                            td= i.estado
+                                            td(class=i.estado)= i.estado
                                             td
                                                 a(href="resolverOrden?idOrden="+i.idOrden)
                                                         h2(class="editIcon")
                                                             i(class='bx bxs-edit') 
                         br
                         hr
-                        h2 Todas las ordenes 
+                       
                     else 
                         a(href="/") 
                             div(style="text-align: center;")
@@ -110,7 +110,7 @@ html(lang="es")
                         div(style="text-align: center;")
                             h2= "Listado de Ordenes - Sector "+sector
                         
-                        div(class="container")
+                        div(class="")
                             table(id="t1" class="table table-striped" style="width:100%")
                                 thead(id="thmtto")
                                     th Id
@@ -145,14 +145,14 @@ html(lang="es")
                                             td= i.horaFin 
                                             td= i.descripcion  
                                             td= i.tiempoTotal
-                                            td= i.estado
+                                            td(class=i.estado)= i.estado
                                             td
                                                 a(href="resolverOrden?idOrden="+i.idOrden)
                                                         h2(class="editIcon")
                                                             i(class='bx bxs-edit') 
                         br
                         hr
-                        h2 Todas las ordenes 
+                        
 
                     script(src="https://unpkg.com/boxicons@2.0.9/dist/boxicons.js")    
                     script(src="https://code.jquery.com/jquery-3.5.1.js")

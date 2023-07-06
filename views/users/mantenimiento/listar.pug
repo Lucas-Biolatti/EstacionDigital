@@ -15,7 +15,7 @@ html(lang="es")
 
 
     body 
-        div(class="container")
+        div
             a(href="/") 
                 div(style="text-align: center;")
                     img(src="/images/logo.jpg" alt="logo" class="img-fluid")
@@ -55,62 +55,65 @@ html(lang="es")
                         span(class="las la-clock")
 
             
-            div()
-                table(id="t1" class="table table-striped" style="width:100%")
-                    thead(id="thmtto")
-                        th Id 
-                        th Detecto 
-                        th Avisar
-                        th Equipo
-                        th Fecha 
-                        th Turno 
-                        th Parada de Proc.
-                        th Prioridad 
-                        th Tipo 
-                        th Hs Inicio 
-                        th Hs Fin 
-                        th Descripcion
-                        th Total
-                        th Estado
-                        th Accion
-                        th Enviar
-                        
-                    tbody 
-                        each i in orden
-                            tr     
-                                td= i.idOrden
-                                td= i.detecto 
-                                td= i.avisar
-                                td= i.equipo 
-                                td= i.fecha 
-                                td= i.turno 
-                                td= i.paradaProceso 
-                                td= i.prioridad 
-                                td= i.tipo 
-                                td= i.horaInicio 
-                                td= i.horaFin 
-                                td= i.descripcion  
-                                td= i.tiempoTotal
-                                td(class=i.estado)= i.estado
-                                td
-                                    if (nombre == i.detecto)
-                                        a(href="editarOrden?idOrden="+i.idOrden+"&idSector="+idSector+"&sector="+sector class="d-inline-block")
-                                                h2(class="editIcon")
-                                                    i(class='bx bxs-edit')
-                                        
-                                        form(action="ordenMtto?_method=DELETE" method="POST"  id="formDelete")
-                                                input(type="hidden", name="id" value=i.idOrden)
-                                                input(type="hidden", name="idSector" value=i.idSector)
-                                                button( type="button" onclick="confirmar()")   
-                                                    h2(class="editIcon")
-                                                        i(class='bx bxs-x-circle' style='color:#f50505')
-                                    else
-                                td
-                                   a(target="blank" class="d-inline-block" href="http://wa.me/"+i.tel+"?text="+"***"+"Nueva Orden Generada en: "+sector+"***"+"%0A"+"Orden: "+i.idOrden+"%0A"+"Detecto: "+i.detecto+"%0A"+"Equipo: "+i.equipo+"%0A"+"Parada de Proceso: "+i.paradaProceso+"%0A"+"Tipo de Parada: "+i.tipo+"%0A"+"Descripcion: "+i.descripcion+"%0A"+"Hora de Inicio: "+i.horaInicio )
-                                        h2(class="editIcon")    
-                                            i(class='bx bxl-whatsapp' style='color:#11a042')
-            br
-            hr
+            
+            table(id="t1" class="table table-striped" style="width:100%")
+                thead(id="thmtto")
+                    th Id 
+                    th Detecto 
+                    th Avisar
+                    th Equipo
+                    th Fecha 
+                    th Turno 
+                    th Parada de Proc.
+                    th Prioridad 
+                    th Tipo 
+                    th Hs Inicio 
+                    th Hs Fin 
+                    th Descripcion
+                    th Total
+                    th Estado
+                    th Accion
+                    th Enviar
+                    
+                tbody 
+                    each i in orden
+                        tr     
+                            td= i.idOrden
+                            td= i.detecto 
+                            td= i.avisar
+                            td= i.equipo 
+                            td= i.fecha 
+                            td= i.turno 
+                            td= i.paradaProceso 
+                            td= i.prioridad 
+                            td= i.tipo 
+                            td= i.horaInicio 
+                            td= i.horaFin 
+                            td= i.descripcion  
+                            td= i.tiempoTotal
+                            td(class=i.estado)= i.estado
+                            td(id="icono")
+                                if (nombre == i.detecto)
+                                    a(href="editarOrden?idOrden="+i.idOrden+"&idSector="+idSector+"&sector="+sector)
+                                            h2(class="editIcon" )
+                                                i(class='bx bxs-edit' )
+                                    
+                                    form(action="ordenMtto?_method=DELETE" method="POST"  id="formDelete" )
+                                            input(type="hidden", name="id" value=i.idOrden)
+                                            input(type="hidden", name="idSector" value=i.idSector)
+                                            button( type="button" onclick="confirmar()")   
+                                                h2(class="editIcon" )
+                                                    i(class='bx bxs-x-circle' style='color:#f50505' )
+                                else
+                                a(href="verOrden?idOrden="+i.idOrden+"&idSector="+idSector+"&sector="+sector)
+                                    h2(class="editIcon" )
+                                        i(class='bx bx-show-alt' )
+                            td
+                                a(target="blank" class="d-inline-block" href="http://wa.me/"+i.tel+"?text="+"***"+"Nueva Orden Generada en: "+sector+"***"+"%0A"+"Orden: "+i.idOrden+"%0A"+"Detecto: "+i.detecto+"%0A"+"Equipo: "+i.equipo+"%0A"+"Parada de Proceso: "+i.paradaProceso+"%0A"+"Tipo de Parada: "+i.tipo+"%0A"+"Descripcion: "+i.descripcion+"%0A"+"Hora de Inicio: "+i.horaInicio )
+                                    h2(class="editIcon")    
+                                        i(class='bx bxl-whatsapp' style='color:#11a042')
+        br
+        hr
         script(src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.16/dist/sweetalert2.all.min.js")
         script(src="https://unpkg.com/boxicons@2.0.9/dist/boxicons.js")    
         script(src="https://code.jquery.com/jquery-3.5.1.js")

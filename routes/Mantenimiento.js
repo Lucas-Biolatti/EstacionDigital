@@ -61,7 +61,7 @@ router.get('/ordenXSector',(req,res)=>{
     let idSector = url.parse(req.url,true).query.id;
     let sector= url.parse(req.url,true).query.nombre;
     let mensaje=req.query.mensaje;
-    let sql1 = "SELECT * FROM ordentrabajo WHERE sector=? AND not estado='cerrado'";
+    let sql1 = "SELECT * FROM ordentrabajo WHERE sector=?";
     let sql2 = "SELECT * FROM ordentrabajo WHERE NOT estado='cerrado'";
     
     
