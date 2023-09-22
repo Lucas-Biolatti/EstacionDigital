@@ -6,6 +6,12 @@
 >Pushear
 
 ////////////////////////////////////////
+clonar con git bash
+Ubicarse en la carpeta
+git bash here
+>git init
+>git clone URL
+
 Respaldo
 🚫 ✔
 Nombre: `${req.session.apellido}, ${req.session.nombre}`
