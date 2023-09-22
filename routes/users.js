@@ -2,7 +2,8 @@ var express = require('express');
 const { start } = require('repl');
 const url = require('url');
 var router = express.Router();
-var conexion = require('../db/db')
+var conexion = require('../db/db');
+const { nextTick } = require('process');
 /* GET users listing. */
 function fecha(x){
   let f = new Date(x);
@@ -15,8 +16,12 @@ function fechaEdit(x){
   let f = x.getUTCFullYear()+"-"+mes+"-"+dia;
   return f;
 }
+
+
+
 //const nombre = `${req.session.apellido}, ${req.session.nombre}`
 //MANTENIMIENTO
+
 router.get('/mtto:?',(req,res)=>{
   //Renderizar index de Mantenimiento
   if (req.session.loggedin && req.session.rol=="users") {
