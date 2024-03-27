@@ -1,5 +1,5 @@
 :root{
-    --primary:#1f4dcce3;
+    --primary:#0a4c7c;
     --light:#ffffff;
     --gray_:#efefef;
     
@@ -9,6 +9,7 @@ body{
     font-weight: 300;
     color: var(--primary);
     scroll-behavior: auto;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     
  }
 a{
@@ -91,13 +92,13 @@ td.Cerrado{
     width: 60%;
 }
 #selected{
-    border-style:outset;
+    border-style:ridge;
     border-radius: 20px 0% 0% 20px;
     border-color: var(--light);
     text-align: center;
     border-right: none;
     font-style: italic;
-    background-color: #2036b4;
+    background-color: #00487c;
     color: var(--light);
 }
 #verde{
@@ -150,4 +151,7 @@ td.Cerrado{
     padding-right: 100%;
     
     
+}
+h4{
+    text-align: center;
 }
