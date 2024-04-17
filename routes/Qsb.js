@@ -28,6 +28,15 @@ router.get('/',(req,res)=>{
       res.render('login',{
         mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
     }
+});
+router.get('/iny',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="Qsb") {
+      res.render('./Qsb/iny')
+  
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
 })
 
 module.exports = router;
