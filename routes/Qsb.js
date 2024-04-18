@@ -31,12 +31,25 @@ router.get('/',(req,res)=>{
 });
 router.get('/iny',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="Qsb") {
-      res.render('./Qsb/iny')
+     
+      res.render('./Qsb/iny',{sector:req.query.sector})
+    
   
   } else {
     res.render('login',{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
+})
+router.get('/datos',(req,res)=>{
+
+  const sql=`SELECT * FROM indicadores WHERE MONTH(fecha)=${req.query.mes} AND YEAR(fecha)=${req.query.year} AND sector ="${req.query.sector}" ORDER BY fecha`
+  conexion.query(sql,(error,results)=>{
+    if(!error){
+      res.send(results)
+    }else{
+      res.send(error)
+    }
+  })
 })
 
 module.exports = router;
