@@ -147,7 +147,7 @@ html(lang="es")
                             </div>
                             <div class="modal-body">
                                 
-                                <form class="d-flex">                               
+                                <form class="d-flex" action="/" method="POST">                               
                                             
                                             <label class="form-label"> Fecha
                                             <input type="date", name="fecha" class="form-control">
@@ -177,13 +177,14 @@ html(lang="es")
                                                 option No Iniciado
                                                 option En Proceso
                                                 option Completado
-                                </form>                            
+                                                            
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                <button type="button" class="btn btn-primary">Guardar</button>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
                             </div>
                             </div>
+                            </form>
                     </div>
                 </div>
                 <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -226,13 +227,14 @@ html(lang="es")
                                             textarea(name="observaciones", cols="30", rows="5" class="form-control") 
                                            
                                             
-                                </form>                            
+                                                           
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                                 <button type="button" class="btn btn-primary">Guardar</button>
                             </div>
                             </div>
+                            </form>                         
                     </div>
                 </div>
 
@@ -757,18 +759,8 @@ html(lang="es")
                                 {title:'Observaciones'},
                                 
                             ],
-                    });
-                    
-               
-                        
-                        
-                      
-                            
-                            
+                    }); 
                     })
-                
-                        
-
             }
             
         })  
