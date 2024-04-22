@@ -50,6 +50,32 @@ router.get('/datos',(req,res)=>{
       res.send(error)
     }
   })
+});
+
+router.post("/agregaraccion",(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="Qsb") {
+    let fecha = req.body.fecha;
+    let sector = req.body.sector;
+    let scrap = req.body.scrap
+    let accidentes = req.body.accidentes;
+    let c_programa = req.body.c_programa;
+    let disponibilidad = req.body.disponibilidad;
+    let disp_molde = req.body.disp_molde;
+    let observaciones = req.body.observaciones;
+    const sql = `INSERT INTO indicadores (fecha,sector, accidentes, c_programa,scrap,disponibilidad,disp_molde, observaciones)VALUES (${fecha},"${sector}", ${accidentes}, ${c_programa},${scrap},${disponibilidad},${disp_molde}, "${observaciones}");`
+    conexion.query(sql,(error,row)=>{
+      if (!error) {
+        res.redirect(`/Qsb/iny?sector=Inyeccion/`)
+      }else{
+        res.send(error)
+      }
+    })
+   
+
+} else {
+  res.render('login',{
+    mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+}
 })
 
 module.exports = router;

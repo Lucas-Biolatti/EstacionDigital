@@ -147,23 +147,23 @@ html(lang="es")
                             </div>
                             <div class="modal-body">
                                 
-                                <form class="d-flex" action="/" method="POST">                               
+                                <form class="d-flex" action="actionplan" method="POST">                               
                                             
                                             <label class="form-label"> Fecha
                                             <input type="date", name="fecha" class="form-control">
                                             <label class="form-label"> Sector
                                             select(name="sector", class="form-select")
-                                                option Inyeccion 
-                                                option TT&CC
-                                                option Mecanizado
-                                                option Ventilado
-                                                option Pintura
-                                                option Mantenimiento 
-                                                option RRHH 
-                                                option Logistica 
-                                                option HHSS 
-                                                option Gerencia 
-                                                option Ingenieria
+                                                option(value="Inyeccion") Inyeccion 
+                                                option(value="TTCC") TT&CC
+                                                option(value="Mecanizado") Mecanizado
+                                                option(value="Ventilado") Ventilado
+                                                option(value="Pintura") Pintura
+                                                option(value="Mantenimiento") Mantenimiento 
+                                                option(value="RRHH") RRHH 
+                                                option(value="Logistica") Logistica 
+                                                option(value="HHSS") HHSS 
+                                                option(value="Gerencia") Gerencia 
+                                                option(value="Ingenieria") Ingenieria
                                             <label class="form-label"> Descripcion
                                             <textarea name="descripcion" class="form-control"></textarea>
                                             <label class="form-label"> Accion
@@ -196,23 +196,23 @@ html(lang="es")
                             </div>
                             <div class="modal-body">
                                 
-                                <form class="d-flex">                               
+                                <form class="d-flex" method="POST" action="agregaraccion">                               
                                             
                                             <label class="form-label"> Fecha
                                             <input type="date", name="fecha" class="form-control">
                                             <label class="form-label"> Sector
                                             select(name="sector", class="form-select")
-                                                option Inyeccion 
-                                                option TT&CC
-                                                option Mecanizado
-                                                option Ventilado
-                                                option Pintura
-                                                option Mantenimiento 
-                                                option RRHH 
-                                                option Logistica 
-                                                option HHSS 
-                                                option Gerencia 
-                                                option Ingenieria
+                                                option(value="Inyeccion") Inyeccion 
+                                                option(value="TTCC") TT&CC
+                                                option(value="Mecanizado") Mecanizado
+                                                option(value="Ventilado") Ventilado
+                                                option(value="Pintura") Pintura
+                                                option(value="Mantenimiento") Mantenimiento 
+                                                option(value="RRHH") RRHH 
+                                                option(value="Logistica") Logistica 
+                                                option(value="HHSS") HHSS 
+                                                option(value="Gerencia") Gerencia 
+                                                option(value="Ingenieria") Ingenieria
                                             <label class="form-label"> Accidentes
                                             <input type="number", name="accidentes" class="form-control" id="accidentes">
                                             <label class="form-label"> Scrap
@@ -220,9 +220,9 @@ html(lang="es")
                                             <label class="form-label"> Cumplimiento de Programa
                                             <input type="number" step="0.01" name="c_programa" class="form-control" id="c_programa">
                                             <label class="form-label"> Disponibilidad Mantenimiento
-                                            <input type="number" step="0.01" name="c_programa" class="form-control" id="c_programa">
+                                            <input type="number" step="0.01" name="disponibilidad" class="form-control" id="c_programa">
                                             <label class="form-label"> Disponibilidad Moldes
-                                            <input type="number" step="0.01" name="c_programa" class="form-control" id="c_programa">
+                                            <input type="number" step="0.01" name="disp_molde" class="form-control" id="c_programa">
                                             <label class="form-label"> Observaciones 
                                             textarea(name="observaciones", cols="30", rows="5" class="form-control") 
                                            
@@ -231,7 +231,7 @@ html(lang="es")
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                <button type="button" class="btn btn-primary">Guardar</button>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
                             </div>
                             </div>
                             </form>                         
