@@ -148,7 +148,7 @@ html(lang="es")
                             <div class="modal-body">
                                 
                                 <form class="d-flex" action="actionplan" method="POST">                               
-                                            
+                                            input(type="hidden", name="sector1" value=sector)
                                             <label class="form-label"> Fecha
                                             <input type="date", name="fecha" class="form-control">
                                             <label class="form-label"> Sector
@@ -169,14 +169,14 @@ html(lang="es")
                                             <label class="form-label"> Accion
                                             <textarea name="accion" class="form-control"></textarea>
                                             <label class="form-label"> Responsable
-                                            <input type="text", name="fecha" class="form-control">
+                                            <input type="text", name="responsable" class="form-control">
                                             <label class="form-label"> Comentario
                                             <textarea name="comentario" class="form-control"></textarea>
                                             <label class="form-label"> Estado
-                                            select(name="sector", class="form-select")
-                                                option No Iniciado
-                                                option En Proceso
-                                                option Completado
+                                            select(name="estado", class="form-select")
+                                                option(value="No Iniciado") No Iniciado
+                                                option(value="En Proceso") En Proceso
+                                                option(value="Completado") Completado
                                                             
                             </div>
                             <div class="modal-footer">
@@ -197,7 +197,10 @@ html(lang="es")
                             <div class="modal-body">
                                 
                                 <form class="d-flex" method="POST" action="agregaraccion">                               
-                                            
+                                            input(type="hidden" name="retrabajo" value="NULL")
+                                            input(type="hidden" name="ret_laca" value="NULL")
+                                            input(type="hidden" name="sc_laca" value="NULL")
+                                            input(type="hidden" name="entregas" value="NULL")
                                             <label class="form-label"> Fecha
                                             <input type="date", name="fecha" class="form-control">
                                             <label class="form-label"> Sector
