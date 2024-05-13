@@ -40,9 +40,23 @@ router.get('/iny',(req,res)=>{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 })
+router.get('/datosPlan',(req,res)=>{
+
+  
+  const sql=`SELECT * FROM planAccionQsb WHERE MONTH(fecha)=${req.query.mes} AND YEAR(fecha)=${req.query.year} AND sector ="${req.query.sector}" ORDER BY fecha`
+  conexion.query(sql,(error,results)=>{
+    if(!error){
+      res.send(results)
+    }else{
+      res.send(error)
+    }
+  })
+});
+
 router.get('/datos',(req,res)=>{
 
   const sql=`SELECT * FROM indicadores WHERE MONTH(fecha)=${req.query.mes} AND YEAR(fecha)=${req.query.year} AND sector ="${req.query.sector}" ORDER BY fecha`
+  const sql2=`SELECT * FROM planAccionQsb WHERE MONTH(fecha)=${req.query.mes} AND YEAR(fecha)=${req.query.year} AND sector ="${req.query.sector}" ORDER BY fecha`
   conexion.query(sql,(error,results)=>{
     if(!error){
       res.send(results)
@@ -67,7 +81,7 @@ router.post("/agregaraccion",(req,res)=>{
     let sc_laca = req.body.sc_laca;
     let entregas = req.body.entregas;
 
-    const sql = `INSERT INTO indicadores (fecha,sector,accidentes,c_programa,retrabajo,scrap,disponibilidad,disp_molde,ret_laca,sc_laca,entregas,observaciones)VALUES (${fecha},"${sector}",${accidentes},${c_programa},${retrabajo},${scrap},${disponibilidad},${disp_molde},${ret_laca},${sc_laca},${entregas},"${observaciones}");`
+    const sql = `INSERT INTO indicadores (fecha,sector,accidentes,c_programa,retrabajo,scrap,disponibilidad,disp_molde,ret_laca,sc_laca,entregas,observaciones)VALUES ("${fecha}","${sector}",${accidentes},${c_programa},${retrabajo},${scrap},${disponibilidad},${disp_molde},${ret_laca},${sc_laca},${entregas},"${observaciones}");`
     conexion.query(sql,(error,row)=>{
       if (!error) {
         res.redirect(`/Qsb/iny?sector=${sector}/`)
@@ -93,10 +107,11 @@ router.post('/actionplan',(req,res)=>{
     let estado = req.body.estado;
     let sector1 = req.body.sector1;
 
-    const sql = `INSERT INTO planAccionQsb (fecha,sector,descripcion,accion,responsable,comentario,estado) VALUES (${fecha},"${sector}","${descripcion}","${accion}","${responsable}","${comentario}","${estado}");`
+    const sql = `INSERT INTO planAccionQsb (fecha,sector,descripcion,accion,responsable,comentario,estado) VALUES ('${fecha}','${sector}','${descripcion}','${accion}','${responsable}','${comentario}','${estado}');`
     conexion.query(sql,(error,rows)=>{
       if (!error) {
         res.redirect(`/Qsb/iny?sector=${sector1}/`)
+        console.log(fecha)
       }else{
         res.send(error)
       }
