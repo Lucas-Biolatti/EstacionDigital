@@ -42,8 +42,7 @@ router.get('/iny',(req,res)=>{
 })
 router.get('/datosPlan',(req,res)=>{
 
-  
-  const sql=`SELECT * FROM planAccionQsb WHERE MONTH(fecha)=${req.query.mes} AND YEAR(fecha)=${req.query.year} AND sector ="${req.query.sector}" ORDER BY fecha`
+  const sql=`SELECT * FROM planAccionQsb WHERE sector ="${req.query.sector}" ORDER BY fecha`
   conexion.query(sql,(error,results)=>{
     if(!error){
       res.send(results)

@@ -18,7 +18,7 @@ html(lang="es")
     div(class="d-flex")
         div(id="sidebar-container" class="bg-primary")
             div(class="logo")
-                img(src="favicon.ico" alt="" class="d-inline-block")
+                img(src="/images/favicon.ico" alt="" class="d-inline-block")
                 h4(class="text-light font-weight-bold d-inline-block")= `Polimetal S.A - ${sector}` 
             div(class="menu")
                 a(href="/" class="d-block p-1 text-light"     )
@@ -37,7 +37,7 @@ html(lang="es")
                 ul(class="logout")
                     li  
                         div(style="text-align: center")
-                            img(src="images/usuario.png", alt="" width="50px")
+                            img(src="/images/usuario.png", alt="" width="50px")
                         p(class="d-block p-3 text-light")= nombre
                         a(href="/logout" class="d-block p-3 text-light" )
                             i(class="icon ion-md-log-in m-2 lead" )="    Logout"
@@ -124,17 +124,7 @@ html(lang="es")
                     br  
                     h4 PLAN DE ACCION - INYECCION
                     table(class="table table-striped table-hover" id="table1")
-                        thead 
-                            th ID 
-                            th FECHA 
-                            th SECTOR 
-                            th DESCRIPCION 
-                            th ACCION 
-                            th RESPONSABLE 
-                            th COMENTARIO 
-                            th ESTADO 
-                            th ...  
-                        tbody
+                        
                     
                         
                         
@@ -253,39 +243,13 @@ html(lang="es")
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     script.
+        
         $(document).ready(function () {
+                        
                             var tabla2 = $('#table2').DataTable();
-                            $('#table1').DataTable({
-                                
-                                dom: 'Bfrtlip',
-                                buttons: [
-                                    
-                                {
-                                    
-                                    "extend":"excelHtml5",
-                                    "text":'Excel',
-                                    "textAttr":"Descargar Excel",
-                                    "className":"btn btn-success",
-                                    
-                                },
-                                {
-                                    extend:'print',
-                                    text:'Imprimir',
-                                    textAttr:'Imprimir Reporte',
-                                    className:'btn btn-info',
-                                },
-                                {
-                                    extend:'pdfHtml5',
-                                    text:'PDF',
-                                    textAttr:'Guardar en PDF',
-                                    className:'btn btn-danger'
-                                }
-                                    
-                                    
-                                ],
-                                
-                                
-                        });
+                            //var tabla1 = $('#table1').DataTable();
+                           
+                            
                     });
         document.addEventListener('DOMContentLoaded',function(){
             initChart();
@@ -293,6 +257,8 @@ html(lang="es")
             initChart3();
             initChart4();
             initChart5();
+            
+
             let cons = document.getElementById('consultar');
             cons.addEventListener('click', (e) => {
             e.preventDefault();
@@ -491,10 +457,13 @@ html(lang="es")
                 var mes = document.getElementById('mes').value;
                 var year = document.getElementById('year').value;
                 var sector = document.getElementById('sector').value;
-                var tabla = document.getElementById('table1');
+                var tabla1 = document.getElementById('table1');
                 var tabla2 = document.getElementById('table2');
                 
                 tabla2.innerHTML="";
+                tabla1.innerHTML="";
+
+                
                 fetch(`/Qsb/datos?sector=${sector}&mes=${mes}&year=${year}`)
                     .then(response => response.json())
                     .then(datos =>{
