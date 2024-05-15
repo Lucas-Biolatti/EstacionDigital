@@ -104,6 +104,18 @@ html(lang="es")
                                             <textarea name="accion" class="form-control"></textarea>
                                             <label class="form-label"> Responsable
                                             <input type="text", name="responsable" class="form-control">
+                                            select(name="sector_resp", class="form-select")
+                                                option(value="Inyeccion") Inyeccion 
+                                                option(value="TTCC") TT&CC
+                                                option(value="Mecanizado") Mecanizado
+                                                option(value="Ventilado") Ventilado
+                                                option(value="Pintura") Pintura
+                                                option(value="Mantenimiento") Mantenimiento 
+                                                option(value="RRHH") RRHH 
+                                                option(value="Logistica") Logistica 
+                                                option(value="HHSS") HHSS 
+                                                option(value="Gerencia") Gerencia 
+                                                option(value="Ingenieria") Ingenieria
                                             <label class="form-label"> Comentario
                                             <textarea name="comentario" class="form-control"></textarea>
                                             <label class="form-label"> Estado
@@ -111,6 +123,10 @@ html(lang="es")
                                                 option(value="No Iniciado") No Iniciado
                                                 option(value="En Proceso") En Proceso
                                                 option(value="Completado") Completado
+                                            <label class="form-label"> Fecha Tentativa
+                                            <input type="date", name="fecha_tent" class="form-control">
+                                            <label class="form-label"> Fecha de Cierre
+                                            <input type="date", name="fecha_cierre" class="form-control">
                                                             
                             </div>
                             <div class="modal-footer">
@@ -134,4 +150,5 @@ html(lang="es")
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     script. 
+        fetch(`datos`)
         
