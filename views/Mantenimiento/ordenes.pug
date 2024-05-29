@@ -108,7 +108,7 @@ html(lang="es")
                             
                             let dataset=[];
                             for(let i=0;i<datos.length;i++){
-                                if(datos[i].estado="Pendiente"){
+                                if(datos[i].estado==="Pendiente"||datos[i].estado==="En Proceso"){
                                     var dat=[
                                 datos[i].idOrden,
                                 datos[i].sector,

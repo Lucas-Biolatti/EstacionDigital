@@ -24,6 +24,37 @@ a:hover{
 }
 #sidebar-container{
     min-height: 100vh;
+    display: block;
+    background-color: #007bff;
+    padding: 10px;
+    color: #fff;
+}
+@media (max-width: 768px) {
+    #sidebar-container {
+        display: none;
+    }
+    #sidebar-container.active {
+        display: block;
+    }
+    #menu-toggle {
+        display: block;
+    }
+}
+@media (min-width: 769px) {
+    #menu-toggle {
+        display: none;
+    }
+}
+@media (max-width: 768px) {
+    #sidebar-container {
+        display: none;
+    }
+}
+.logout-container {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 #sidebar-container .logo{
     padding: .875rem 1.25rem;

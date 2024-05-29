@@ -5,6 +5,33 @@
 }
 body {
   background-color: #435165;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+@media (max-width: 600px) {
+  body {
+    font-size: 14px;
+  }
+
+  .container {
+    padding: 10px;
+  }
+
+  /* Más ajustes específicos para móviles */
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  body {
+    font-size: 16px;
+  }
+
+  .container {
+    padding: 20px;
+  }
+}
+img {
+  max-width: 100%;
+  height: auto;
 }
 .login {
   width: 400px;

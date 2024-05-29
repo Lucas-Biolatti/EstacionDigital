@@ -58,6 +58,8 @@ router.get('/ordenTrabajo',(req,res)=>{
   
 })
 router.get('/ordenXSector',(req,res)=>{
+    if (req.session.loggedin  && req.session.rol=="Mantenimiento") {
+    
     let idSector = url.parse(req.url,true).query.id;
     let sector= url.parse(req.url,true).query.nombre;
     let mensaje=req.query.mensaje;
@@ -74,7 +76,7 @@ router.get('/ordenXSector',(req,res)=>{
             let enProceso=0
                 for(let i=0;i<result.length;i++){
                     let f = new Date(result[i].fecha);
-                    let fecha = f.getDate()+"/"+f.getMonth()+1+"/"+f.getUTCFullYear();
+                    let fecha = `${f.getDate()}/${f.getMonth()+1}/${f.getUTCFullYear()}`;
                     let finicio  = new Date(result[i].horaInicio);
                     let ffin  = new Date(result[i].horaFin);
                     let inicio=finicio.getDate()+"/"+finicio.getMonth()+"/"+finicio.getUTCFullYear()+" - "+finicio.getHours()+":"+finicio.getMinutes();
@@ -120,6 +122,10 @@ router.get('/ordenXSector',(req,res)=>{
             console.log("Error de conexion");
         }
     })
+    }else {
+        res.render('login',{
+        mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+      }
 })
 router.get('/ordenes',(req,res)=>{
   const sql="SELECT * FROM ordentrabajo WHERE NOT estado='cerrado'"

@@ -13,6 +13,7 @@ html(lang="es")
   body
    
     div(class="d-flex")
+        
         div(id="sidebar-container" class="bg-primary")
             div(class="logo")
                 img(src="favicon.ico" alt="" class="d-inline-block")
@@ -30,21 +31,24 @@ html(lang="es")
                 a(href="#" class="d-block p-1 text-light") Pintura
                 
                 
-                ul(class="logout")
-                    li  
-                        div(style="text-align: center")
-                            img(src="images/usuario.png", alt="" width="50px")
-                        p(class="d-block p-3 text-light")= nombre
-                        a(href="/logout" class="d-block p-3 text-light" )
-                            i(class="icon ion-md-log-in m-2 lead" )="    Logout"
+                ul.logout
+                    li
+                        .logout-container
+                        img(src="images/usuario.png" alt="" width="50px")
+                        p.d-block.p-3.text-light= nombre
+                        a(href="/logout" class="d-block p-3.text-light")
+                            i.icon.ion-md-log-in.m-2.lead Logout
                
                         
                 
         
         div(class="w-100")
             div(class="container")
+
                 <nav class="navbar navbar-light bg-light">
                     <div class="container-fluid">
+                        button#menu-toggle.btn.btn-primary
+                            i.icon.ion-md-menu
                         h3(class="navbar-brand") Reunion de respuesta rapida
                         
 
@@ -150,5 +154,14 @@ html(lang="es")
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     script. 
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const menuToggle = document.getElementById('menu-toggle');
+            const sidebarContainer = document.getElementById('sidebar-container');
+
+            menuToggle.addEventListener('click', function() {
+                sidebarContainer.classList.toggle('active');
+            });
+        });
         fetch(`datos`)
         
