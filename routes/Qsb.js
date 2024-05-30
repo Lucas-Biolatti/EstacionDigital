@@ -40,22 +40,11 @@ router.get('/iny',(req,res)=>{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 })
+
 router.get('/datosPlan',(req,res)=>{
 
-  const sql=`SELECT * FROM planAccionQsb WHERE sector ="${req.query.sector}" ORDER BY fecha`
-  conexion.query(sql,(error,results)=>{
-    if(!error){
-      res.send(results)
-    }else{
-      res.send(error)
-    }
-  })
-});
-
-router.get('/datos',(req,res)=>{
-
-  const sql=`SELECT * FROM indicadores WHERE MONTH(fecha)=${req.query.mes} AND YEAR(fecha)=${req.query.year} AND sector ="${req.query.sector}" ORDER BY fecha`
-  const sql2=`SELECT * FROM planAccionQsb WHERE MONTH(fecha)=${req.query.mes} AND YEAR(fecha)=${req.query.year} AND sector ="${req.query.sector}" ORDER BY fecha`
+  
+  const sql=`SELECT * FROM planAccionQsb ORDER BY fecha`
   conexion.query(sql,(error,results)=>{
     if(!error){
       res.send(results)
