@@ -170,17 +170,29 @@ html(lang="es")
 
                 let dataset = [];
                 datos.forEach(dato => {
+                    let f01 = new Date(dato.fecha);
+                    let f1 = `${f01.getDate()}/${f01.getMonth()+1}/${f01.getUTCFullYear()}`;
+                    
+                    let f02 = dato.fecha_tent ? new Date(dato.fecha_tent) : null;
+                    let f2 = f02 ? `${f02.getDate()}/${f02.getMonth()+1}/${f02.getUTCFullYear()}` : null;
+                    
+                    let f03 = dato.fecha_cierre ? new Date(dato.fecha_cierre) : null;
+                    let f3 = f03 ? `${f03.getDate()}/${f03.getMonth()+1}/${f03.getUTCFullYear()}` : null;
                     dataset.push([
-                        dato.fecha,
+                        f1,
                         dato.sector,
                         dato.descripcion,
                         dato.accion,
                         dato.responsable,
                         dato.sector_resp,
                         dato.comentario,
-                        dato.fecha_tent,
-                        dato.fecha_cierre,
-                        dato.estado
+                        f2,
+                        f3,
+                        dato.estado,
+                        `<button type="button"> Editar`
+                        
+                        
+                        
                     ]);
                     if(dato.estado == "No Iniciado"){
                         noIniciado++
@@ -235,6 +247,7 @@ html(lang="es")
                             { title: 'Fecha tentativa' },
                             { title: 'Fecha Cierre' },
                             { title: 'Estado' },
+                            { title: '☰' },
                         ],
                         
                     });
@@ -254,4 +267,62 @@ html(lang="es")
                     })
                 });
             });
-        
+            // Obtén el modal y los campos del formulario
+        // Obtén el modal y los campos del formulario
+        var modal = document.getElementById('exampleModal');
+        var fechaInput = modal.querySelector('input[name="fecha"]');
+        var sectorSelect = modal.querySelector('select[name="sector"]');
+        var descripcionTextarea = modal.querySelector('textarea[name="descripcion"]');
+        var accionTextarea = modal.querySelector('textarea[name="accion"]');
+        var responsableInput = modal.querySelector('input[name="responsable"]');
+        var sectorRespSelect = modal.querySelector('select[name="sector_resp"]');
+        var comentarioTextarea = modal.querySelector('textarea[name="comentario"]');
+        var estadoSelect = modal.querySelector('select[name="estado"]');
+        var fechaTentInput = modal.querySelector('input[name="fecha_tent"]');
+        var fechaCierreInput = modal.querySelector('input[name="fecha_cierre"]');
+
+        // Función para llenar el formulario con los datos de una fila
+        function llenarFormulario(fila) {
+            fechaInput.value = fila[0]; // Asigna la fecha
+            sectorSelect.value = fila[1]; // Asigna el sector
+            descripcionTextarea.value = fila[2]; // Asigna la descripción
+            accionTextarea.value = fila[3]; // Asigna la acción
+            responsableInput.value = fila[4]; // Asigna el responsable
+            sectorRespSelect.value = fila[5]; // Asigna el sector responsable
+            comentarioTextarea.value = fila[6]; // Asigna el comentario
+            estadoSelect.value = fila[9]; // Asigna el estado
+            fechaTentInput.value = fila[7]; // Asigna la fecha tentativa
+            fechaCierreInput.value = fila[8]; // Asigna la fecha de cierre
+        }
+
+        // Itera sobre el arreglo dataset y agrega un evento de clic al botón de editar de cada fila
+        dataset.forEach(function(fila, indice) {
+            // Crea un botón de editar
+            var botonEditar = document.createElement('button');
+            botonEditar.type = 'button';
+            botonEditar.textContent = 'Editar';
+            // Agrega un evento de clic al botón
+            botonEditar.addEventListener('click', function() {
+                // Llama a la función para llenar el formulario con los datos de la fila actual
+                llenarFormulario(fila);
+                // Abre el modal
+                var modal = new bootstrap.Modal(document.getElementById('exampleModal'));
+                modal.show();
+            });
+
+            // Agrega el botón de editar a la última celda de la fila
+            var tdBoton = document.createElement('td');
+            tdBoton.appendChild(botonEditar);
+
+            // Crea una fila y agrega las celdas correspondientes
+            var tr = document.createElement('tr');
+            fila.forEach(function(dato) {
+                var td = document.createElement('td');
+                td.textContent = dato;
+                tr.appendChild(td);
+            });
+            tr.appendChild(tdBoton); // Agrega la celda del botón de editar al final
+
+            // Agrega la fila a la tabla
+            document.querySelector('#tablaDatos tbody').appendChild(tr);
+        });
