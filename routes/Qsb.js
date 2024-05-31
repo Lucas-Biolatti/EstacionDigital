@@ -91,15 +91,18 @@ router.post('/actionplan',(req,res)=>{
     let descripcion = req.body.descripcion;
     let accion = req.body.accion;
     let responsable = req.body.responsable;
+    let sector_resp = req.body.sector_resp;
     let comentario = req.body.comentario;
+    let fecha_tent = req.body.fecha_tent;
+    let fecha_cierre = req.body.fecha_cierre ? req.body.fecha_cierre : null;
     let estado = req.body.estado;
     let sector1 = req.body.sector1;
 
-    const sql = `INSERT INTO planAccionQsb (fecha,sector,descripcion,accion,responsable,comentario,estado) VALUES ('${fecha}','${sector}','${descripcion}','${accion}','${responsable}','${comentario}','${estado}');`
-    conexion.query(sql,(error,rows)=>{
+    const sql = `INSERT INTO planAccionQsb (fecha,sector,descripcion,accion,responsable,sector_resp,comentario,fecha_tent,fecha_cierre,estado) VALUES ('${fecha}','${sector}','${descripcion}','${accion}','${responsable}','${sector_resp}','${comentario}','${fecha_tent}','${fecha_cierre}','${estado}');`
+    conexion.query(sql,(error,rows)=>{  
       if (!error) {
-        res.redirect(`/Qsb/iny?sector=${sector1}/`)
-        console.log(fecha)
+        res.redirect(`/Qsb`)
+        
       }else{
         res.send(error)
       }
@@ -109,5 +112,7 @@ router.post('/actionplan',(req,res)=>{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 })
+router.put('/actPlan',(req,res)=>{
 
+})
 module.exports = router;

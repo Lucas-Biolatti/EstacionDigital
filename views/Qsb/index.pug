@@ -87,12 +87,13 @@ html(lang="es")
                             </div>
                             <div class="modal-body">
                                 
-                                <form class="d-flex" action="actionplan" method="POST">                               
+                                <form class="d-flex" action="Qsb/actionplan" method="POST">                               
                                             input(type="hidden", name="sector1" value=sector)
                                             <label class="form-label"> Fecha
                                             <input type="date", name="fecha" class="form-control">
                                             <label class="form-label"> Sector
                                             select(name="sector", class="form-select")
+                                                option(value="Matriceria") Matriceria
                                                 option(value="Inyeccion") Inyeccion 
                                                 option(value="TTCC") TT&CC
                                                 option(value="Mecanizado") Mecanizado
@@ -111,6 +112,7 @@ html(lang="es")
                                             <label class="form-label"> Responsable
                                             <input type="text", name="responsable" class="form-control">
                                             select(name="sector_resp", class="form-select")
+                                                option(value="Matriceria") Matriceria
                                                 option(value="Inyeccion") Inyeccion 
                                                 option(value="TTCC") TT&CC
                                                 option(value="Mecanizado") Mecanizado
@@ -143,6 +145,88 @@ html(lang="es")
                             </form>
                     </div>
                 </div>
+                <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Editar Detección</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form id="editForm" class="d-flex" action="actplan" method="POST">
+                                <div class="modal-body">
+                                        <input id="id" type="hidden" name="id" value="sector">                       
+                                        <input type="hidden" name="sector1" value="sector">
+                                        <label class="form-label"> Fecha
+                                        <input type="date" id="fecha" name="fecha" class="form-control">
+                                        </label>
+                                        <label class="form-label"> Sector
+                                        <select id="sector" name="sector" class="form-select">
+                                            <option value="Matriceria">Matriceria</option>
+                                            <option value="Inyeccion">Inyección</option>
+                                            <option value="TTCC">TT&CC</option>
+                                            <option value="Mecanizado">Mecanizado</option>
+                                            <option value="Ventilado">Ventilado</option>
+                                            <option value="Pintura">Pintura</option>
+                                            <option value="Mantenimiento">Mantenimiento</option>
+                                            <option value="RRHH">RRHH</option>
+                                            <option value="Logistica">Logística</option>
+                                            <option value="HHSS">HHSS</option>
+                                            <option value="Gerencia">Gerencia</option>
+                                            <option value="Ingenieria">Ingeniería</option>
+                                        </select>
+                                        </label>
+                                        <label class="form-label"> Descripción
+                                        <textarea id="descripcion" name="descripcion" class="form-control"></textarea>
+                                        </label>
+                                        <label class="form-label"> Acción
+                                        <textarea id="accion" name="accion" class="form-control"></textarea>
+                                        </label>
+                                        <label class="form-label"> Responsable
+                                        <input type="text" id="responsable" name="responsable" class="form-control">
+                                        </label>
+                                        <label class="form-label"> Sector Responsable
+                                        <select id="sector_resp" name="sector_resp" class="form-select">
+                                            <option value="Matriceria">Matriceria</option>
+                                            <option value="Inyeccion">Inyección</option>
+                                            <option value="TTCC">TT&CC</option>
+                                            <option value="Mecanizado">Mecanizado</option>
+                                            <option value="Ventilado">Ventilado</option>
+                                            <option value="Pintura">Pintura</option>
+                                            <option value="Mantenimiento">Mantenimiento</option>
+                                            <option value="RRHH">RRHH</option>
+                                            <option value="Logistica">Logística</option>
+                                            <option value="HHSS">HHSS</option>
+                                            <option value="Gerencia">Gerencia</option>
+                                            <option value="Ingenieria">Ingeniería</option>
+                                        </select>
+                                        </label>
+                                        <label class="form-label"> Comentario
+                                        <textarea id="comentario" name="comentario" class="form-control"></textarea>
+                                        </label>
+                                        <label class="form-label"> Estado
+                                        <select id="estado" name="estado" class="form-select">
+                                            <option value="No Iniciado">No Iniciado</option>
+                                            <option value="En Proceso">En Proceso</option>
+                                            <option value="Completado">Completado</option>
+                                        </select>
+                                        </label>
+                                        <label class="form-label"> Fecha Tentativa
+                                        <input type="date" id="fecha_tent" name="fecha_tent" class="form-control">
+                                        </label>
+                                        <label class="form-label"> Fecha de Cierre
+                                        <input type="date" id="fecha_cierre" name="fecha_cierre" class="form-control">
+                                        </label>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                                </div>
+                                    
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
 
 
 
@@ -172,13 +256,15 @@ html(lang="es")
                 datos.forEach(dato => {
                     let f01 = new Date(dato.fecha);
                     let f1 = `${f01.getDate()}/${f01.getMonth()+1}/${f01.getUTCFullYear()}`;
-                    
-                    let f02 = dato.fecha_tent ? new Date(dato.fecha_tent) : null;
+
+                    let f02 = dato.fecha_tent || dato.fecha_tent=="0000-00-00" ? new Date(dato.fecha_tent) : null;
                     let f2 = f02 ? `${f02.getDate()}/${f02.getMonth()+1}/${f02.getUTCFullYear()}` : null;
-                    
+
                     let f03 = dato.fecha_cierre ? new Date(dato.fecha_cierre) : null;
                     let f3 = f03 ? `${f03.getDate()}/${f03.getMonth()+1}/${f03.getUTCFullYear()}` : null;
+
                     dataset.push([
+                        dato.id,
                         f1,
                         dato.sector,
                         dato.descripcion,
@@ -189,54 +275,51 @@ html(lang="es")
                         f2,
                         f3,
                         dato.estado,
-                        `<button type="button"> Editar`
-                        
-                        
-                        
+                        `<button type="button" class="btn btn-primary btn-edit" data-bs-toggle="modal" data-bs-target="#exampleModal1" data-id="${dato.id}"> Editar</button>`
                     ]);
+
                     if(dato.estado == "No Iniciado"){
                         noIniciado++
+                    }else if(dato.estado == "En Proceso"){
+                        enProceso++
                     }else{
-                        if(dato.estado == "En Proceso"){
-                            enProceso++
-                        }else completado++
+                        completado++
                     }
                 });
+
                 const ctx = document.getElementById('myChart');
 
                 new Chart(ctx, {
                     type: 'doughnut',
                     data: {
-                    labels: ['NO INICIADO', 'EN PROCESO', 'CERRADO',],
-                    datasets: [{
-                        label: '# of Votes',
-                        data: [noIniciado,enProceso,completado,],
-                        borderWidth: 1,
-                        backgroundColor: [
-                        'rgb(255, 99, 132)',
-                        'rgb(54, 162, 235)',
-                        'green'
-                        ],
-                    }]
+                        labels: ['NO INICIADO', 'EN PROCESO', 'CERRADO'],
+                        datasets: [{
+                            label: '# of Votes',
+                            data: [noIniciado, enProceso, completado],
+                            borderWidth: 1,
+                            backgroundColor: [
+                                'rgb(255, 99, 132)',
+                                'rgb(54, 162, 235)',
+                                'green'
+                            ],
+                        }]
                     },
                     options: {
-                    scales: {
-                        y: {
-                        beginAtZero: true
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
                         }
                     }
-                    },
-                    
                 });
-                console.log(completado)
-                
 
                 $(document).ready(function () {
-                    var table= $('#tabla').DataTable({
+                    var table = $('#tabla').DataTable({
                         fixedHeader: true,
                         dom: 'Bfrtlip',
                         data: dataset,
                         columns: [
+                            { title: 'Id' },
                             { title: 'Fecha' },
                             { title: 'Sector' },
                             { title: 'Descripcion' },
@@ -249,80 +332,52 @@ html(lang="es")
                             { title: 'Estado' },
                             { title: '☰' },
                         ],
-                        
                     });
+
                     $('#tabla thead tr').clone(true).appendTo('#tabla thead');
-                    $('#tabla thead tr:eq(1) th').each(function(i){
+                    $('#tabla thead tr:eq(1) th').each(function(i) {
                         var title = $(this).text();
                         $(this).html('<input type="text" placeholder="Buscar..."/>');
 
-                        $('input',this).on( 'keyup chance', function(){
-                            if(table.column(i).search() !== this.value){
+                        $('input', this).on('keyup change', function() {
+                            if (table.column(i).search() !== this.value) {
                                 table
                                     .column(i)
                                     .search(this.value)
                                     .draw();
                             }
-                        })
-                    })
+                        });
+                    });
+                    function fechaEdit(x){
+                        let dia = (x.getUTCDate()<10?'0':'')+x.getUTCDate();
+                        let mes = ((x.getMonth()+1)<10?'0':'')+(x.getMonth()+1);
+                        let f = x.getUTCFullYear()+"-"+mes+"-"+dia;
+                        return f;
+                        }
+                    $('#tabla tbody').on('click', '.btn-edit', function() {
+                        let dataId = $(this).data('id');
+                        let rowData = datos.find(dato => dato.id == dataId);
+
+                        if (rowData) {
+                            $('#id').val(rowData.id);
+
+        // Formatear las fechas a 'YYYY-MM-DD'
+        let fechaFormatted = rowData.fecha ? new Date(rowData.fecha).toISOString().split('T')[0] : '';
+        let fechaTentFormatted = rowData.fecha_tent || rowData.fecha_tent==="0000-00-00" ? new Date(rowData.fecha_tent).toISOString().split('T')[0] : null;
+        let fechaCierreFormatted = rowData.fecha_cierre ? new Date(rowData.fecha_cierre).toISOString().split('T')[0] : null;
+
+        // Pre-cargar los valores en el formulario
+        $('#fecha').val(fechaFormatted);
+        $('#sector').val(rowData.sector);
+        $('#descripcion').val(rowData.descripcion);
+        $('#accion').val(rowData.accion);
+        $('#responsable').val(rowData.responsable);
+        $('#sector_resp').val(rowData.sector_resp);
+        $('#comentario').val(rowData.comentario);
+        $('#estado').val(rowData.estado);
+        $('#fecha_tent').val(fechaTentFormatted || "");
+        $('#fecha_cierre').val(fechaCierreFormatted);
+                        }
+                    });
                 });
             });
-            // Obtén el modal y los campos del formulario
-        // Obtén el modal y los campos del formulario
-        var modal = document.getElementById('exampleModal');
-        var fechaInput = modal.querySelector('input[name="fecha"]');
-        var sectorSelect = modal.querySelector('select[name="sector"]');
-        var descripcionTextarea = modal.querySelector('textarea[name="descripcion"]');
-        var accionTextarea = modal.querySelector('textarea[name="accion"]');
-        var responsableInput = modal.querySelector('input[name="responsable"]');
-        var sectorRespSelect = modal.querySelector('select[name="sector_resp"]');
-        var comentarioTextarea = modal.querySelector('textarea[name="comentario"]');
-        var estadoSelect = modal.querySelector('select[name="estado"]');
-        var fechaTentInput = modal.querySelector('input[name="fecha_tent"]');
-        var fechaCierreInput = modal.querySelector('input[name="fecha_cierre"]');
-
-        // Función para llenar el formulario con los datos de una fila
-        function llenarFormulario(fila) {
-            fechaInput.value = fila[0]; // Asigna la fecha
-            sectorSelect.value = fila[1]; // Asigna el sector
-            descripcionTextarea.value = fila[2]; // Asigna la descripción
-            accionTextarea.value = fila[3]; // Asigna la acción
-            responsableInput.value = fila[4]; // Asigna el responsable
-            sectorRespSelect.value = fila[5]; // Asigna el sector responsable
-            comentarioTextarea.value = fila[6]; // Asigna el comentario
-            estadoSelect.value = fila[9]; // Asigna el estado
-            fechaTentInput.value = fila[7]; // Asigna la fecha tentativa
-            fechaCierreInput.value = fila[8]; // Asigna la fecha de cierre
-        }
-
-        // Itera sobre el arreglo dataset y agrega un evento de clic al botón de editar de cada fila
-        dataset.forEach(function(fila, indice) {
-            // Crea un botón de editar
-            var botonEditar = document.createElement('button');
-            botonEditar.type = 'button';
-            botonEditar.textContent = 'Editar';
-            // Agrega un evento de clic al botón
-            botonEditar.addEventListener('click', function() {
-                // Llama a la función para llenar el formulario con los datos de la fila actual
-                llenarFormulario(fila);
-                // Abre el modal
-                var modal = new bootstrap.Modal(document.getElementById('exampleModal'));
-                modal.show();
-            });
-
-            // Agrega el botón de editar a la última celda de la fila
-            var tdBoton = document.createElement('td');
-            tdBoton.appendChild(botonEditar);
-
-            // Crea una fila y agrega las celdas correspondientes
-            var tr = document.createElement('tr');
-            fila.forEach(function(dato) {
-                var td = document.createElement('td');
-                td.textContent = dato;
-                tr.appendChild(td);
-            });
-            tr.appendChild(tdBoton); // Agrega la celda del botón de editar al final
-
-            // Agrega la fila a la tabla
-            document.querySelector('#tablaDatos tbody').appendChild(tr);
-        });
