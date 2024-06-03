@@ -105,6 +105,7 @@ html(lang="es")
                                                 option(value="HHSS") HHSS 
                                                 option(value="Gerencia") Gerencia 
                                                 option(value="Ingenieria") Ingenieria
+                                                option(value="Compras") Compras
                                             <label class="form-label"> Descripcion
                                             <textarea name="descripcion" class="form-control"></textarea>
                                             <label class="form-label"> Accion
@@ -124,6 +125,7 @@ html(lang="es")
                                                 option(value="HHSS") HHSS 
                                                 option(value="Gerencia") Gerencia 
                                                 option(value="Ingenieria") Ingenieria
+                                                option(value="Compras") Compras
                                             <label class="form-label"> Comentario
                                             <textarea name="comentario" class="form-control"></textarea>
                                             <label class="form-label"> Estado
@@ -173,6 +175,7 @@ html(lang="es")
                                             <option value="HHSS">HHSS</option>
                                             <option value="Gerencia">Gerencia</option>
                                             <option value="Ingenieria">Ingeniería</option>
+                                            <option value="Compras">Compras</option>
                                         </select>
                                         </label>
                                         <label class="form-label"> Descripción
@@ -248,6 +251,7 @@ html(lang="es")
         fetch('Qsb/datosPlan')
             .then(response => response.json())
             .then(datos => {
+                
                 let noIniciado = 0;
                 let enProceso = 0;
                 let completado=0;
@@ -257,12 +261,14 @@ html(lang="es")
                     let f01 = new Date(dato.fecha);
                     let f1 = `${f01.getDate()}/${f01.getMonth()+1}/${f01.getUTCFullYear()}`;
 
-                    let f02 = dato.fecha_tent || dato.fecha_tent=="0000-00-00" ? new Date(dato.fecha_tent) : null;
+                    let f02 = dato.fecha_tent ? new Date(dato.fecha_tent) : null;
                     let f2 = f02 ? `${f02.getDate()}/${f02.getMonth()+1}/${f02.getUTCFullYear()}` : null;
-
+                    let f21 = f2 !== "30/11/1899" ? f2 : "";
+                    
                     let f03 = dato.fecha_cierre ? new Date(dato.fecha_cierre) : null;
                     let f3 = f03 ? `${f03.getDate()}/${f03.getMonth()+1}/${f03.getUTCFullYear()}` : null;
-
+                    let f31 = f3 !== "30/11/1899" ? f3 : "";
+                   
                     dataset.push([
                         dato.id,
                         f1,
@@ -272,8 +278,8 @@ html(lang="es")
                         dato.responsable,
                         dato.sector_resp,
                         dato.comentario,
-                        f2,
-                        f3,
+                        f21,
+                        f31,
                         dato.estado,
                         `<button type="button" class="btn btn-primary btn-edit" data-bs-toggle="modal" data-bs-target="#exampleModal1" data-id="${dato.id}"> Editar</button>`
                     ]);
