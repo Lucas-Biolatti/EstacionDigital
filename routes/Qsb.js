@@ -40,7 +40,31 @@ router.get('/iny',(req,res)=>{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 })
+router.get('/cc',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="Qsb") {
+     
+      res.render('./Qsb/cc',{sector:req.query.sector})
+    
+  
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+})
+router.get('/datos',(req,res)=>{
+  let sector = req.query.sector;
+  let mes = req.query.mes;
+  let year = req.query.year;
 
+  const sql = `SELECT * FROM indicadores where sector="${sector}" AND MONTH(fecha)="${mes}" AND YEAR(fecha)="${year}" ORDER BY fecha`
+  conexion.query(sql,(error,result)=>{
+    if (!error) {
+      res.send(result);
+    }else{
+      res.send(error);
+    }
+  })
+});
 router.get('/datosPlan',(req,res)=>{
 
   
@@ -111,7 +135,8 @@ router.post('/actionplan',(req,res)=>{
     res.render('login',{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
-})
+});
+
 router.put('/actPlan',(req,res)=>{
 
 })
