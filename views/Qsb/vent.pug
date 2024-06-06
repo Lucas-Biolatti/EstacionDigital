@@ -90,25 +90,34 @@ html(lang="es")
                 .container 
                     
                     h4= "SEGUIMIENTO DIARIO - "+sector
+                    
                     .row 
                         .col-6 
                             img(src="/images/actosInseguros.jpg", alt="", style="border-radius:50%;height:70px;width:100px;")
                             <div style="width: 100%; height: 250px;">
                                 <canvas id="myChart"></canvas>
                             </div>
-                        
                         .col-6
+                            img(src="/images/reject.png", alt="", style="border-radius:50%;height:70px;width:100px;")
+                            <div style="width: 100%; height: 250px;">
+                                <canvas id="myChart2"></canvas>
+                            </div>
+                        .col-12
                             img(src="/images/objetive.png", alt="", style="border-radius:50%;height:70px;width:100px;")  
                             <div style="width: 100%; height: 250px;">
                                 <canvas id="myChart3"></canvas>
                             </div>
                     .row 
-                        .col-12 
+                        .col-6 
                             img(src="/images/ot.jpg", alt="", style="border-radius:50%;height:70px;width:100px;")
                             <div style="width: 100%; height: 250px;">
                                 <canvas id="myChart4"></canvas>
                             </div>
-                       
+                        .col-6
+                            img(src="/images/moldes.png", alt="", style="border-radius:50%;height:70px;width:100px;") 
+                            <div style="width: 100%; height: 250px;">
+                                <canvas id="myChart5"></canvas>
+                            </div>
                     hr
                     table(class="table table-striped table-hover" id="table2")
                         thead 
@@ -206,9 +215,6 @@ html(lang="es")
                                             input(type="hidden" name="ret_laca" value="NULL")
                                             input(type="hidden" name="sc_laca" value="NULL")
                                             input(type="hidden" name="entregas" value="NULL")
-                                            input(type="hidden" step="0.01" name="scrap" class="form-control" id="scrap" value="NULL")
-                                            input(type="hidden" step="0.01" name="disp_molde" class="form-control" id="c_programa" value="Null")
-
                                             <label class="form-label"> Fecha
                                             <input type="date" name="fecha" class="form-control">
                                             <label class="form-label"> Sector
@@ -226,14 +232,14 @@ html(lang="es")
                                                 option(value="Ingenieria") Ingenieria
                                             <label class="form-label"> Accidentes
                                             <input type="number", name="accidentes" class="form-control" id="accidentes">
-                                           
-                                            
+                                            <label class="form-label"> Scrap
+                                            <input type="number" step="0.01" name="scrap" class="form-control" id="scrap">
                                             <label class="form-label"> Cumplimiento de Programa
                                             <input type="number" step="0.01" name="c_programa" class="form-control" id="c_programa">
                                             <label class="form-label"> Disponibilidad Mantenimiento
-                                            <input type="number" step="0.01" name="disponibilidad" class="form-control" id="disponibilidad">
-                                            
-                                            
+                                            <input type="number" step="0.01" name="disponibilidad" class="form-control" id="c_programa">
+                                            <label class="form-label"> Disponibilidad Moldes
+                                            <input type="number" step="0.01" name="disp_molde" class="form-control" id="c_programa">
                                             <label class="form-label"> Observaciones 
                                             textarea(name="observaciones", cols="30", rows="5" class="form-control") 
                                            
@@ -279,10 +285,10 @@ html(lang="es")
                     });
         document.addEventListener('DOMContentLoaded',function(){
             initChart();
-            //initChart2();
+            initChart2();
             initChart3();
             initChart4();
-            //initChart5();
+            initChart5();
             
 
             let cons = document.getElementById('consultar');
@@ -534,7 +540,7 @@ html(lang="es")
                             }
                         chart.update();
 
-                        /*let chart2 = Chart.instances[1];
+                        let chart2 = Chart.instances[1];
                             chart2.data = {
                                 labels: datos.map(e => fecha(e.fecha)),
                                 
@@ -576,9 +582,9 @@ html(lang="es")
                                 
                                 
                                 }  
-                        chart2.update(); */
+                        chart2.update(); 
 
-                        let chart3 = Chart.instances[1];
+                        let chart3 = Chart.instances[2];
                             chart3.data = {
                                 labels: datos.map(e => fecha(e.fecha)),
                                 
@@ -622,7 +628,7 @@ html(lang="es")
                                 } 
                         chart3.update();  
 
-                        let chart4 = Chart.instances[2];
+                        let chart4 = Chart.instances[3];
                             chart4.data = {
                                 labels: datos.map(e => fecha(e.fecha)),
                                 
@@ -666,7 +672,7 @@ html(lang="es")
                                 } 
                         chart4.update();  
 
-                       /* let chart5 = Chart.instances[4];
+                        let chart5 = Chart.instances[4];
                             chart5.data = {
                                 labels: datos.map(e => fecha(e.fecha)),
                                 
@@ -708,7 +714,7 @@ html(lang="es")
                                 
                                 
                                 } 
-                        chart5.update();*/
+                        chart5.update();
 
                         $('#table2').DataTable().destroy();
                         let dataset=[];
@@ -726,13 +732,38 @@ html(lang="es")
                         $('#table2').DataTable({
                             
                             dom: 'Bfrtlip',
+                            buttons: [
+                                
+                            {
+                                
+                                "extend":"excelHtml5",
+                                "text":'Excel',
+                                "textAttr":"Descargar Excel",
+                                "className":"btn btn-success",
+                                
+                            },
+                            {
+                                extend:'print',
+                                text:'Imprimir',
+                                textAttr:'Imprimir Reporte',
+                                className:'btn btn-info',
+                            },
+                            {
+                                extend:'pdfHtml5',
+                                text:'PDF',
+                                textAttr:'Guardar en PDF',
+                                className:'btn btn-danger'
+                            }
+                                
+                                
+                            ],
                             data:dataset,
                             columns:[
                                 {title:'Fecha'},
                                 {title:'Observaciones'},
                                 
                             ],
-                        }); 
+                    }); 
                     })
             }
             
