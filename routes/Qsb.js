@@ -83,7 +83,7 @@ router.get('/datos',(req,res)=>{
     if (!error) {
       res.send(result);
     }else{
-      res.send(error);
+      res.send("ERROR......:"+error);
     }
   })
 });
@@ -114,11 +114,13 @@ router.post("/agregaraccion",(req,res)=>{
     let ret_laca = req.body.ret_laca;
     let sc_laca = req.body.sc_laca;
     let entregas = req.body.entregas;
+    let path = req.body.path;
 
     const sql = `INSERT INTO indicadores (fecha,sector,accidentes,c_programa,retrabajo,scrap,disponibilidad,disp_molde,ret_laca,sc_laca,entregas,observaciones)VALUES ("${fecha}","${sector}",${accidentes},${c_programa},${retrabajo},${scrap},${disponibilidad},${disp_molde},${ret_laca},${sc_laca},${entregas},"${observaciones}");`
     conexion.query(sql,(error,row)=>{
       if (!error) {
-        res.redirect(`/Qsb/iny?sector=${sector}/`)
+        res.redirect(`${path}?sector=${sector}`)
+        
       }else{
         res.send(error)
       }

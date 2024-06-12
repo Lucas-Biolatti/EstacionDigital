@@ -113,11 +113,7 @@ html(lang="es")
                             <div style="width: 100%; height: 250px;">
                                 <canvas id="myChart4"></canvas>
                             </div>
-                        .col-6
-                            img(src="/images/moldes.png", alt="", style="border-radius:50%;height:70px;width:100px;") 
-                            <div style="width: 100%; height: 250px;">
-                                <canvas id="myChart5"></canvas>
-                            </div>
+                        
                     hr
                     table(class="table table-striped table-hover" id="table2")
                         thead 
@@ -210,7 +206,8 @@ html(lang="es")
                             </div>
                             <div class="modal-body">
                                 
-                                <form class="d-flex" method="POST" action="agregaraccion">                               
+                                <form class="d-flex" method="POST" action="agregaraccion">
+                                            input(type="hidden", name="path" value="/Qsb/vent")                               
                                             input(type="hidden" name="retrabajo" value="NULL")
                                             input(type="hidden" name="ret_laca" value="NULL")
                                             input(type="hidden" name="sc_laca" value="NULL")
@@ -238,8 +235,8 @@ html(lang="es")
                                             <input type="number" step="0.01" name="c_programa" class="form-control" id="c_programa">
                                             <label class="form-label"> Disponibilidad Mantenimiento
                                             <input type="number" step="0.01" name="disponibilidad" class="form-control" id="c_programa">
-                                            <label class="form-label"> Disponibilidad Moldes
-                                            <input type="number" step="0.01" name="disp_molde" class="form-control" id="c_programa">
+                                            
+                                            <input type="hidden" step="0.01" name="disp_molde" class="form-control" id="c_programa" value="NULL">
                                             <label class="form-label"> Observaciones 
                                             textarea(name="observaciones", cols="30", rows="5" class="form-control") 
                                            
@@ -288,7 +285,7 @@ html(lang="es")
             initChart2();
             initChart3();
             initChart4();
-            initChart5();
+            //initChart5();
             
 
             let cons = document.getElementById('consultar');
@@ -672,7 +669,7 @@ html(lang="es")
                                 } 
                         chart4.update();  
 
-                        let chart5 = Chart.instances[4];
+                        /*let chart5 = Chart.instances[4];
                             chart5.data = {
                                 labels: datos.map(e => fecha(e.fecha)),
                                 
@@ -714,7 +711,7 @@ html(lang="es")
                                 
                                 
                                 } 
-                        chart5.update();
+                        chart5.update();*/
 
                         $('#table2').DataTable().destroy();
                         let dataset=[];
