@@ -164,4 +164,17 @@ router.post('/actionplan',(req,res)=>{
 router.put('/actPlan',(req,res)=>{
 
 })
+router.get('/editarIndicador',(req,res)=>{
+  let id = req.query.id;
+  const sql = `SELECT * FROM indicadores WHERE id=${id};`;
+  conexion.query(sql, (error,result)=>{
+    if (!error) {
+      res.render('./Qsb/editarIndicador',{result:result[0], id:id})
+      console.log(result[0])
+    }else{
+      res.send(error)
+    }
+  })
+ 
+})
 module.exports = router;

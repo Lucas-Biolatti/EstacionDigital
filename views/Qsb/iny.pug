@@ -121,13 +121,14 @@ html(lang="es")
                     hr
                     table(class="table table-striped table-hover" id="table2")
                         thead 
+                            th Id
                             th Fecha 
-                            th Observaciones 
+                            th Observaciones
+                            th Accion
                         tbody()
                         
                     br  
-                    h4 PLAN DE ACCION - INYECCION
-                    table(class="table table-striped table-hover" id="table1")
+                    
                         
                     
                         
@@ -210,7 +211,8 @@ html(lang="es")
                             </div>
                             <div class="modal-body">
                                 
-                                <form class="d-flex" method="POST" action="agregaraccion">                               
+                                <form class="d-flex" method="POST" action="agregaraccion">
+                                            input(type="hidden", name="path" value="/Qsb/vent")                               
                                             input(type="hidden" name="retrabajo" value="NULL")
                                             input(type="hidden" name="ret_laca" value="NULL")
                                             input(type="hidden" name="sc_laca" value="NULL")
@@ -237,9 +239,9 @@ html(lang="es")
                                             <label class="form-label"> Cumplimiento de Programa
                                             <input type="number" step="0.01" name="c_programa" class="form-control" id="c_programa">
                                             <label class="form-label"> Disponibilidad Mantenimiento
-                                            <input type="number" step="0.01" name="disponibilidad" class="form-control" id="c_programa">
-                                            <label class="form-label"> Disponibilidad Moldes
-                                            <input type="number" step="0.01" name="disp_molde" class="form-control" id="c_programa">
+                                            <input type="number" step="0.01" name="disponibilidad" class="form-control" id="disponibilidad">
+                                            <label class="form-label"> Disponibilidad de moldes
+                                            <input type="number" step="0.01" name="disp_molde" class="form-control" id="disp_molde" value="NULL">
                                             <label class="form-label"> Observaciones 
                                             textarea(name="observaciones", cols="30", rows="5" class="form-control") 
                                            
@@ -279,8 +281,7 @@ html(lang="es")
         $(document).ready(function () {
                         
                             var tabla2 = $('#table2').DataTable();
-                            //var tabla1 = $('#table1').DataTable();
-                           
+                                                     
                             
                     });
         document.addEventListener('DOMContentLoaded',function(){
@@ -489,11 +490,11 @@ html(lang="es")
                 var mes = document.getElementById('mes').value;
                 var year = document.getElementById('year').value;
                 var sector = document.getElementById('sector').value;
-                var tabla1 = document.getElementById('table1');
+                
                 var tabla2 = document.getElementById('table2');
                 
                 tabla2.innerHTML="";
-                tabla1.innerHTML="";
+               
 
                 
                 fetch(`/Qsb/datos?sector=${sector}&mes=${mes}&year=${year}`)
@@ -721,8 +722,10 @@ html(lang="es")
                             for(let i=0;i<datos.length;i++){
                                 if(datos[i].observaciones){
                                     var dat=[
+                                datos[i].id,
                                 fecha(datos[i].fecha),
                                 datos[i].observaciones,
+                                '<a href="editarIndicador?id=' + datos[i].id + '" class="btn btn-primary btn-edit">Editar</a>'
                                 
                                 ]
                                 dataset.push(dat);
@@ -732,38 +735,17 @@ html(lang="es")
                         $('#table2').DataTable({
                             
                             dom: 'Bfrtlip',
-                            buttons: [
-                                
-                            {
-                                
-                                "extend":"excelHtml5",
-                                "text":'Excel',
-                                "textAttr":"Descargar Excel",
-                                "className":"btn btn-success",
-                                
-                            },
-                            {
-                                extend:'print',
-                                text:'Imprimir',
-                                textAttr:'Imprimir Reporte',
-                                className:'btn btn-info',
-                            },
-                            {
-                                extend:'pdfHtml5',
-                                text:'PDF',
-                                textAttr:'Guardar en PDF',
-                                className:'btn btn-danger'
-                            }
-                                
-                                
-                            ],
+                            
                             data:dataset,
                             columns:[
+                                {title:'id'},
                                 {title:'Fecha'},
                                 {title:'Observaciones'},
-                                
+                                {title:'Accion'},
                             ],
                     }); 
+
+                     
                     })
             }
             
