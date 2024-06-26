@@ -1,0 +1,31 @@
+div(class="d-flex")
+        
+        div(id="sidebar-container" class="bg-primary")
+            div(class="logo")
+                img(src="favicon.ico" alt="" class="d-inline-block")
+                h4(class="text-light font-weight-bold d-inline-block") Polimetal S.A
+            div(class="menu")
+                a(href="/" class="d-block p-1 text-light"     )
+                    i(class="icon ion-md-home m-2 lead") Inicio
+            
+                hr
+                h6(class="p-3 text-light") Sectores
+                a(href="Qsb/iny?sector=Inyeccion" class="d-block p-1 text-light") Inyeccion
+                a(href="Qsb/cc?sector=TTCC" class="d-block p-1 text-light") TT & CC
+                a(href="Qsb/mec?sector=Mecanizado" class="d-block p-1 text-light") Mecanizado
+                a(href="Qsb/vent?sector=Ventilado" class="d-block p-1 text-light") Ventilado 
+                a(href="Qsb/pint?sector=Pintura" class="d-block p-1 text-light") Pintura
+                a(href="Qsb/log?sector=Logistica" class="d-block p-1 text-light") Logistica
+                
+                
+                ul.logout
+                    li
+                        .logout-container
+                        img(src="images/usuario.png" alt="" width="50px")
+                        p.d-block.p-3.text-light= nombre
+                        a(href="/logout" class="d-block p-3.text-light")
+                            i.icon.ion-md-log-in.m-2.lead Logout
+                            
+                        
+                
+        

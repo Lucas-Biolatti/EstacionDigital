@@ -29,6 +29,7 @@ router.get('/',(req,res)=>{
         mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
     }
 });
+//Sectores 
 router.get('/iny',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="Qsb") {
      
@@ -72,7 +73,21 @@ router.get('/vent',(req,res)=>{
     res.render('login',{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
-})
+});
+router.get('/pint',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="Qsb") {
+     
+      res.render('./Qsb/pint',{sector:req.query.sector})
+    
+  
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+});
+
+
+//Auxiliares
 router.get('/datos',(req,res)=>{
   let sector = req.query.sector;
   let mes = req.query.mes;
