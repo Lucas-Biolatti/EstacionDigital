@@ -83,8 +83,13 @@ html(lang="es")
                 | 
                 label(class="form-label") Seleccione el Año 
                     input(type="number", name="year", class="form-control", min="2024", id="year")
-                    input(type="hidden", name="sector", value=sector, id="sector")
-                |    
+                    
+                | 
+                label(class="form-label") Sector 
+                    select(name="sector" id="sector" class="form-select")
+                        option(value="Mecanizado") Mecanizado
+                        option(value="Diamantado") Diamantado
+                | 
                 
                 <button class="btn btn-outline-success" type="button" id="consultar">Consultar</button>
                 .container 
@@ -154,6 +159,8 @@ html(lang="es")
                                                 option(value="Mecanizado") Mecanizado
                                                 option(value="Ventilado") Ventilado
                                                 option(value="Pintura") Pintura
+                                                option(value="Laca") Laca
+                                                option(value="Diamantado") Diamantado
                                                 option(value="Mantenimiento") Mantenimiento 
                                                 option(value="RRHH") RRHH 
                                                 option(value="Logistica") Logistica 
@@ -174,6 +181,8 @@ html(lang="es")
                                                 option(value="Mecanizado") Mecanizado
                                                 option(value="Ventilado") Ventilado
                                                 option(value="Pintura") Pintura
+                                                option(value="Laca") Laca
+                                                option(value="Diamantado") Diamantado
                                                 option(value="Mantenimiento") Mantenimiento 
                                                 option(value="RRHH") RRHH 
                                                 option(value="Logistica") Logistica 
@@ -226,6 +235,8 @@ html(lang="es")
                                                 option(value="Mecanizado") Mecanizado
                                                 option(value="Ventilado") Ventilado
                                                 option(value="Pintura") Pintura
+                                                option(value="Laca") Laca
+                                                option(value="Diamantado") Diamantado
                                                 option(value="Mantenimiento") Mantenimiento 
                                                 option(value="RRHH") RRHH 
                                                 option(value="Logistica") Logistica 
@@ -568,7 +579,7 @@ html(lang="es")
                                 },
                             
                                 {
-                                    data: datos.map(e => 6.5),
+                                    data: datos.map(e => e.sector==="Mecanizado" ? 1.2 : 3),
                                     label:'Objetivo',
                                     type:'line',
                                     lineTension: 0,
@@ -656,7 +667,7 @@ html(lang="es")
                                 },
                             
                                 {
-                                    data: datos.map(e => 96),
+                                    data: datos.map(e => 95),
                                     label:'Objetivo',
                                     type:'line',
                                     lineTension: 0,
@@ -700,7 +711,7 @@ html(lang="es")
                                 },
                             
                                 {
-                                    data: datos.map(e => 96),
+                                    data: datos.map(e => e.sector==="Mecanizado" ? 1.5 : 20),
                                     label:'Objetivo',
                                     type:'line',
                                     lineTension: 0,

@@ -85,6 +85,17 @@ router.get('/pint',(req,res)=>{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 });
+router.get('/log',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="Qsb") {
+     
+      res.render('./Qsb/log',{sector:req.query.sector})
+    
+  
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+});
 
 
 //Auxiliares

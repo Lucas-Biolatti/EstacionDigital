@@ -92,32 +92,12 @@ html(lang="es")
                     h4= "SEGUIMIENTO DIARIO - "+sector
                     
                     .row 
-                        .col-6 
-                            img(src="/images/actosInseguros.jpg", alt="", style="border-radius:50%;height:70px;width:100px;")
+                        .col-12
+                            img(src="/images/objetive.png", alt="", style="border-radius:50%;height:70px;width:100px;")
                             <div style="width: 100%; height: 250px;">
                                 <canvas id="myChart"></canvas>
                             </div>
-                        .col-6
-                            img(src="/images/reject.png", alt="", style="border-radius:50%;height:70px;width:100px;")
-                            <div style="width: 100%; height: 250px;">
-                                <canvas id="myChart2"></canvas>
-                            </div>
-                        .col-12
-                            img(src="/images/objetive.png", alt="", style="border-radius:50%;height:70px;width:100px;")  
-                            <div style="width: 100%; height: 250px;">
-                                <canvas id="myChart3"></canvas>
-                            </div>
-                    .row 
-                        .col-6 
-                            img(src="/images/ot.jpg", alt="", style="border-radius:50%;height:70px;width:100px;")
-                            <div style="width: 100%; height: 250px;">
-                                <canvas id="myChart4"></canvas>
-                            </div>
-                        .col-6
-                            img(src="/images/moldes.png", alt="", style="border-radius:50%;height:70px;width:100px;") 
-                            <div style="width: 100%; height: 250px;">
-                                <canvas id="myChart5"></canvas>
-                            </div>
+                     
                     hr
                     table(class="table table-striped table-hover" id="table2")
                         thead 
@@ -218,33 +198,25 @@ html(lang="es")
                                             input(type="hidden" name="retrabajo" value="NULL")
                                             input(type="hidden" name="ret_laca" value="NULL")
                                             input(type="hidden" name="sc_laca" value="NULL")
-                                            input(type="hidden" name="entregas" value="NULL")
+                                            
                                             <label class="form-label"> Fecha
-                                            <input type="date" name="fecha" class="form-control">
+                                            <input type="date" name="fecha" class="form-control" required>
                                             <label class="form-label"> Sector
-                                            select(name="sector", class="form-select")
-                                                option(value="Inyeccion") Inyeccion 
-                                                option(value="TTCC") TT&CC
-                                                option(value="Mecanizado") Mecanizado
-                                                option(value="Ventilado") Ventilado
-                                                option(value="Pintura") Pintura
-                                                option(value="Diamantado") Diamantado
-                                                option(value="Mantenimiento") Mantenimiento 
-                                                option(value="RRHH") RRHH 
+                                            select(name="sector", class="form-select" required)
+                                                
                                                 option(value="Logistica") Logistica 
-                                                option(value="HHSS") HHSS 
-                                                option(value="Gerencia") Gerencia 
-                                                option(value="Ingenieria") Ingenieria
-                                            <label class="form-label"> Accidentes
-                                            <input type="number", name="accidentes" class="form-control" id="accidentes">
-                                            <label class="form-label"> Scrap
-                                            <input type="number" step="0.01" name="scrap" class="form-control" id="scrap">
-                                            <label class="form-label"> Cumplimiento de Programa
-                                            <input type="number" step="0.01" name="c_programa" class="form-control" id="c_programa">
-                                            <label class="form-label"> Disponibilidad Mantenimiento
-                                            <input type="number" step="0.01" name="disponibilidad" class="form-control" id="disponibilidad">
-                                            <label class="form-label"> Disponibilidad de moldes
-                                            <input type="number" step="0.01" name="disp_molde" class="form-control" id="disp_molde" >
+                                                
+                                            
+                                            <input type="hidden", name="accidentes" class="form-control" id="accidentes" value="NULL">
+                                            label(class="form-label") Entregas
+                                            <input type="number" step="0.01" name="entregas" class="form-control" id="entregas" required>
+                                            <input type="hidden" step="0.01" name="scrap" class="form-control" id="scrap" value="NULL">
+                                            
+                                            <input type="hidden" step="0.01" name="c_programa" class="form-control" id="c_programa" value="NULL">
+                                            
+                                            <input type="hidden" step="0.01" name="disponibilidad" class="form-control" id="disponibilidad" value="NULL">
+                                            
+                                            <input type="hidden" step="0.01" name="disp_molde" class="form-control" id="disp_molde" value="NULL">
                                             <label class="form-label"> Observaciones 
                                             textarea(name="observaciones", cols="30", rows="5" class="form-control") 
                                            
@@ -289,11 +261,11 @@ html(lang="es")
                     });
         document.addEventListener('DOMContentLoaded',function(){
             initChart();
-            initChart2();
+            /*initChart2();
             initChart3();
             initChart4();
             initChart5();
-            
+            */
 
             let cons = document.getElementById('consultar');
             cons.addEventListener('click', (e) => {
@@ -309,7 +281,7 @@ html(lang="es")
                     data: {
                         labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],
                         datasets: [{
-                            label: 'Accidentes',
+                            label: 'Entregas',
                             data: [], // Los datos se actualizarán más tarde
                             borderWidth: 1
                         },
@@ -333,7 +305,7 @@ html(lang="es")
 
                 return chart;
             }
-            function initChart2() {
+            /*function initChart2() {
                 // Crea el gráfico en la carga de la página
                 let ctx = document.getElementById('myChart2').getContext("2d");
                 let chart2 = new Chart(ctx, {
@@ -480,7 +452,7 @@ html(lang="es")
                 });
 
                 return chart5;
-            }
+            }*/
             function updateChart(){
                 function fecha(x){
                     let f = new Date(x);
@@ -510,7 +482,7 @@ html(lang="es")
                                 labels: datos.map(e => fecha(e.fecha)),
                                 
                                 datasets: [{
-                                    data: datos.map(e => e.accidentes),
+                                    data: datos.map(e => e.entregas),
                                     label:'Accidentes',
                                     type:'line',
                                     lineTension: 0,
@@ -527,7 +499,7 @@ html(lang="es")
                                     }
                                 },
                                 {
-                                    data: datos.map(e => 0),
+                                    data: datos.map(e => 100),
                                     label:'Objetivo',
                                     type:'line',
                                     lineTension: 0,
@@ -544,7 +516,7 @@ html(lang="es")
                             }
                         chart.update();
 
-                        let chart2 = Chart.instances[1];
+                        /*let chart2 = Chart.instances[1];
                             chart2.data = {
                                 labels: datos.map(e => fecha(e.fecha)),
                                 
@@ -718,7 +690,7 @@ html(lang="es")
                                 
                                 
                                 } 
-                        chart5.update();
+                        chart5.update();*/
 
                         $('#table2').DataTable().destroy();
                         let dataset=[];
