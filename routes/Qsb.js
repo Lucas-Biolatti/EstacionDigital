@@ -196,7 +196,7 @@ router.get('/editarIndicador',(req,res)=>{
   conexion.query(sql, (error,result)=>{
     if (!error) {
       res.render('./Qsb/editarIndicador',{result:result[0], id:id})
-      console.log(result[0])
+      
     }else{
       res.send(error)
     }

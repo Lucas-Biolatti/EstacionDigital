@@ -52,12 +52,12 @@ html(lang="es")
                 <nav class="navbar navbar-light bg-light">
                     <div class="container-fluid">
                         button#menu-toggle.btn.btn-outline-primary ☰
-                        h3(class="navbar-brand") Editar Indicadores
+                        h3(class="navbar-brand")= "Editar Indicadores - "+result.id
                     </div>
                 </nav>
                 
                 .container
-                   if result.sector === "Inyeccion"
+                    if result.sector === "Inyeccion"
                         <form  method="POST" action="editarIndicador">
                             .row 
                                 .col-4
@@ -109,7 +109,58 @@ html(lang="es")
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                                     <button type="submit" class="btn btn-primary">Guardar</button>
                         </form>
-                    
+                    else if result.sector === "TTCC"
+                        <form  method="POST" action="editarIndicador">
+                            .row 
+                                .col-4
+                                    input(type="hidden", name="id" value=id)
+                                    input(type="hidden", name="path" value="/Qsb/vent")                               
+                                    input(type="hidden" name="retrabajo" value="NULL")
+                                    input(type="hidden" name="ret_laca" value="NULL")
+                                    input(type="hidden" name="sc_laca" value="NULL")
+                                    input(type="hidden" name="entregas" value="NULL")
+                                    input(type="hidden" step="0.01" name="scrap" class="form-control" id="scrap" value="NULL")
+                                    input(type="hidden" step="0.01" name="disp_molde" class="form-control" id="disp_molde" value="NULL")
+                                    <label class="form-label"> Fecha
+                                    <input type="date" name="fecha" class="form-control">
+                                .col-4
+                                    <label class="form-label"> Sector
+                                    select(name="sector", class="form-select" id="sector" value= result.sector)
+                                        option(value="Inyeccion") Inyeccion 
+                                        option(value="TTCC") TT&CC
+                                        option(value="Mecanizado") Mecanizado
+                                        option(value="Ventilado") Ventilado
+                                        option(value="Pintura") Pintura
+                                        option(value="Laca") Laca
+                                        option(value="Diamantado") Diamantado
+                                        option(value="Mantenimiento") Mantenimiento 
+                                        option(value="RRHH") RRHH 
+                                        option(value="Logistica") Logistica 
+                                        option(value="HHSS") HHSS 
+                                        option(value="Gerencia") Gerencia 
+                                        option(value="Ingenieria") Ingenieria
+                                    
+                                .col-4
+                                    <label class="form-label"> Accidentes    
+                                    input(type="number", name="accidentes" class="form-control" id="accidentes" value= result.accidentes)
+                            .row 
+                                                                    
+                                .col-4     
+                                    <label class="form-label"> Cumplimiento de Programa
+                                    input(type="number" step="0.01" name="c_programa" class="form-control" id="c_programa" value=result.c_programa)
+                                .col-4
+                                    <label class="form-label"> Disponibilidad Mantenimiento
+                                    input(type="number" step="0.01" name="disponibilidad" class="form-control" id="disponibilidad" value=result.disponibilidad)
+                            .row 
+                                
+                                .col-4    
+                                    <label class="form-label"> Observaciones 
+                                    textarea(name="observaciones", cols="30", rows="5" class="form-control" )= result.observaciones
+                            .row 
+                                .col-6
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                    <button type="submit" class="btn btn-primary">Guardar</button>
+                        </form>
                 
                 
 
