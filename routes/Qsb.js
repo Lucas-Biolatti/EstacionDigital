@@ -9,10 +9,11 @@ function fecha(x){
   let fecha = f.getDate()+"/"+f.getMonth()+"/"+f.getUTCFullYear();
   return fecha;
 };
-function fechaEdit(x){
-  let dia = (x.getUTCDate()<10?'0':'')+x.getUTCDate();
-  let mes = ((x.getMonth()+1)<10?'0':'')+(x.getMonth()+1);
-  let f = x.getUTCFullYear()+"-"+mes+"-"+dia;
+function fechaEdit(x) {
+  let fecha=new Date(x)
+  let dia = (fecha.getDate() < 10 ? '0' : '') + fecha.getDate();
+  let mes = ((fecha.getMonth() + 1) < 10 ? '0' : '') + (fecha.getMonth() + 1);
+  let f = fecha.getFullYear() + "-" + mes + "-" + dia;
   return f;
 }
 
@@ -130,7 +131,7 @@ router.post("/agregaraccion",(req,res)=>{
   if (req.session.loggedin && req.session.rol=="Qsb") {
     let fecha = req.body.fecha;
     let sector = req.body.sector;
-    let scrap = req.body.scrap
+    let scrap = req.body.scrap;
     let accidentes = req.body.accidentes;
     let c_programa = req.body.c_programa;
     let disponibilidad = req.body.disponibilidad;
@@ -187,20 +188,77 @@ router.post('/actionplan',(req,res)=>{
   }
 });
 
-router.put('/actPlan',(req,res)=>{
-
+router.post('/actplan',(req,res)=>{
+    let id = req.body.id;
+    let fecha = req.body.fecha;
+    let sector = req.body.sector;
+    let descripcion = req.body.descripcion;
+    let accion = req.body.accion;
+    let responsable = req.body.responsable;
+    let sector_resp = req.body.sector_resp;
+    let comentario = req.body.comentario;
+    let fecha_tent = req.body.fecha_tent;
+    let fecha_cierre = req.body.fecha_cierre ? req.body.fecha_cierre : null;
+    let estado = req.body.estado;
+    let sector1 = req.body.sector1;
+    const sql = `UPDATE planAccionQsb SET fecha="${fecha}",sector="${sector}",descripcion="${descripcion}" ,accion="${accion}" ,responsable="${responsable}" ,sector_resp="${sector_resp}" ,comentario="${comentario}" ,fecha_tent="${fecha_tent}" ,fecha_cierre="${fecha_cierre}" ,estado="${estado}"  WHERE id=${id};`
+    conexion.query(sql,(error,row)=>{
+      if (!error) {
+        res.redirect(`/Qsb`)
+      }else(res.send(error));
+    })
 })
 router.get('/editarIndicador',(req,res)=>{
   let id = req.query.id;
   const sql = `SELECT * FROM indicadores WHERE id=${id};`;
   conexion.query(sql, (error,result)=>{
     if (!error) {
-      res.render('./Qsb/editarIndicador',{result:result[0], id:id})
+      let datos={
+        'fecha': fechaEdit(result[0].fecha),
+        'sector': result[0].sector,
+        'scrap': result[0].scrap,
+        'accidentes': result[0].accidentes,
+        'c_programa': result[0].c_programa,
+        'disponibilidad': result[0].disponibilidad,
+        'disp_molde': result[0].disp_molde,
+        'observaciones': result[0].observaciones,
+        'retrabajo': result[0].retrabajo,
+        'ret_laca': result[0].ret_laca,
+        'sc_laca': result[0].sc_laca,
+        'entregas': result[0].entregas,
+        'path': result[0].path,
+      }
+      console.log(datos)
+      res.render('./Qsb/editarIndicador',{result:datos, id:id})
       
     }else{
       res.send(error)
     }
   })
  
+})
+router.post('/editarIndicador',(req,res)=>{
+  let id = req.body.id;
+  let fecha=req.body.fecha;
+  let sector=req.body.sector;
+  let scrap=req.body.scrap;
+  let accidentes=req.body.accidentes;
+  let c_programa=req.body.c_programa;
+  let disponibilidad=req.body.disponibilidad;
+  let disp_molde=req.body.disp_molde;
+  let observaciones=req.body.observaciones;
+  let retrabajo=req.body.retrabajo;
+  let ret_laca=req.body.ret_laca;
+  let sc_laca=req.body.sc_laca;
+  let entregas=req.body.entregas;
+  let path=req.body.path;
+  const sql = `UPDATE indicadores SET fecha="${fecha}",sector="${sector}",accidentes=${accidentes},c_programa=${c_programa},retrabajo=${retrabajo},scrap=${scrap},disponibilidad=${disponibilidad},disp_molde=${disp_molde},ret_laca=${ret_laca},sc_laca=${sc_laca},entregas=${entregas},observaciones="${observaciones}" WHERE id=${id};`
+  conexion.query(sql,(error,row)=>{
+    if (!error) {
+      res.redirect(path);
+    }else{
+      res.send(error)
+    }
+  })
 })
 module.exports = router;
