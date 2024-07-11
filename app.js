@@ -14,6 +14,8 @@ var SeguridadRouter = require('./routes/Seguridad');
 var MantenimientoRouter = require('./routes/Mantenimiento');
 var AdminRouter = require('./routes/Admin');
 var QsbRouter = require('./routes/Qsb');
+const flash = require('connect-flash');
+
 var app = express();
 
 // view engine setup
@@ -23,8 +25,12 @@ app.use(session({
 	secret: 'secret',
 	resave: true,
 	saveUninitialized: true,
+  cookie: {
+    maxAge: 3600000 // 1 hora en milisegundos
+}
  
 }));
+app.use(flash());
 app.use(methodOverride('_method'));
 app.use(logger('dev'));
 app.use(express.json());

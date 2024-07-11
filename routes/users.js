@@ -25,24 +25,30 @@ function fechaEdit(x){
 router.get('/mtto:?',(req,res)=>{
   //Renderizar index de Mantenimiento
   if (req.session.loggedin && req.session.rol=="users") {
-    let sql1 = "SELECT * FROM sector";
-    let sector = [];
-    let mensaje = req.query.mensaje
-    
-    conexion.query(sql1,async (error,result,files)=>{
-        if(!error){
-           
-            for(let i=0;i<result.length;i++){
-                sector.push(result[i])
-            }
-         
-        }
-    
-      await res.render("./users/mantenimiento/mtto",{sector:sector,
-        nombre:`${req.session.apellido}, ${req.session.nombre}`,
-      mensaje:mensaje});   
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      let sql1 = "SELECT * FROM sector";
+      let sector = [];
+      let mensaje = req.query.mensaje
       
-    })
+      conexion.query(sql1,async (error,result,files)=>{
+          if(!error){
+             
+              for(let i=0;i<result.length;i++){
+                  sector.push(result[i])
+              }
+           
+          }
+      
+        await res.render("./users/mantenimiento/mtto",{sector:sector,
+          nombre:`${req.session.apellido}, ${req.session.nombre}`,
+        mensaje:mensaje});   
+        
+      })
+      })
+    
   }else{
     res.render('login',{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`})
@@ -51,217 +57,262 @@ router.get('/mtto:?',(req,res)=>{
 router.get('/ordenMtto',(req,res)=>{
   //Renderizar formulario de orden de trabajo
   if (req.session.loggedin && req.session.rol=="users") {
-    let idSector = url.parse(req.url,true).query.id;
-    let sector = url.parse(req.url,true).query.nombre;
-    let sql2 = "SELECT * FROM equipo WHERE Sector=?";
-    let equipo = [];
-    conexion.query(sql2,[parseInt(idSector)],(error,result,files)=>{
-        if(!error){
-           
-            for(let i=0;i<result.length;i++){
-                equipo.push(result[i])
-            }
-            res.render('./users/mantenimiento/agregar',{
-              equipo:equipo,
-              idSector:idSector,
-              sector:sector,
-              nombre:`${req.session.apellido}, ${req.session.nombre}`});
-        }
-  
-    })
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      let idSector = url.parse(req.url,true).query.id;
+      let sector = url.parse(req.url,true).query.nombre;
+      let sql2 = "SELECT * FROM equipo WHERE Sector=?";
+      let equipo = [];
+      conexion.query(sql2,[parseInt(idSector)],(error,result,files)=>{
+          if(!error){
+             
+              for(let i=0;i<result.length;i++){
+                  equipo.push(result[i])
+              }
+              res.render('./users/mantenimiento/agregar',{
+                equipo:equipo,
+                idSector:idSector,
+                sector:sector,
+                nombre:`${req.session.apellido}, ${req.session.nombre}`});
+          }
+    
+      })
+      })
+    
     
   } else {
-    res.render('login');
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
   
 });
 router.get('/listarOrden:?',(req,res)=>{
   //listado de Ordenes y sumatoria de minutos
   if (req.session.loggedin && req.session.rol=="users") {
-    let idSector = req.query.id;
-    let sector= req.query.nombre;
-    let sql1 = "SELECT * FROM ordentrabajo WHERE sector=?";
-    conexion.query(sql1,[sector],(error,result,files)=>{
-        if(!error){
-            let tiempoTotal=0
-            let resultados=[];
-            let abiertas=0
-            let cerradas=0
-            let enProceso=0
-            for(let i=0;i<result.length;i++){
-            let f = new Date(result[i].fecha);
-            let fecha = `${f.getDate()}/${f.getMonth()+1}/${f.getUTCFullYear()}`;
-            let finicio  = new Date(result[i].horaInicio);
-            let ffin  = new Date(result[i].horaFin);
-            let inicio=finicio.getDate()+"/"+finicio.getMonth()+"/"+finicio.getUTCFullYear()+" - "+finicio.getHours()+":"+finicio.getMinutes();
-            let fin=ffin.getDate()+"/"+ffin.getMonth()+"/"+ffin.getUTCFullYear()+" - "+ffin.getHours()+":"+ffin.getMinutes();
-            let resultado={
-                idOrden: result[i].idOrden,
-                detecto: result[i].detecto,
-                equipo: result[i].equipo,
-                fecha: fecha,
-                turno: result[i].turno,
-                paradaProceso: result[i].paradaProceso,
-                prioridad: result[i].prioridad,
-                tipo: result[i].tipoParada,
-                horaInicio: inicio,
-                horaFin: fin,
-                descripcion:  result[i].descripcion,
-                tiempoTotal:(ffin-finicio)/1000/60,
-                estado:result[i].estado,
-                tel:result[i].tel,
-                avisar:result[i].avisar
-            }
-            if(result[i].estado=="Pendiente"){
-                abiertas++;
-            }if(result[i].estado=="Cerrado"){
-                cerradas++;
-            }if(result[i].estado=="En Proceso"){
-                enProceso++;
-            }
-            tiempoTotal+=(ffin-finicio)/1000/60;
-            resultados.push(resultado);
-        }
-            res.render('./users/mantenimiento/listar',{
-                orden:resultados,
-                idSector:parseInt(idSector),
-                tt:tiempoTotal,
-                abiertas:abiertas,
-                cerradas:cerradas,
-                enProceso:enProceso,   
-                sector:sector,
-                nombre:`${req.session.apellido}, ${req.session.nombre}`
-               
-            });
-         }
-        else{
-            res.send("Error de conexion:"+error);
-        }
-    })
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      let idSector = req.query.id;
+      let sector= req.query.nombre;
+      let sql1 = "SELECT * FROM ordentrabajo WHERE sector=?";
+      conexion.query(sql1,[sector],(error,result,files)=>{
+          if(!error){
+              let tiempoTotal=0
+              let resultados=[];
+              let abiertas=0
+              let cerradas=0
+              let enProceso=0
+              for(let i=0;i<result.length;i++){
+              let f = new Date(result[i].fecha);
+              let fecha = `${f.getDate()}/${f.getMonth()+1}/${f.getUTCFullYear()}`;
+              let finicio  = new Date(result[i].horaInicio);
+              let ffin  = new Date(result[i].horaFin);
+              let inicio=finicio.getDate()+"/"+finicio.getMonth()+"/"+finicio.getUTCFullYear()+" - "+finicio.getHours()+":"+finicio.getMinutes();
+              let fin=ffin.getDate()+"/"+ffin.getMonth()+"/"+ffin.getUTCFullYear()+" - "+ffin.getHours()+":"+ffin.getMinutes();
+              let resultado={
+                  idOrden: result[i].idOrden,
+                  detecto: result[i].detecto,
+                  equipo: result[i].equipo,
+                  fecha: fecha,
+                  turno: result[i].turno,
+                  paradaProceso: result[i].paradaProceso,
+                  prioridad: result[i].prioridad,
+                  tipo: result[i].tipoParada,
+                  horaInicio: inicio,
+                  horaFin: fin,
+                  descripcion:  result[i].descripcion,
+                  tiempoTotal:(ffin-finicio)/1000/60,
+                  estado:result[i].estado,
+                  tel:result[i].tel,
+                  avisar:result[i].avisar
+              }
+              if(result[i].estado=="Pendiente"){
+                  abiertas++;
+              }if(result[i].estado=="Cerrado"){
+                  cerradas++;
+              }if(result[i].estado=="En Proceso"){
+                  enProceso++;
+              }
+              tiempoTotal+=(ffin-finicio)/1000/60;
+              resultados.push(resultado);
+          }
+              res.render('./users/mantenimiento/listar',{
+                  orden:resultados,
+                  idSector:parseInt(idSector),
+                  tt:tiempoTotal,
+                  abiertas:abiertas,
+                  cerradas:cerradas,
+                  enProceso:enProceso,   
+                  sector:sector,
+                  nombre:`${req.session.apellido}, ${req.session.nombre}`
+                 
+              });
+           }
+          else{
+              res.send("Error de conexion:"+error);
+          }
+      })
+      })
+    
   } else {
-    res.render('login')
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 });
 router.get('/editarOrden',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="users") {
-    let idOrden = url.parse(req.url,true).query.idOrden;
-    let idSector = url.parse(req.url,true).query.idSector;
-
-    let sql2 = "SELECT * FROM equipo WHERE Sector=?";
-    let equipo = [];
-    conexion.query(sql2,[parseInt(idSector)],(error,result,files)=>{
-        if(!error){
-            for(let i=0;i<result.length;i++){
-                equipo.push(result[i])
-            }
-        }
-    })
-
-    let sql = "SELECT * FROM `ordentrabajo` WHERE `idOrden`=?";
-    conexion.query(sql,[parseInt(idOrden)],(error,result,file)=>{
-        if(!error){
-        let dia = (result[0].fecha.getUTCDate()<10?'0':'')+result[0].fecha.getUTCDate();
-        let mes = ((result[0].fecha.getMonth()+1)<10?'0':'')+(result[0].fecha.getMonth()+1);
-        let f = result[0].fecha.getUTCFullYear()+"-"+mes+"-"+dia;
-        //hs inicio
-        let diahi = (result[0].horaInicio.getUTCDate()<10?'0':'')+result[0].horaInicio.getUTCDate();
-        let meshi = ((result[0].horaInicio.getMonth()+1)<10?'0':'')+(result[0].horaInicio.getMonth()+1);
-        let fhi = result[0].horaInicio.getUTCFullYear()+"-"+meshi+"-"+diahi+"T"+result[0].horaInicio.getHours()+":"+((result[0].horaInicio.getMinutes()<10?'0':'')+result[0].horaInicio.getMinutes());
-        
-        //hs fin
-        let diahf = (result[0].horaFin.getUTCDate()<10?'0':'')+result[0].horaFin.getUTCDate();
-        let meshf = ((result[0].horaFin.getMonth()+1)<10?'0':'')+(result[0].horaFin.getMonth()+1);
-        let fhf = result[0].horaFin.getUTCFullYear()+"-"+meshf+"-"+diahf+"T"+result[0].horaFin.getHours()+":"+((result[0].horaFin.getMinutes()<10?'0':'')+result[0].horaFin.getMinutes());
-        
-        res.render('./users/mantenimiento/editar',{
-            result:result,
-            idSector:idSector,
-            idOrden:idOrden,
-            equipo:equipo,
-            f:f,
-            fhi:fhi,
-            fhf:fhf});
-        }
-    })
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      let idOrden = url.parse(req.url,true).query.idOrden;
+      let idSector = url.parse(req.url,true).query.idSector;
+  
+      let sql2 = "SELECT * FROM equipo WHERE Sector=?";
+      let equipo = [];
+      conexion.query(sql2,[parseInt(idSector)],(error,result,files)=>{
+          if(!error){
+              for(let i=0;i<result.length;i++){
+                  equipo.push(result[i])
+              }
+          }
+      })
+  
+      let sql = "SELECT * FROM `ordentrabajo` WHERE `idOrden`=?";
+      conexion.query(sql,[parseInt(idOrden)],(error,result,file)=>{
+          if(!error){
+          let dia = (result[0].fecha.getUTCDate()<10?'0':'')+result[0].fecha.getUTCDate();
+          let mes = ((result[0].fecha.getMonth()+1)<10?'0':'')+(result[0].fecha.getMonth()+1);
+          let f = result[0].fecha.getUTCFullYear()+"-"+mes+"-"+dia;
+          //hs inicio
+          let diahi = (result[0].horaInicio.getUTCDate()<10?'0':'')+result[0].horaInicio.getUTCDate();
+          let meshi = ((result[0].horaInicio.getMonth()+1)<10?'0':'')+(result[0].horaInicio.getMonth()+1);
+          let fhi = result[0].horaInicio.getUTCFullYear()+"-"+meshi+"-"+diahi+"T"+result[0].horaInicio.getHours()+":"+((result[0].horaInicio.getMinutes()<10?'0':'')+result[0].horaInicio.getMinutes());
+          
+          //hs fin
+          let diahf = (result[0].horaFin.getUTCDate()<10?'0':'')+result[0].horaFin.getUTCDate();
+          let meshf = ((result[0].horaFin.getMonth()+1)<10?'0':'')+(result[0].horaFin.getMonth()+1);
+          let fhf = result[0].horaFin.getUTCFullYear()+"-"+meshf+"-"+diahf+"T"+result[0].horaFin.getHours()+":"+((result[0].horaFin.getMinutes()<10?'0':'')+result[0].horaFin.getMinutes());
+          
+          res.render('./users/mantenimiento/editar',{
+              result:result,
+              idSector:idSector,
+              idOrden:idOrden,
+              equipo:equipo,
+              f:f,
+              fhi:fhi,
+              fhf:fhf});
+          }
+      })
+      })
+    
   } else {
-    res.render('login')
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 });
 router.post('/ordenMtto',(req,res)=>{
   // Guardar Orden de Trabajo
   if (req.session.loggedin && req.session.rol=="users") {
-    let sql = "INSERT INTO `ordentrabajo`(`detecto`,`avisar`,`tel`, `sector`, `equipo`, `fecha`, `turno`, `paradaProceso`, `prioridad`, `tipoParada`, `horaInicio`, `horaFin`, `descripcion`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-    conexion.query(sql,[
-    req.body.detecto,
-    req.body.avisar,
-    req.body.tel,
-    req.body.sector,
-    req.body.equipo,
-    req.body.fecha,
-    req.body.turno,
-    req.body.paradaProceso,
-    req.body.prioridad,
-    req.body.tipoParada,
-    req.body.horaInicio,
-    req.body.horaFin,
-    req.body.descripcion],(error,fields)=>{
-      if(!error){
-        res.redirect('mtto?mensaje=Se agrego exitosamente la OT');
-      }else{
-        res.redirect('mtto?mensaje=Error al intentar agregar OT');
-    }})
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      let sql = "INSERT INTO `ordentrabajo`(`detecto`,`avisar`,`tel`, `sector`, `equipo`, `fecha`, `turno`, `paradaProceso`, `prioridad`, `tipoParada`, `horaInicio`, `horaFin`, `descripcion`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+      conexion.query(sql,[
+      req.body.detecto,
+      req.body.avisar,
+      req.body.tel,
+      req.body.sector,
+      req.body.equipo,
+      req.body.fecha,
+      req.body.turno,
+      req.body.paradaProceso,
+      req.body.prioridad,
+      req.body.tipoParada,
+      req.body.horaInicio,
+      req.body.horaFin,
+      req.body.descripcion],(error,fields)=>{
+        if(!error){
+          res.redirect('mtto?mensaje=Se agrego exitosamente la OT');
+        }else{
+          res.redirect('mtto?mensaje=Error al intentar agregar OT');
+      }})
+      })
+    
   } else {
-    res.render('login');
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 });
 router.delete('/ordenMtto:?',(req,res)=>{
   //Eliminar orden de trabajo
   if (req.session.loggedin && req.session.rol=="users") {
-    let id = req.body.id;
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      let id = req.body.id;
     
 
-    const sql = `DELETE FROM ordentrabajo WHERE idOrden = ${id}`
-    conexion.query(sql,(error,filas)=>{
-      res.redirect(`mtto?mensaje=Se elimino correctamente la OT Nro ${id}`)
-    })
+      const sql = `DELETE FROM ordentrabajo WHERE idOrden = ${id}`
+      conexion.query(sql,(error,filas)=>{
+        res.redirect(`mtto?mensaje=Se elimino correctamente la OT Nro ${id}`)
+      })
+      })
+    
   } else {
-    res.render('login')
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 });
 router.put('/editarOrden',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="users") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      let sqlupdate = "UPDATE `ordentrabajo` SET `detecto`=?,`equipo`=?,`fecha`=?,`turno`=?,`paradaProceso`=?,`prioridad`=?,`tipoParada`=?,`horaInicio`=?,`horaFin`=?,`descripcion`=? WHERE `idOrden`=?";
+      let resultados = [
+          req.body.detecto,
+          req.body.equipo,
+          req.body.fecha,
+          req.body.turno,
+          req.body.paradaProceso,
+          req.body.prioridad,
+          req.body.tipoParada,
+          req.body.horaInicio,
+          req.body.horaFin,
+          req.body.descripcion,
+          parseInt(req.body.idOrden),
+          
+      ];
+      
+      conexion.query(sqlupdate,resultados,(error,rows)=>{
+          if(!error){
+         
+          res.redirect(`mtto?mensaje=Se modifico correctamente la Orden Nro ${req.body.idOrden}`)
+          }else{
+            res.redirect(`mtto?mensaje=Error al intentar modificar!`)
+             
+          }
+        })
+      })  
         
-        let sqlupdate = "UPDATE `ordentrabajo` SET `detecto`=?,`equipo`=?,`fecha`=?,`turno`=?,`paradaProceso`=?,`prioridad`=?,`tipoParada`=?,`horaInicio`=?,`horaFin`=?,`descripcion`=? WHERE `idOrden`=?";
-        let resultados = [
-            req.body.detecto,
-            req.body.equipo,
-            req.body.fecha,
-            req.body.turno,
-            req.body.paradaProceso,
-            req.body.prioridad,
-            req.body.tipoParada,
-            req.body.horaInicio,
-            req.body.horaFin,
-            req.body.descripcion,
-            parseInt(req.body.idOrden),
-            
-        ];
-        
-        conexion.query(sqlupdate,resultados,(error,rows)=>{
-            if(!error){
-           
-            res.redirect(`mtto?mensaje=Se modifico correctamente la Orden Nro ${req.body.idOrden}`)
-            }else{
-              res.redirect(`mtto?mensaje=Error al intentar modificar!`)
-               
-            }
-          })
   } else {
-    res.render('login')
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 });
 router.get('/verOrden',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="users") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
       let idOrden = url.parse(req.url,true).query.idOrden;
       const sqlorden = "SELECT * FROM ordentrabajo WHERE idOrden = ?"
       conexion.query(sqlorden,[idOrden],(error,result)=>{
@@ -283,6 +334,8 @@ router.get('/verOrden',(req,res)=>{
               Nombre: `${req.session.apellido}, ${req.session.nombre}`});
       }else{res.send(`<h1>No se encontraron resultados</h1>`)};
   })
+      })
+      
   
   } else {
     res.render('login',{
@@ -295,49 +348,56 @@ router.get('/verOrden',(req,res)=>{
 router.get('/syso', (req,res)=>{
   //Renderizar index de Seguridad
   if (req.session.loggedin && req.session.rol=="users") {
-    let sql1 = "SELECT * FROM sector";
-    let sql2= "SELECT * FROM accidentes";
-    let sql3= "SELECT * FROM actosinseguros";
-    let sector = [];
-    let accidentes=0;
-    let actos=0;
-
-     conexion.query(sql2,(error,result)=>{
-        if(!error){
-            for(let i=0;i<result.length;i++){
-                accidentes++
-            }
-            
-        }
-    })
-    conexion.query(sql3,(error,result)=>{
-        if(!error){
-        for(let i=0;i<result.length;i++){
-            actos++
-        }
-    }
-    })
-
-    
-    conexion.query(sql1,(error,result,files)=>{
-        if(!error){
-            
-            for(let i=0;i<result.length;i++){
-                sector.push(result[i])
-            }
-         
-        }
-    
-    res.render("./users/syso/index",{
-      sector:sector,
-      accidentes:accidentes,
-      actos:actos,
-      nombre:`${req.session.apellido}, ${req.session.nombre}`,
-      mensaje:req.query.mensaje})
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      let sql1 = "SELECT * FROM sector";
+      let sql2= "SELECT * FROM accidentes";
+      let sql3= "SELECT * FROM actosinseguros";
+      let sector = [];
+      let accidentes=0;
+      let actos=0;
+  
+       conexion.query(sql2,(error,result)=>{
+          if(!error){
+              for(let i=0;i<result.length;i++){
+                  accidentes++
+              }
+              
+          }
+      })
+      conexion.query(sql3,(error,result)=>{
+          if(!error){
+          for(let i=0;i<result.length;i++){
+              actos++
+          }
+      }
+      })
+  
       
-    })
+      conexion.query(sql1,(error,result,files)=>{
+          if(!error){
+              
+              for(let i=0;i<result.length;i++){
+                  sector.push(result[i])
+              }
+           
+          }
+      
+      res.render("./users/syso/index",{
+        sector:sector,
+        accidentes:accidentes,
+        actos:actos,
+        nombre:`${req.session.apellido}, ${req.session.nombre}`,
+        mensaje:req.query.mensaje})
+        
+      })
+      })
+    
   }else{
-    res.render('login')
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 });
         // Accidentes

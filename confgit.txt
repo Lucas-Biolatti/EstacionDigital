@@ -25,3 +25,17 @@ if (req.session.loggedin && req.session.rol=="users") {
   }
 
 const sql2 = `UPDATE datos_matriceria SET fecha=${req.body.fecha}, molde=${req.body.molde}, fns=${req.body.fns}, fni=${req.body.fni}, fsb=${req.body.fsb}, fporta=${req.body.fporta}, observaciones=${req.body.observaciones} WHERE `
+
+const { connectToDatabase } = require('../db/db');
+
+if (req.session.loggedin && req.session.rol=="Qsb") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+        //......Datos de la consulta
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }

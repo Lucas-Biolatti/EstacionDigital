@@ -2,6 +2,7 @@ var express = require('express');
 const url = require('url');
 var router = express.Router();
 var conexion = require('../db/db');
+const { connectToDatabase } = require('../db/db');
 
 
 function fecha(x){
@@ -101,34 +102,59 @@ router.get('/log',(req,res)=>{
 
 //Auxiliares
 router.get('/datos',(req,res)=>{
-  let sector = req.query.sector;
-  let mes = req.query.mes;
-  let year = req.query.year;
+  //Lleva los datos a los indicadores de cada area, trabaja con fetch
+  if (req.session.loggedin && req.session.rol=="Qsb") {
+    let sector = req.query.sector;
+    let mes = req.query.mes;
+    let year = req.query.year;
 
-  const sql = `SELECT * FROM indicadores where sector="${sector}" AND MONTH(fecha)="${mes}" AND YEAR(fecha)="${year}" ORDER BY fecha`
-  conexion.query(sql,(error,result)=>{
-    if (!error) {
-      res.send(result);
-    }else{
-      res.send("ERROR......:"+error);
-    }
-  })
+    const sql = `SELECT * FROM indicadores where sector="${sector}" AND MONTH(fecha)="${mes}" AND YEAR(fecha)="${year}" ORDER BY fecha`
+    
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      conexion.query(sql,(error,result)=>{
+        if (!error) {
+          res.send(result);
+        }else{
+          res.send("ERROR......:"+error);
+        }
+      })
+    });
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
 });
-router.get('/datosPlan',(req,res)=>{
+router.get('/datosPlan', (req, res) => {
+  if (req.session.loggedin && req.session.rol=="Qsb") {
+    connectToDatabase((error, conexion) => {
+        if (error) {
+            return res.status(500).send('Error de conexión a la base de datos');
+        }
 
-  
-  const sql=`SELECT * FROM planAccionQsb ORDER BY fecha`
-  conexion.query(sql,(error,results)=>{
-    if(!error){
-      res.send(results)
-    }else{
-      res.send(error)
-    }
-  })
+        const sql = 'SELECT * FROM planAccionQsb ORDER BY fecha';
+        conexion.query(sql, (error, results) => {
+            if (!error) {
+                res.send(results);
+            } else {
+                res.send(error);
+            }
+        });
+    });
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
 });
 
 router.post("/agregaraccion",(req,res)=>{
   if (req.session.loggedin && req.session.rol=="Qsb") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
     let fecha = req.body.fecha;
     let sector = req.body.sector;
     let scrap = req.body.scrap;
@@ -152,7 +178,7 @@ router.post("/agregaraccion",(req,res)=>{
         res.send(error)
       }
     })
-   
+  });
 
     } else {
         res.render('login',{
@@ -161,26 +187,31 @@ router.post("/agregaraccion",(req,res)=>{
   });
 router.post('/actionplan',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="Qsb") {
-    let fecha = req.body.fecha;
-    let sector = req.body.sector;
-    let descripcion = req.body.descripcion;
-    let accion = req.body.accion;
-    let responsable = req.body.responsable;
-    let sector_resp = req.body.sector_resp;
-    let comentario = req.body.comentario;
-    let fecha_tent = req.body.fecha_tent;
-    let fecha_cierre = req.body.fecha_cierre ? req.body.fecha_cierre : null;
-    let estado = req.body.estado;
-    let sector1 = req.body.sector1;
-
-    const sql = `INSERT INTO planAccionQsb (fecha,sector,descripcion,accion,responsable,sector_resp,comentario,fecha_tent,fecha_cierre,estado) VALUES ('${fecha}','${sector}','${descripcion}','${accion}','${responsable}','${sector_resp}','${comentario}','${fecha_tent}','${fecha_cierre}','${estado}');`
-    conexion.query(sql,(error,rows)=>{  
-      if (!error) {
-        res.redirect(`/Qsb`)
-        
-      }else{
-        res.send(error)
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
       }
+      let fecha = req.body.fecha;
+      let sector = req.body.sector;
+      let descripcion = req.body.descripcion;
+      let accion = req.body.accion;
+      let responsable = req.body.responsable;
+      let sector_resp = req.body.sector_resp;
+      let comentario = req.body.comentario;
+      let fecha_tent = req.body.fecha_tent;
+      let fecha_cierre = req.body.fecha_cierre ? req.body.fecha_cierre : null;
+      let estado = req.body.estado;
+      let sector1 = req.body.sector1;
+
+      const sql = `INSERT INTO planAccionQsb (fecha,sector,descripcion,accion,responsable,sector_resp,comentario,fecha_tent,fecha_cierre,estado) VALUES ('${fecha}','${sector}','${descripcion}','${accion}','${responsable}','${sector_resp}','${comentario}','${fecha_tent}','${fecha_cierre}','${estado}');`
+      conexion.query(sql,(error,rows)=>{  
+        if (!error) {
+          res.redirect(`/Qsb`)
+          
+        }else{
+          res.send(error)
+        }
+      })
     })
   } else {
     res.render('login',{
@@ -189,6 +220,11 @@ router.post('/actionplan',(req,res)=>{
 });
 
 router.post('/actplan',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="Qsb") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
     let id = req.body.id;
     let fecha = req.body.fecha;
     let sector = req.body.sector;
@@ -207,8 +243,18 @@ router.post('/actplan',(req,res)=>{
         res.redirect(`/Qsb`)
       }else(res.send(error));
     })
+  })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
 })
 router.get('/editarIndicador',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="Qsb") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
   let id = req.query.id;
   const sql = `SELECT * FROM indicadores WHERE id=${id};`;
   conexion.query(sql, (error,result)=>{
@@ -235,9 +281,18 @@ router.get('/editarIndicador',(req,res)=>{
       res.send(error)
     }
   })
- 
+ })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
 })
 router.post('/editarIndicador',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="Qsb") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
   let id = req.body.id;
   let fecha=req.body.fecha;
   let sector=req.body.sector;
@@ -260,5 +315,10 @@ router.post('/editarIndicador',(req,res)=>{
       res.send(error)
     }
   })
+})
+} else {
+  res.render('login',{
+    mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+}
 })
 module.exports = router;
