@@ -403,22 +403,33 @@ router.get('/syso', (req,res)=>{
         // Accidentes
 router.get('/accidente',(req,res)=>{
    if (req.session.loggedin && req.session.rol=="users") {
-    let idSector = req.query.id;
-    let sector = req.query.sector;
-   
-            res.render('./users/syso/agregarAccidente',{
-              idSector:idSector,
-              sector:sector,
-              nombre:`${req.session.apellido}, ${req.session.nombre}`});
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      let idSector = req.query.id;
+      let sector = req.query.sector;
+     
+              res.render('./users/syso/agregarAccidente',{
+                idSector:idSector,
+                sector:sector,
+                nombre:`${req.session.apellido}, ${req.session.nombre}`});
+      })
+    
    } else {
-    res.render('login');
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
    }
         
 });
 router.post('/accidente',async (req,res)=>{
 if (req.session.loggedin && req.session.rol=="users") {
+  connectToDatabase((error, conexion) => {
+    if (error) {
+        return res.status(500).send('Error de conexión a la base de datos');
+    }
     let sql = "INSERT INTO `accidentes`( `nombre`, `fecha`, `tipo`, `que`, `cuando`, `donde`, `quien`, `cual`, `como`, `observaciones`, `sector`) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-    await  conexion.query(sql,[
+     conexion.query(sql,[
       req.body.nombre,
       req.body.fecha,
       req.body.tipo,
@@ -442,242 +453,300 @@ if (req.session.loggedin && req.session.rol=="users") {
             console.log(error);
         }
     })
-        
-    
-} else {
-  res.render('login');
-}
-});
-router.get('/listaAccidentes',(req,res)=>{
-  if (req.session.loggedin && req.session.rol=="users") {
-    let sql = "SELECT * FROM accidentes WHERE 1";
-    let mensaje = req.query.mensaje;
-    conexion.query(sql,(error,result)=>{
-        
-        if(!error){
-            let resultados=[];
-        for(let i=0;i<result.length;i++){
-            let f = new Date(result[i].fecha);
-            let fecha = `${f.getDate()}/${f.getMonth()+1}/${f.getUTCFullYear()}`;
-            
-            let resultado={
-                idAccidente:result[i].idAccidente,
-                nombre:`${result[i].nombre}`,
-                fecha:fecha,
-                tipo:result[i].tipo,
-                que:result[i].que,
-                cuando:result[i].cuando,
-                donde:result[i].donde,
-                quien:result[i].quien,
-                cual:result[i].cual,
-                como:result[i].como,
-                observaciones:result[i].observaciones,
-                sector:result[i].sector,
-                estado:result[i].estado,
-                fecha_cierre:result[i].fecha_inicio,
-                cuatrom:result[i].cuatrom,
-                cincow:result[i].cincow,
-                acciones:result[i].acciones,
-                nombreSession: `${req.session.apellido}, ${req.session.nombre}`
-
-            }
-            resultados.push(resultado);
-            
-        }
-            res.render('./users/syso/listadoAccidentes',{result:resultados,mensaje:mensaje});
-        }else{
-            console.log("Error de coneixion con la tabla accidentes");
-        }
-    })
-  } else {
-    res.render('login')
-  }
-});
-router.get('/editarAccidente',(req,res)=>{
-  if (req.session.loggedin && req.session.rol=="users") {
-    let idAccidente=req.query.idAccidente;
-    let idSector=req.query.idSector;
-    let mensaje = req.query.mensaje;
-    const sql="select * FROM accidentes WHERE idAccidente=?"
-    conexion.query(sql,[idAccidente],(error,result,files)=>{
-        if(!error){
-            let dia = (result[0].fecha.getUTCDate()<10?'0':'')+result[0].fecha.getUTCDate();
-            let mes = ((result[0].fecha.getMonth()+1)<10?'0':'')+(result[0].fecha.getMonth()+1);
-            let f = result[0].fecha.getUTCFullYear()+"-"+mes+"-"+dia;
-            res.render('./users/syso/editarAccidente',{result:result,idAccidente:idAccidente,idSector:idSector,fecha:f,mensaje:mensaje});        
-        }
-
-    })
-  } else {
-    res.render('login')
-  }
-});
-router.put('/editarAccidente',(req,res)=>{
-  if (req.session.loggedin && req.session.rol=="users") {
-    let sql = "UPDATE accidentes SET nombre=?,fecha=?,tipo=?,que=?, cuando=?, donde=?,quien=?, cual=?, como=?,observaciones=? WHERE idAccidente=?"
-        conexion.query(sql,[
-          req.body.nombre,
-          req.body.fecha,
-          req.body.tipo,
-          req.body.que,
-          req.body.cuando,
-          req.body.donde,
-          req.body.quien,
-          req.body.cual,
-          req.body.como,
-          req.body.observacion,
-          req.body.idAccidente],(error,rows)=>{
-        if (!error) {
-            res.redirect(`listaAccidentes?mensaje=Se Actualizo la informacion del accidente Nro ${req.body.idAccidente}`)
-            
-        }
     })
   } else {
     res.render('login',{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
-  }
+}
+});
+router.get('/listaAccidentes',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="users") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      let sql = "SELECT * FROM accidentes WHERE 1";
+      let mensaje = req.query.mensaje;
+      conexion.query(sql,(error,result)=>{
+          
+          if(!error){
+              let resultados=[];
+          for(let i=0;i<result.length;i++){
+              let f = new Date(result[i].fecha);
+              let fecha = `${f.getDate()}/${f.getMonth()+1}/${f.getUTCFullYear()}`;
+              
+              let resultado={
+                  idAccidente:result[i].idAccidente,
+                  nombre:`${result[i].nombre}`,
+                  fecha:fecha,
+                  tipo:result[i].tipo,
+                  que:result[i].que,
+                  cuando:result[i].cuando,
+                  donde:result[i].donde,
+                  quien:result[i].quien,
+                  cual:result[i].cual,
+                  como:result[i].como,
+                  observaciones:result[i].observaciones,
+                  sector:result[i].sector,
+                  estado:result[i].estado,
+                  fecha_cierre:result[i].fecha_inicio,
+                  cuatrom:result[i].cuatrom,
+                  cincow:result[i].cincow,
+                  acciones:result[i].acciones,
+                  nombreSession: `${req.session.apellido}, ${req.session.nombre}`
+  
+              }
+              resultados.push(resultado);
+              
+          }
+              res.render('./users/syso/listadoAccidentes',{result:resultados,mensaje:mensaje});
+          }else{
+              console.log("Error de coneixion con la tabla accidentes");
+          }
+      })
+      })
     
-   
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+});
+router.get('/editarAccidente',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="users") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      let idAccidente=req.query.idAccidente;
+      let idSector=req.query.idSector;
+      let mensaje = req.query.mensaje;
+      const sql="select * FROM accidentes WHERE idAccidente=?"
+      conexion.query(sql,[idAccidente],(error,result,files)=>{
+          if(!error){
+              let dia = (result[0].fecha.getUTCDate()<10?'0':'')+result[0].fecha.getUTCDate();
+              let mes = ((result[0].fecha.getMonth()+1)<10?'0':'')+(result[0].fecha.getMonth()+1);
+              let f = result[0].fecha.getUTCFullYear()+"-"+mes+"-"+dia;
+              res.render('./users/syso/editarAccidente',{result:result,idAccidente:idAccidente,idSector:idSector,fecha:f,mensaje:mensaje});        
+          }
+  
+      })
+      })
+    
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+});
+router.put('/editarAccidente',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="users") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      let sql = "UPDATE accidentes SET nombre=?,fecha=?,tipo=?,que=?, cuando=?, donde=?,quien=?, cual=?, como=?,observaciones=? WHERE idAccidente=?"
+      conexion.query(sql,[
+        req.body.nombre,
+        req.body.fecha,
+        req.body.tipo,
+        req.body.que,
+        req.body.cuando,
+        req.body.donde,
+        req.body.quien,
+        req.body.cual,
+        req.body.como,
+        req.body.observacion,
+        req.body.idAccidente],(error,rows)=>{
+      if (!error) {
+          res.redirect(`listaAccidentes?mensaje=Se Actualizo la informacion del accidente Nro ${req.body.idAccidente}`)
+        }
+  })
+      })
+    
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
 });
 router.delete('/eliminarAccidente',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="users") {
-    let id = req.body.idAccidente;
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      let id = req.body.idAccidente;
     
 
-    const sql = `DELETE FROM accidentes WHERE idAccidente = ${id}`
-    conexion.query(sql,(error,filas)=>{
-      res.redirect(`listaAccidentes?mensaje=Se elimino correctamente la OT Nro ${id}`)
-    })
+      const sql = `DELETE FROM accidentes WHERE idAccidente = ${id}`
+      conexion.query(sql,(error,filas)=>{
+        res.redirect(`listaAccidentes?mensaje=Se elimino correctamente la OT Nro ${id}`)
+      })
+      })
+    
   } else {
-    res.render('login')
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 });
         //Actos Inseguros
 router.get('/actosInseguros',(req,res)=>{
+  
   if (req.session.loggedin && req.session.rol=="users") {
-    let idSector = req.query.id;
-    let sector = req.query.sector;
-   
-            res.render('./users/syso/agregarActo',{
-              idSector:idSector,
-              sector:sector,
-              nombre:`${req.session.apellido}, ${req.session.nombre}`});
-        
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      let idSector = req.query.id;
+      let sector = req.query.sector;
+     
+              res.render('./users/syso/agregarActo',{
+                idSector:idSector,
+                sector:sector,
+                nombre:`${req.session.apellido}, ${req.session.nombre}`});
+      })
   } else {
-    res.render('login')
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 });
 router.post('/actosInseguros',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="users") {
-    
-    let sql = "INSERT INTO `actosinseguros`(`nombre`, `fecha`, `tipo`, `subTipo`, `descripcion`, `propuesta`, `accion`, `sector`) VALUES (?,?,?,?,?,?,?,?)";
-    conexion.query(sql,[
-      req.body.nombre,
-      req.body.fecha,
-      req.body.tipo,
-      req.body.subtipo,
-      req.body.descripcion,
-      req.body.propuesta,
-      req.body.accion,
-      req.body.sector],(error,row,file)=>{
-      
-          if(!error){
-            res.redirect(`syso?mensaje=Se agrego exitosamente el acto o condicion insegura en ${req.body.sector}`);
-          }
-          else{
-            res.redirect(`syso?mensaje=No se pudo agregar el acto o condicion insegura en ${req.body.sector}`);
-          }
-      })
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      let sql = "INSERT INTO `actosinseguros`(`nombre`, `fecha`, `tipo`, `subTipo`, `descripcion`, `propuesta`, `accion`, `sector`) VALUES (?,?,?,?,?,?,?,?)";
+      conexion.query(sql,[
+        req.body.nombre,
+        req.body.fecha,
+        req.body.tipo,
+        req.body.subtipo,
+        req.body.descripcion,
+        req.body.propuesta,
+        req.body.accion,
+        req.body.sector],(error,row,file)=>{
         
-    
+            if(!error){
+              res.redirect(`syso?mensaje=Se agrego exitosamente el acto o condicion insegura en ${req.body.sector}`);
+            }
+            else{
+              res.redirect(`syso?mensaje=No se pudo agregar el acto o condicion insegura en ${req.body.sector}`);
+            }
+        })
+      })
   } else {
-    res.render('login');
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 });
 router.get('/listaActos',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="users") {
-    const sql = "SELECT * FROM `actosinseguros` WHERE 1";
-    conexion.query(sql,(error,result,files)=>{
-        if(!error){
-            let resultados=[];
-            for(let i=0;i<result.length;i++){
-                let f = new Date(result[i].fecha);
-                let fecha = `${f.getDate()}/${f.getMonth()+1}/${f.getUTCFullYear()}`;
-                let resultado={
-                    idActoInseguro:result[i].idActoInseguro,
-                    observador:result[i].nombre,
-                    sector:result[i].sector,
-                    fecha:fecha,
-                    tipo:result[i].tipo,
-                    subTipo:result[i].subTipo,
-                    descripcion:result[i].descripcion,
-                    propuesta:result[i].propuesta,
-                    accion:result[i].accion,
-                    estado:result[i].estado,
-                    fecha_cierre:result[i].fecha_cierre,
-                    accion_def:result[i].accion_def,
-                    evidencia:result[i].evidencia
-                }
-                resultados.push(resultado)
-            }
-            res.render("./users/syso/listadoActos",{
-              actosInseguros:resultados,
-              nombre: `${req.session.apellido}, ${req.session.nombre}`,
-              mensaje:req.query.mensaje});
-        }else{
-            console.log(error)
-        }
-    })
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      const sql = "SELECT * FROM `actosinseguros` WHERE 1";
+      conexion.query(sql,(error,result,files)=>{
+          if(!error){
+              let resultados=[];
+              for(let i=0;i<result.length;i++){
+                  let f = new Date(result[i].fecha);
+                  let fecha = `${f.getDate()}/${f.getMonth()+1}/${f.getUTCFullYear()}`;
+                  let resultado={
+                      idActoInseguro:result[i].idActoInseguro,
+                      observador:result[i].nombre,
+                      sector:result[i].sector,
+                      fecha:fecha,
+                      tipo:result[i].tipo,
+                      subTipo:result[i].subTipo,
+                      descripcion:result[i].descripcion,
+                      propuesta:result[i].propuesta,
+                      accion:result[i].accion,
+                      estado:result[i].estado,
+                      fecha_cierre:result[i].fecha_cierre,
+                      accion_def:result[i].accion_def,
+                      evidencia:result[i].evidencia
+                  }
+                  resultados.push(resultado)
+              }
+              res.render("./users/syso/listadoActos",{
+                actosInseguros:resultados,
+                nombre: `${req.session.apellido}, ${req.session.nombre}`,
+                mensaje:req.query.mensaje});
+          }else{
+              console.log(error)
+          }
+      })
+      })
+   
   } else {
-    res.render('login')
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 });
 router.get('/editarActo',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="users") {
-    const sector= req.query.idSector;
-    const idActo= req.query.idIncidente;
-    const sql = "SELECT * FROM actosinseguros WHERE idActoInseguro=?"
-    conexion.query(sql,[idActo],(error,results)=>{
-        let f=fechaEdit(results[0].fecha);
-        res.render('./users/syso/editarIncidente',{results:results,sector:sector,f:f,idActo:idActo})
-    })
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      const sector= req.query.idSector;
+      const idActo= req.query.idIncidente;
+      const sql = "SELECT * FROM actosinseguros WHERE idActoInseguro=?"
+      conexion.query(sql,[idActo],(error,results)=>{
+          let f=fechaEdit(results[0].fecha);
+          res.render('./users/syso/editarIncidente',{results:results,sector:sector,f:f,idActo:idActo})
+      })
+      })
+    
   } else {
-    res.render('login')
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 });
 router.put('/editarActo',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="users") {
-    let sql="UPDATE actosinseguros SET nombre=?, fecha=?, tipo=?, subTipo=?, descripcion=?, propuesta=?, accion=? WHERE idActoInseguro=?"
-  conexion.query(sql,[
-    req.body.nombre,
-    req.body.fecha,
-    req.body.tipo,
-    req.body.subtipo,
-    req.body.descripcion,
-    req.body.propuesta,
-    req.body.accion,
-    req.body.acto],(error,rows)=>{
-          if (!error) {
-              res.redirect(`listaActos?mensaje=Se actualizaron los datos del incidente o condicion Nro ${req.body.acto} del sector ${req.body.sector}`)
-          }else{
-            res.redirect(`listaActos?mensaje=No fue posible actualizar:${error}`)
-          }
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      let sql="UPDATE actosinseguros SET nombre=?, fecha=?, tipo=?, subTipo=?, descripcion=?, propuesta=?, accion=? WHERE idActoInseguro=?"
+      conexion.query(sql,[
+        req.body.nombre,
+        req.body.fecha,
+        req.body.tipo,
+        req.body.subtipo,
+        req.body.descripcion,
+        req.body.propuesta,
+        req.body.accion,
+        req.body.acto],(error,rows)=>{
+              if (!error) {
+                  res.redirect(`listaActos?mensaje=Se actualizaron los datos del incidente o condicion Nro ${req.body.acto} del sector ${req.body.sector}`)
+              }else{
+                res.redirect(`listaActos?mensaje=No fue posible actualizar:${error}`)
+              }
+          })
       })
-        
-    
   } else {
-    res.render('login')
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 })
 router.delete('/eliminarActo',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="users") {
-    let id = req.body.idActoInseguro;
-    const sql = `DELETE FROM actosinseguros WHERE idActoInseguro = ${id}`
-    conexion.query(sql,(error,filas)=>{
-      res.redirect(`listaActos?mensaje=Se elimino correctamente el acto o condicion insegura Nro ${id}`)
-    })
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      let id = req.body.idActoInseguro;
+      const sql = `DELETE FROM actosinseguros WHERE idActoInseguro = ${id}`
+      conexion.query(sql,(error,filas)=>{
+        res.redirect(`listaActos?mensaje=Se elimino correctamente el acto o condicion insegura Nro ${id}`)
+      })
+      })
+    
   } else {
-    res.render('login')
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 })
 
@@ -695,46 +764,59 @@ router.get('/autonomo',(req,res)=>{
 });
 router.get('/agregarTarjeta',(req,res)=>{
   if (req.session.loggedin) {
-    let sector = req.query.sector;
-    let id= req.query.id
-
-    let sql="SELECT * FROM equipo WHERE sector=?"
-    conexion.query(sql,[id],(error,result)=>{
-        if(!error){
-            res.render('./users/autonomo/agregar',{
-              result:result,
-              id:id,
-              sector:sector,
-              nombre:`${req.session.apellido}, ${req.session.nombre}`});
-        }else console.error("Error al recibir datos de Equipos");
-    })
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      let sector = req.query.sector;
+      let id= req.query.id
+  
+      let sql="SELECT * FROM equipo WHERE sector=?"
+      conexion.query(sql,[id],(error,result)=>{
+          if(!error){
+              res.render('./users/autonomo/agregar',{
+                result:result,
+                id:id,
+                sector:sector,
+                nombre:`${req.session.apellido}, ${req.session.nombre}`});
+          }else console.error("Error al recibir datos de Equipos");
+      })
+      })
+    
   } else {
-    res.render('login');
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 });
 router.post('/agregarTarjeta',(req,res)=>{
   if (req.session.loggedin) {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      const sql="INSERT INTO tarjetasAm (sector,fecha,tipo,detecto,equipo,prioridad,disposicion,descripcion) VALUES (?,?,?,?,?,?,?,?)";
     
-    const sql="INSERT INTO tarjetasAm (sector,fecha,tipo,detecto,equipo,prioridad,disposicion,descripcion) VALUES (?,?,?,?,?,?,?,?)";
+      conexion.query(sql,[
+        req.body.sector,
+        req.body.fecha,
+        req.body.tipo,
+        req.body.detecto,
+        req.body.equipo,
+        req.body.prioridad,
+        req.body.disposicion,
+        req.body.descripcion],(error)=>{
+          if (!error) {
+              res.redirect(`autonomo?mensaje=✔Se Agrego correctamente la Tarjeta en el sector ${req.body.sector}✔`);
+          }else{
+              res.redirect(`autonomo?mensaje=🚫No Se Pudo Agregar la Tarjeta🚫`)
+          }
+      })
+
+      })
     
-            conexion.query(sql,[
-              req.body.sector,
-              req.body.fecha,
-              req.body.tipo,
-              req.body.detecto,
-              req.body.equipo,
-              req.body.prioridad,
-              req.body.disposicion,
-              req.body.descripcion],(error)=>{
-                if (!error) {
-                    res.redirect(`autonomo?mensaje=✔Se Agrego correctamente la Tarjeta en el sector ${req.body.sector}✔`);
-                }else{
-                    res.redirect(`autonomo?mensaje=🚫No Se Pudo Agregar la Tarjeta🚫`)
-                }
-            })
-   
   } else {
-    res.render('login')
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 });
 router.get('/listadoTarjetas',(req,res)=>{
