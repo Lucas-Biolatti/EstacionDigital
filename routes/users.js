@@ -754,6 +754,7 @@ router.delete('/eliminarActo',(req,res)=>{
 router.get('/autonomo',(req,res)=>{
   //Renderizar index de AM
   if (req.session.loggedin) {
+    
     res.render('./users/autonomo/index',{
       nombre:`${req.session.apellido}, ${req.session.nombre}`,
       mensaje: req.query.mensaje
@@ -821,226 +822,281 @@ router.post('/agregarTarjeta',(req,res)=>{
 });
 router.get('/listadoTarjetas',(req,res)=>{
   if (req.session.loggedin) {
-    let sector = req.query.sector;
-    const sql = "select * from tarjetasAm where sector=? and tipo='Mantenimiento Autonomo'"
-    const sql1 = "select * from tarjetasAm where sector=? and tipo='Mantenimiento Profesional'"
-     let resultadosazul=[];
-     let pendAzul=0;
-     let cerradoAzul=0;
-     let pendRojo=0;
-     let cerradoRojo=0;
-     let resultadosrojo=[];
-     //listado azules por sector
-    conexion.query(sql,[sector],(error,results)=>{
-       if (!error) {
-       
-            for (let i = 0; i < results.length; i++) {
-                let f=fecha(results[i].fecha)
-                let fcierre = fecha(results[i].fecha_cierre);
-                if (results[i].estado == "Cerrado") {
-                    cerradoAzul++;
-                }else pendAzul++;
-                resultado = {
-                    id:results[i].id,
-                    fecha:f,
-                    sector:results[i].sector,
-                    tipo:results[i].tipo,
-                    detecto:results[i].detecto,
-                    equipo:results[i].equipo,
-                    prioridad:results[i].prioridad,
-                    disposicion:results[i].disposicion,
-                    descripcion:results[i].descripcion,
-                    estado:results[i].estado,
-                    fecha_cierre:fcierre,
-                    ejecutor:results[i].ejecutor,
-                    acciones:results[i].acciones,
-                    duracion:results[i].duracion
-                }
-
-            resultadosazul.push(resultado) 
-            }
-            
-        } else console.log(error);
-    })
-    //listado Rojas por sector
-    conexion.query(sql1,[sector],(error,results)=>{
-        if (!error) {
-            
-        
-             for (let i = 0; i < results.length; i++) {
-                 let f=fecha(results[i].fecha);
-                 let fcierre=fecha(results[i].fecha_cierre);
-                 if (results[i].estado == "Cerrado") {
-                    cerradoRojo++;
-                }else pendRojo++;
-                 resultado = {
-                     id:results[i].id,
-                     fecha:f,
-                     sector:results[i].sector,
-                     tipo:results[i].tipo,
-                     detecto:results[i].detecto,
-                     equipo:results[i].equipo,
-                     prioridad:results[i].prioridad,
-                     disposicion:results[i].disposicion,
-                     descripcion:results[i].descripcion,
-                     estado:results[i].estado,
-                     fecha_cierre:fcierre,
-                     ejecutor:results[i].ejecutor,
-                     acciones:results[i].acciones,
-                     duracion:results[i].duracion
-                 }
- 
-             resultadosrojo.push(resultado) 
-             }
-             res.render('./users/autonomo/listar',{
-                 rojo:resultadosrojo,
-                 azul:resultadosazul,
-                 pendAzul:pendAzul,
-                 cerradoAzul:cerradoAzul,
-                 sector:sector,
-                 pendRojo:pendRojo,
-                 cerradoRojo:cerradoRojo,
-                 nombre:`${req.session.apellido}, ${req.session.nombre}`});
-         } else console.log(error);
-     })
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      let sector = req.query.sector;
+      const sql = "select * from tarjetasAm where sector=? and tipo='Mantenimiento Autonomo'"
+      const sql1 = "select * from tarjetasAm where sector=? and tipo='Mantenimiento Profesional'"
+       let resultadosazul=[];
+       let pendAzul=0;
+       let cerradoAzul=0;
+       let pendRojo=0;
+       let cerradoRojo=0;
+       let resultadosrojo=[];
+       //listado azules por sector
+      conexion.query(sql,[sector],(error,results)=>{
+         if (!error) {
+         
+              for (let i = 0; i < results.length; i++) {
+                  let f=fecha(results[i].fecha)
+                  let fcierre = fecha(results[i].fecha_cierre);
+                  if (results[i].estado == "Cerrado") {
+                      cerradoAzul++;
+                  }else pendAzul++;
+                  resultado = {
+                      id:results[i].id,
+                      fecha:f,
+                      sector:results[i].sector,
+                      tipo:results[i].tipo,
+                      detecto:results[i].detecto,
+                      equipo:results[i].equipo,
+                      prioridad:results[i].prioridad,
+                      disposicion:results[i].disposicion,
+                      descripcion:results[i].descripcion,
+                      estado:results[i].estado,
+                      fecha_cierre:fcierre,
+                      ejecutor:results[i].ejecutor,
+                      acciones:results[i].acciones,
+                      duracion:results[i].duracion
+                  }
+  
+              resultadosazul.push(resultado) 
+              }
+              
+          } else console.log(error);
+      })
+      //listado Rojas por sector
+      conexion.query(sql1,[sector],(error,results)=>{
+          if (!error) {
+              
+          
+               for (let i = 0; i < results.length; i++) {
+                   let f=fecha(results[i].fecha);
+                   let fcierre=fecha(results[i].fecha_cierre);
+                   if (results[i].estado == "Cerrado") {
+                      cerradoRojo++;
+                  }else pendRojo++;
+                   resultado = {
+                       id:results[i].id,
+                       fecha:f,
+                       sector:results[i].sector,
+                       tipo:results[i].tipo,
+                       detecto:results[i].detecto,
+                       equipo:results[i].equipo,
+                       prioridad:results[i].prioridad,
+                       disposicion:results[i].disposicion,
+                       descripcion:results[i].descripcion,
+                       estado:results[i].estado,
+                       fecha_cierre:fcierre,
+                       ejecutor:results[i].ejecutor,
+                       acciones:results[i].acciones,
+                       duracion:results[i].duracion
+                   }
+   
+               resultadosrojo.push(resultado) 
+               }
+               res.render('./users/autonomo/listar',{
+                   rojo:resultadosrojo,
+                   azul:resultadosazul,
+                   pendAzul:pendAzul,
+                   cerradoAzul:cerradoAzul,
+                   sector:sector,
+                   pendRojo:pendRojo,
+                   cerradoRojo:cerradoRojo,
+                   nombre:`${req.session.apellido}, ${req.session.nombre}`});
+           } else console.log(error);
+       })
+      })
+    
     
   } else {
-    res.render('login');
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 });
 router.get('/editarTarjeta',(req,res)=>{
   if (req.session.loggedin) {
-    let id = req.query.id;
-    let sector = req.query.sector;
-    let sql = "select * from tarjetasAm where id=?"
-    let equipos = [];
-    conexion.query("select * from equipo where sectorDesc = ?",[sector],(error,resultados)=>{
-       for (let i = 0; i < resultados.length; i++) {
-            equipos.push(resultados[i]);    
-        }
-    });
-    conexion.query(sql,[id],(error,results)=>{
-        if (!error) {
-            
-            let f = fechaEdit(results[0].fecha);
-            let fecha_cierre = fecha(results[0].fecha_cierre);
-            res.render('./users/autonomo/editarTarjeta',{
-                results:results,
-                id:id,
-                fecha:f,
-                fecha_cierre:fecha_cierre,
-                sector:sector,
-                equipos:equipos,
-                })
-        }
-    })
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      let id = req.query.id;
+      let sector = req.query.sector;
+      let sql = "select * from tarjetasAm where id=?"
+      let equipos = [];
+      conexion.query("select * from equipo where sectorDesc = ?",[sector],(error,resultados)=>{
+         for (let i = 0; i < resultados.length; i++) {
+              equipos.push(resultados[i]);    
+          }
+      });
+      conexion.query(sql,[id],(error,results)=>{
+          if (!error) {
+              
+              let f = fechaEdit(results[0].fecha);
+              let fecha_cierre = fecha(results[0].fecha_cierre);
+              res.render('./users/autonomo/editarTarjeta',{
+                  results:results,
+                  id:id,
+                  fecha:f,
+                  fecha_cierre:fecha_cierre,
+                  sector:sector,
+                  equipos:equipos,
+                  })
+          }
+      })
+      
+      })
     
   } else {
-    res.render('login');
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 });
 router.put('/editarTarjeta',(req,res)=>{
   if (req.session.loggedin) {
-    const sql="UPDATE tarjetasAm SET sector=?, fecha=?, tipo=?, detecto=?, equipo=?, prioridad=?, disposicion=?, descripcion=? WHERE id=?"
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      const sql="UPDATE tarjetasAm SET sector=?, fecha=?, tipo=?, detecto=?, equipo=?, prioridad=?, disposicion=?, descripcion=? WHERE id=?"
     
-            conexion.query(sql,[
-              req.body.sector,
-              req.body.fecha,
-              req.body.tipo,
-              req.body.detecto,
-              req.body.equipo,
-              req.body.prioridad,
-              req.body.disposicion,
-              req.body.descripcion,
-              req.body.id],(error)=>{
-                if (!error) {
-                    res.redirect(`autonomo?mensaje=✔Tarjeta Nro${req.body.id} Modificada Exitosamente✔`);
-                }else{
-                  res.redirect(`autonomo?mensaje=🚫No se pudo modificar Tarjeta🚫`);
-                }
-            })
-        
+      conexion.query(sql,[
+        req.body.sector,
+        req.body.fecha,
+        req.body.tipo,
+        req.body.detecto,
+        req.body.equipo,
+        req.body.prioridad,
+        req.body.disposicion,
+        req.body.descripcion,
+        req.body.id],(error)=>{
+          if (!error) {
+              res.redirect(`autonomo?mensaje=✔Tarjeta Nro${req.body.id} Modificada Exitosamente✔`);
+          }else{
+            res.redirect(`autonomo?mensaje=🚫No se pudo modificar Tarjeta🚫`);
+          }
+      })
+  
+      })
+    
     
   } else {
-    res.render('login');
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 });
 router.delete('/eliminarTarjeta',(req,res)=>{
   if (req.session.loggedin) {
-    let id= req.body.id;
-    const sql = "DELETE FROM tarjetasAm WHERE id=?"
-      conexion.query(sql,[id],(error)=>{
-        if (!error) {
-          res.redirect(`autonomo?mensaje=✔Tarjeta Nro${req.body.id} Eliminada Exitosamente✔`);
-      }else{
-        res.redirect(`autonomo?mensaje=🚫No se pudo eliminar Tarjeta🚫`);
-        
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
       }
+      let id= req.body.id;
+      const sql = "DELETE FROM tarjetasAm WHERE id=?"
+        conexion.query(sql,[id],(error)=>{
+          if (!error) {
+            res.redirect(`autonomo?mensaje=✔Tarjeta Nro${req.body.id} Eliminada Exitosamente✔`);
+        }else{
+          res.redirect(`autonomo?mensaje=🚫No se pudo eliminar Tarjeta🚫`);
+          
+        }
+        })
       })
+    
   } else {
-    res.render('login');
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 })
 
 //DATOS PARA USAR CON FETCH
 router.get('/items',(req,res)=>{
-  const sql = "SELECT * FROM items WHERE 1"
-  conexion.query(sql,(error,result)=>{
-      if(!error){
-          res.send(result);
-          
-      }
-      
+  connectToDatabase((error, conexion) => {
+    if (error) {
+        return res.status(500).send('Error de conexión a la base de datos');
+    }
+    const sql = "SELECT * FROM items WHERE 1"
+    conexion.query(sql,(error,result)=>{
+        if(!error){
+            res.send(result);
+        }
+    })
   })
+  
 });
 router.get('/sector',(req,res)=>{
-  let sql1 = "SELECT * FROM sector";
-  conexion.query(sql1,(error,result,files)=>{
-      if(!error){
-         res.send(result);
-      }else{
-          alert("No se pudo obtener los sectores");
-      }
+  connectToDatabase((error, conexion) => {
+    if (error) {
+        return res.status(500).send('Error de conexión a la base de datos');
+    }
+    let sql1 = "SELECT * FROM sector";
+    conexion.query(sql1,(error,result,files)=>{
+        if(!error){
+           res.send(result);
+        }else{
+            alert("No se pudo obtener los sectores");
+        }
+    })
   })
+  
 });
 router.get('/nomina',(req,res)=>{
-  let sql1 = "SELECT * FROM nomina";
-  conexion.query(sql1,(error,result,files)=>{
-      if(!error){
-         res.send(result);
-      }else{
-          alert("No se pudo obtener la nomina");
-      }
-  })
+  connectToDatabase((error, conexion) => {
+    if (error) {
+        return res.status(500).send('Error de conexión a la base de datos');
+    }
+    let sql1 = "SELECT * FROM nomina";
+    conexion.query(sql1,(error,result,files)=>{
+        if(!error){
+           res.send(result);
+        }else{
+            alert("No se pudo obtener la nomina");
+        }
+    })
+    })
+  
 });
 
 
 router.get('/ordenes',(req,res)=>{
-  const sql="SELECT * FROM ordentrabajo WHERE NOT estado='cerrado'"
-  conexion.query(sql,(error,fields)=>{
-      if(!error){ 
-          let data=[];
-          for (let i = 0; i < fields.length; i++) {
-              let dato = {
-                  idOrden:fields[i].idOrden,
-                  sector:fields[i].sector,
-                  avisar:fields[i].avisar,
-                  equipo:fields[i].equipo,
-                  fecha:fecha(fields[i].fecha),
-                  turno:fields[i].turno,
-                  descripcion:fields[i].descripcion,
-                  estado:fields[i].estado,
-                  accion:'<a href="/resolverOrden?idOrden='+fields[i].idOrden+'">Cerrar</a>'
-
-              }
-              data.push(dato)
-              
-          }
-          
-          res.send(data);
+  if (req.session.loggedin) {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
       }
-      else res.send("Error:"+error)
-  })
+      const sql="SELECT * FROM ordentrabajo WHERE NOT estado='cerrado'"
+      conexion.query(sql,(error,fields)=>{
+          if(!error){ 
+              let data=[];
+              for (let i = 0; i < fields.length; i++) {
+                  let dato = {
+                      idOrden:fields[i].idOrden,
+                      sector:fields[i].sector,
+                      avisar:fields[i].avisar,
+                      equipo:fields[i].equipo,
+                      fecha:fecha(fields[i].fecha),
+                      turno:fields[i].turno,
+                      descripcion:fields[i].descripcion,
+                      estado:fields[i].estado,
+                      accion:'<a href="/resolverOrden?idOrden='+fields[i].idOrden+'">Cerrar</a>'
+    
+                  }
+                  data.push(dato)
+                  
+              }
+              
+              res.send(data);
+          }
+          else res.send("Error:"+error)
+      })
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+  
 });
 router.get('/tarjetas',(req,res)=>{
   const sql="select * from tarjetasAm where 1"
