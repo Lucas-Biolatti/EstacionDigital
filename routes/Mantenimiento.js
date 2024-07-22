@@ -23,6 +23,7 @@ router.get('/items',(req,res)=>{
           }
           const sql = "SELECT * FROM items WHERE 1"
           conexion.query(sql,(error,result)=>{
+            conexion.release();
               if(!error){
                   res.send(result);
                 }
@@ -45,6 +46,7 @@ router.get('/sector',(req,res)=>{
             
             let sql1 = "SELECT * FROM sector";
             conexion.query(sql1,(error,result,files)=>{
+                conexion.release();
                 if(!error){
                     res.send(result);
                 }else{
@@ -69,6 +71,7 @@ router.get('/ordenTrabajo',(req,res)=>{
             let sector = [];
 
             conexion.query(sql1,(error,result,files)=>{
+                conexion.release();
                 if(!error){
                 
                     for(let i=0;i<result.length;i++){
@@ -97,6 +100,7 @@ router.get('/ordenXSector',(req,res)=>{
             
             
             conexion.query(sql1,[sector],(error,result,files)=>{
+                conexion.release();
                 if(!error){
                     let tiempoTotal=0
                     let resultados=[];
@@ -167,6 +171,7 @@ router.get('/ordenes',(req,res)=>{
           }
           const sql="SELECT * FROM ordentrabajo WHERE NOT estado='cerrado'"
           conexion.query(sql,(error,fields)=>{
+            conexion.release();
               if(!error){ 
                   let data=[];
                   for (let i = 0; i < fields.length; i++) {
@@ -208,6 +213,7 @@ router.get('/resolverOrden',(req,res)=>{
             let idOrden = url.parse(req.url,true).query.idOrden;
             const sqlorden = "SELECT * FROM ordentrabajo WHERE idOrden = ?"
             conexion.query(sqlorden,[idOrden],(error,result)=>{
+                conexion.release();
             if(!error && result.length>0){
                 let dia = (result[0].fecha.getUTCDate()<10?'0':'')+result[0].fecha.getUTCDate();
                 let mes = ((result[0].fecha.getMonth()+1)<10?'0':'')+(result[0].fecha.getMonth()+1);
@@ -259,6 +265,7 @@ router.post('/resolverOrden',(req,res)=>{
                 req.body.ejecutor2,
                 req.body.ejecutor3,
                 parseInt(req.body.idOrden)],(error)=>{
+                    conexion.release();
                 if(!error){
                     res.redirect(`ordenTrabajo?mensaje=✅Se Actualizo orden Nro ${req.body.idOrden} Correctamente✅`);
                     

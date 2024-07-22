@@ -34,6 +34,7 @@ router.get('/mtto:?',(req,res)=>{
       let mensaje = req.query.mensaje
       
       conexion.query(sql1,async (error,result,files)=>{
+        conexion.release();
           if(!error){
              
               for(let i=0;i<result.length;i++){
@@ -66,6 +67,7 @@ router.get('/ordenMtto',(req,res)=>{
       let sql2 = "SELECT * FROM equipo WHERE Sector=?";
       let equipo = [];
       conexion.query(sql2,[parseInt(idSector)],(error,result,files)=>{
+        conexion.release();
           if(!error){
              
               for(let i=0;i<result.length;i++){
@@ -99,6 +101,7 @@ router.get('/listarOrden:?',(req,res)=>{
       let sector= req.query.nombre;
       let sql1 = "SELECT * FROM ordentrabajo WHERE sector=?";
       conexion.query(sql1,[sector],(error,result,files)=>{
+        conexion.release();
           if(!error){
               let tiempoTotal=0
               let resultados=[];
@@ -174,6 +177,7 @@ router.get('/editarOrden',(req,res)=>{
       let sql2 = "SELECT * FROM equipo WHERE Sector=?";
       let equipo = [];
       conexion.query(sql2,[parseInt(idSector)],(error,result,files)=>{
+        conexion.release();
           if(!error){
               for(let i=0;i<result.length;i++){
                   equipo.push(result[i])
@@ -183,6 +187,7 @@ router.get('/editarOrden',(req,res)=>{
   
       let sql = "SELECT * FROM `ordentrabajo` WHERE `idOrden`=?";
       conexion.query(sql,[parseInt(idOrden)],(error,result,file)=>{
+        conexion.release();
           if(!error){
           let dia = (result[0].fecha.getUTCDate()<10?'0':'')+result[0].fecha.getUTCDate();
           let mes = ((result[0].fecha.getMonth()+1)<10?'0':'')+(result[0].fecha.getMonth()+1);
@@ -236,6 +241,7 @@ router.post('/ordenMtto',(req,res)=>{
       req.body.horaInicio,
       req.body.horaFin,
       req.body.descripcion],(error,fields)=>{
+        conexion.release();
         if(!error){
           res.redirect('mtto?mensaje=Se agrego exitosamente la OT');
         }else{
@@ -260,6 +266,7 @@ router.delete('/ordenMtto:?',(req,res)=>{
 
       const sql = `DELETE FROM ordentrabajo WHERE idOrden = ${id}`
       conexion.query(sql,(error,filas)=>{
+        conexion.release();
         res.redirect(`mtto?mensaje=Se elimino correctamente la OT Nro ${id}`)
       })
       })
@@ -292,6 +299,7 @@ router.put('/editarOrden',(req,res)=>{
       ];
       
       conexion.query(sqlupdate,resultados,(error,rows)=>{
+        conexion.release();
           if(!error){
          
           res.redirect(`mtto?mensaje=Se modifico correctamente la Orden Nro ${req.body.idOrden}`)
@@ -316,6 +324,7 @@ router.get('/verOrden',(req,res)=>{
       let idOrden = url.parse(req.url,true).query.idOrden;
       const sqlorden = "SELECT * FROM ordentrabajo WHERE idOrden = ?"
       conexion.query(sqlorden,[idOrden],(error,result)=>{
+        conexion.release();
       if(!error && result.length>0){
           let dia = (result[0].fecha.getUTCDate()<10?'0':'')+result[0].fecha.getUTCDate();
           let mes = ((result[0].fecha.getMonth()+1)<10?'0':'')+(result[0].fecha.getMonth()+1);
@@ -360,6 +369,7 @@ router.get('/syso', (req,res)=>{
       let actos=0;
   
        conexion.query(sql2,(error,result)=>{
+        conexion.release();
           if(!error){
               for(let i=0;i<result.length;i++){
                   accidentes++
@@ -368,6 +378,7 @@ router.get('/syso', (req,res)=>{
           }
       })
       conexion.query(sql3,(error,result)=>{
+        conexion.release();
           if(!error){
           for(let i=0;i<result.length;i++){
               actos++
@@ -377,6 +388,7 @@ router.get('/syso', (req,res)=>{
   
       
       conexion.query(sql1,(error,result,files)=>{
+        conexion.release();
           if(!error){
               
               for(let i=0;i<result.length;i++){
@@ -441,6 +453,7 @@ if (req.session.loggedin && req.session.rol=="users") {
       req.body.como,
       req.body.observacion,
       req.body.sector],(error,row,file)=>{
+        conexion.release();
       if(!error){
             let f = new Date(req.body.fecha);
             let fecha = f.getDate()+"/"+f.getMonth()+1+"/"+f.getUTCFullYear();
@@ -468,6 +481,7 @@ router.get('/listaAccidentes',(req,res)=>{
       let sql = "SELECT * FROM accidentes WHERE 1";
       let mensaje = req.query.mensaje;
       conexion.query(sql,(error,result)=>{
+        conexion.release();
           
           if(!error){
               let resultados=[];
@@ -522,6 +536,7 @@ router.get('/editarAccidente',(req,res)=>{
       let mensaje = req.query.mensaje;
       const sql="select * FROM accidentes WHERE idAccidente=?"
       conexion.query(sql,[idAccidente],(error,result,files)=>{
+        conexion.release();
           if(!error){
               let dia = (result[0].fecha.getUTCDate()<10?'0':'')+result[0].fecha.getUTCDate();
               let mes = ((result[0].fecha.getMonth()+1)<10?'0':'')+(result[0].fecha.getMonth()+1);
@@ -556,6 +571,7 @@ router.put('/editarAccidente',(req,res)=>{
         req.body.como,
         req.body.observacion,
         req.body.idAccidente],(error,rows)=>{
+          conexion.release();
       if (!error) {
           res.redirect(`listaAccidentes?mensaje=Se Actualizo la informacion del accidente Nro ${req.body.idAccidente}`)
         }
@@ -578,6 +594,7 @@ router.delete('/eliminarAccidente',(req,res)=>{
 
       const sql = `DELETE FROM accidentes WHERE idAccidente = ${id}`
       conexion.query(sql,(error,filas)=>{
+        conexion.release();
         res.redirect(`listaAccidentes?mensaje=Se elimino correctamente la OT Nro ${id}`)
       })
       })
@@ -624,6 +641,7 @@ router.post('/actosInseguros',(req,res)=>{
         req.body.propuesta,
         req.body.accion,
         req.body.sector],(error,row,file)=>{
+          conexion.release();
         
             if(!error){
               res.redirect(`syso?mensaje=Se agrego exitosamente el acto o condicion insegura en ${req.body.sector}`);
@@ -646,6 +664,7 @@ router.get('/listaActos',(req,res)=>{
       }
       const sql = "SELECT * FROM `actosinseguros` WHERE 1";
       conexion.query(sql,(error,result,files)=>{
+        conexion.release();
           if(!error){
               let resultados=[];
               for(let i=0;i<result.length;i++){
@@ -693,6 +712,7 @@ router.get('/editarActo',(req,res)=>{
       const idActo= req.query.idIncidente;
       const sql = "SELECT * FROM actosinseguros WHERE idActoInseguro=?"
       conexion.query(sql,[idActo],(error,results)=>{
+        conexion.release();
           let f=fechaEdit(results[0].fecha);
           res.render('./users/syso/editarIncidente',{results:results,sector:sector,f:f,idActo:idActo})
       })
@@ -719,6 +739,7 @@ router.put('/editarActo',(req,res)=>{
         req.body.propuesta,
         req.body.accion,
         req.body.acto],(error,rows)=>{
+          conexion.release();
               if (!error) {
                   res.redirect(`listaActos?mensaje=Se actualizaron los datos del incidente o condicion Nro ${req.body.acto} del sector ${req.body.sector}`)
               }else{
@@ -740,6 +761,7 @@ router.delete('/eliminarActo',(req,res)=>{
       let id = req.body.idActoInseguro;
       const sql = `DELETE FROM actosinseguros WHERE idActoInseguro = ${id}`
       conexion.query(sql,(error,filas)=>{
+        conexion.release();
         res.redirect(`listaActos?mensaje=Se elimino correctamente el acto o condicion insegura Nro ${id}`)
       })
       })
@@ -774,6 +796,7 @@ router.get('/agregarTarjeta',(req,res)=>{
   
       let sql="SELECT * FROM equipo WHERE sector=?"
       conexion.query(sql,[id],(error,result)=>{
+        conexion.release();
           if(!error){
               res.render('./users/autonomo/agregar',{
                 result:result,
@@ -806,6 +829,7 @@ router.post('/agregarTarjeta',(req,res)=>{
         req.body.prioridad,
         req.body.disposicion,
         req.body.descripcion],(error)=>{
+          conexion.release();
           if (!error) {
               res.redirect(`autonomo?mensaje=✔Se Agrego correctamente la Tarjeta en el sector ${req.body.sector}✔`);
           }else{
@@ -837,6 +861,7 @@ router.get('/listadoTarjetas',(req,res)=>{
        let resultadosrojo=[];
        //listado azules por sector
       conexion.query(sql,[sector],(error,results)=>{
+        conexion.release();
          if (!error) {
          
               for (let i = 0; i < results.length; i++) {
@@ -869,6 +894,7 @@ router.get('/listadoTarjetas',(req,res)=>{
       })
       //listado Rojas por sector
       conexion.query(sql1,[sector],(error,results)=>{
+        conexion.release();
           if (!error) {
               
           
@@ -932,6 +958,7 @@ router.get('/editarTarjeta',(req,res)=>{
           }
       });
       conexion.query(sql,[id],(error,results)=>{
+        conexion.release();
           if (!error) {
               
               let f = fechaEdit(results[0].fecha);
@@ -972,6 +999,7 @@ router.put('/editarTarjeta',(req,res)=>{
         req.body.disposicion,
         req.body.descripcion,
         req.body.id],(error)=>{
+          conexion.release();
           if (!error) {
               res.redirect(`autonomo?mensaje=✔Tarjeta Nro${req.body.id} Modificada Exitosamente✔`);
           }else{
@@ -996,6 +1024,7 @@ router.delete('/eliminarTarjeta',(req,res)=>{
       let id= req.body.id;
       const sql = "DELETE FROM tarjetasAm WHERE id=?"
         conexion.query(sql,[id],(error)=>{
+          conexion.release();
           if (!error) {
             res.redirect(`autonomo?mensaje=✔Tarjeta Nro${req.body.id} Eliminada Exitosamente✔`);
         }else{
@@ -1019,6 +1048,7 @@ router.get('/items',(req,res)=>{
     }
     const sql = "SELECT * FROM items WHERE 1"
     conexion.query(sql,(error,result)=>{
+      conexion.release();
         if(!error){
             res.send(result);
         }
@@ -1033,6 +1063,7 @@ router.get('/sector',(req,res)=>{
     }
     let sql1 = "SELECT * FROM sector";
     conexion.query(sql1,(error,result,files)=>{
+      conexion.release();
         if(!error){
            res.send(result);
         }else{
@@ -1049,6 +1080,7 @@ router.get('/nomina',(req,res)=>{
     }
     let sql1 = "SELECT * FROM nomina";
     conexion.query(sql1,(error,result,files)=>{
+      conexion.release();
         if(!error){
            res.send(result);
         }else{
@@ -1068,6 +1100,7 @@ router.get('/ordenes',(req,res)=>{
       }
       const sql="SELECT * FROM ordentrabajo WHERE NOT estado='cerrado'"
       conexion.query(sql,(error,fields)=>{
+        conexion.release();
           if(!error){ 
               let data=[];
               for (let i = 0; i < fields.length; i++) {
@@ -1101,6 +1134,7 @@ router.get('/ordenes',(req,res)=>{
 router.get('/tarjetas',(req,res)=>{
   const sql="select * from tarjetasAm where 1"
   conexion.query(sql,(error,fields)=>{
+    conexion.release();
       if (!error) {
           res.send(fields);
       }
