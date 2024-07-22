@@ -1,7 +1,7 @@
 var express = require('express');
 const url = require('url');
 var router = express.Router();
-var conexion = require('../db/db');
+//var conexion = require('../db/db');
 const { connectToDatabase } = require('../db/db');
 
 
@@ -115,6 +115,7 @@ router.get('/datos',(req,res)=>{
           return res.status(500).send('Error de conexión a la base de datos');
       }
       conexion.query(sql,(error,result)=>{
+        conexion.release();
         if (!error) {
           res.send(result);
         }else{
@@ -136,6 +137,7 @@ router.get('/datosPlan', (req, res) => {
 
         const sql = 'SELECT * FROM planAccionQsb ORDER BY fecha';
         conexion.query(sql, (error, results) => {
+          conexion.release();
             if (!error) {
                 res.send(results);
             } else {
@@ -171,6 +173,7 @@ router.post("/agregaraccion",(req,res)=>{
 
     const sql = `INSERT INTO indicadores (fecha,sector,accidentes,c_programa,retrabajo,scrap,disponibilidad,disp_molde,ret_laca,sc_laca,entregas,observaciones)VALUES ("${fecha}","${sector}",${accidentes},${c_programa},${retrabajo},${scrap},${disponibilidad},${disp_molde},${ret_laca},${sc_laca},${entregas},"${observaciones}");`
     conexion.query(sql,(error,row)=>{
+      conexion.release();
       if (!error) {
         res.redirect(`${path}?sector=${sector}`)
         
@@ -204,7 +207,8 @@ router.post('/actionplan',(req,res)=>{
       let sector1 = req.body.sector1;
 
       const sql = `INSERT INTO planAccionQsb (fecha,sector,descripcion,accion,responsable,sector_resp,comentario,fecha_tent,fecha_cierre,estado) VALUES ('${fecha}','${sector}','${descripcion}','${accion}','${responsable}','${sector_resp}','${comentario}','${fecha_tent}','${fecha_cierre}','${estado}');`
-      conexion.query(sql,(error,rows)=>{  
+      conexion.query(sql,(error,rows)=>{
+        conexion.release();  
         if (!error) {
           res.redirect(`/Qsb`)
           
@@ -239,6 +243,7 @@ router.post('/actplan',(req,res)=>{
     let sector1 = req.body.sector1;
     const sql = `UPDATE planAccionQsb SET fecha="${fecha}",sector="${sector}",descripcion="${descripcion}" ,accion="${accion}" ,responsable="${responsable}" ,sector_resp="${sector_resp}" ,comentario="${comentario}" ,fecha_tent="${fecha_tent}" ,fecha_cierre="${fecha_cierre}" ,estado="${estado}"  WHERE id=${id};`
     conexion.query(sql,(error,row)=>{
+      conexion.release();
       if (!error) {
         res.redirect(`/Qsb`)
       }else(res.send(error));
@@ -258,8 +263,10 @@ router.get('/editarIndicador',(req,res)=>{
   let id = req.query.id;
   const sql = `SELECT * FROM indicadores WHERE id=${id};`;
   conexion.query(sql, (error,result)=>{
+    conexion.release();
     if (!error) {
       let datos={
+        'id':result[0].id,
         'fecha': fechaEdit(result[0].fecha),
         'sector': result[0].sector,
         'scrap': result[0].scrap,
@@ -309,6 +316,7 @@ router.post('/editarIndicador',(req,res)=>{
   let path=req.body.path;
   const sql = `UPDATE indicadores SET fecha="${fecha}",sector="${sector}",accidentes=${accidentes},c_programa=${c_programa},retrabajo=${retrabajo},scrap=${scrap},disponibilidad=${disponibilidad},disp_molde=${disp_molde},ret_laca=${ret_laca},sc_laca=${sc_laca},entregas=${entregas},observaciones="${observaciones}" WHERE id=${id};`
   conexion.query(sql,(error,row)=>{
+    conexion.release();
     if (!error) {
       res.redirect(path);
     }else{

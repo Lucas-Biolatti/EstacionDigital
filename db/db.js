@@ -17,31 +17,24 @@ module.exports = conexion
 */
 const mysql = require('mysql2');
 
-const createConnection = () => {
-    return mysql.createConnection({
-        host: '172.16.4.199',
-        user: 'lbiolatti',
-        password: 'diego2015',
-        database: 'EstacionDigital'
+const pool = mysql.createPool({
+    host: '172.16.4.199',
+    user: 'lbiolatti',
+    password: 'diego2015',
+    database: 'EstacionDigital',
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+});
+
+const connectToDatabase = (callback) => {
+    pool.getConnection((error, connection) => {
+        if (error) {
+            console.error("Error al obtener la conexión de la base de datos: " + error);
+            return callback(error);
+        }
+        callback(null, connection);
     });
 };
 
-let connection;
-
-const connectToDatabase = (callback) => {
-    if (!connection || connection.state === 'disconnected') {
-        connection = createConnection();
-        connection.connect((error) => {
-            if (error) {
-                console.error("Error de base de datos: " + error);
-                return callback(error);
-            }
-            console.log("Conectado a la BD");
-            callback(null, connection);
-        });
-    } else {
-        callback(null, connection);
-    }
-};
-
-module.exports = { connectToDatabase, connection };
+module.exports = { connectToDatabase };

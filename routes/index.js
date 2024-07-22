@@ -13,7 +13,7 @@ router.get('/login', function(req, res, next) {
 	}
   
 });
-function requireAuth(req, res, next) {
+/*function requireAuth(req, res, next) {
     if (!req.session.loggedin) {
         req.session.returnTo = req.originalUrl; // Guarda la URL actual
         req.flash('error', 'Por favor, inicia sesión para acceder.');
@@ -26,7 +26,7 @@ function requireAuth(req, res, next) {
 router.get('/ruta-protegida', requireAuth, (req, res) => {
     res.send('Esta es una ruta protegida.');
 });
-
+*/
 router.post('/auth', function(request, response) {
     // Capturar los campos de entrada
     let username = request.body.username;
@@ -45,6 +45,7 @@ router.post('/auth', function(request, response) {
             const params = [username, password];
 
             conexion.query(sql, params, (error, results) => {
+                conexion.release();
                 // Si hay un problema con la consulta, mostrar el error
                 if (error) {
                     console.error("Error en la consulta a la base de datos: " + error);
@@ -61,19 +62,22 @@ router.post('/auth', function(request, response) {
                     request.session.apellido = results[0].apellido;
 
                     // Redirigir a la página de inicio
-					const returnTo = request.session.returnTo || '/';
-					delete request.session.returnTo;
-					response.redirect(returnTo);
-                    //response.redirect('/');
+					//const returnTo = request.session.returnTo || '/';
+					//delete request.session.returnTo;
+					//response.redirect(returnTo);
+                    response.redirect('/');
                 } else {
                     response.render('login', { mensaje: 'Usuario o contraseña incorrecta' });
                 }
                 response.end();
+                
             });
+           
         });
     } else {
         response.send('Por favor ingrese nombre de usuario y contraseña');
         response.end();
+        
     }
 });
 
