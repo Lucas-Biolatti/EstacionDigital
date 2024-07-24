@@ -3,6 +3,7 @@ const { start } = require('repl');
 const url = require('url');
 var router = express.Router();
 var conexion = require('../db/db');
+const { connectToDatabase } = require('../db/db');
 const { nextTick } = require('process');
 /* GET users listing. */
 function fecha(x){
