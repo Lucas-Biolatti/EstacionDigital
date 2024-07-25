@@ -49,6 +49,7 @@ html(lang="es")
             
             div(class="w-100") 
              div(class="container")
+                    button#menu-toggle.btn.btn-outline-primary ☰
                     if (mensaje)
                         div(class="alert alert-success" role="alert")= mensaje
                         div(style="text-align: center; width:auto;heigh:auto;padding-top:5rem")
@@ -77,6 +78,15 @@ html(lang="es")
                   
                 
         script(src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js")
+        script. 
+            document.addEventListener("DOMContentLoaded", function() {
+                const menuToggle = document.getElementById('menu-toggle');
+                const sidebarContainer = document.getElementById('sidebar-container');
+
+                menuToggle.addEventListener('click', function() {
+                    sidebarContainer.classList.toggle('active');
+                });
+            });
                  
                 
                 

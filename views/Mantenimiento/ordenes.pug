@@ -47,6 +47,7 @@ html(lang="es")
             
             div(class="w-100") 
                 div(class="container" style="padding: 20px;")
+                    button#menu-toggle.btn.btn-outline-primary ☰
                     a(href="/") 
                         div(style="text-align: center;")
                             img(src="/images/logo.jpg" alt="logo" class="img-fluid")
@@ -101,7 +102,14 @@ html(lang="es")
                 
                         
                 script. 
-                
+                    document.addEventListener("DOMContentLoaded", function() {
+                        const menuToggle = document.getElementById('menu-toggle');
+                        const sidebarContainer = document.getElementById('sidebar-container');
+
+                        menuToggle.addEventListener('click', function() {
+                            sidebarContainer.classList.toggle('active');
+                        });
+                    }); 
                     fetch('/Mantenimiento/ordenes')
                         .then(response=>response.json())
                         .then(datos=>{

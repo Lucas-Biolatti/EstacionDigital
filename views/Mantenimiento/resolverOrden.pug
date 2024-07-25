@@ -44,6 +44,7 @@ html(lang="es")
             
             div(class="w-100")
                 div(class="container")
+                    button#menu-toggle.btn.btn-outline-primary ☰
                     a(href="/cierremtto") 
                         div(style="text-align: center;")
                             img(src="/images/logo.jpg" alt="logo" class="img-fluid")
@@ -99,50 +100,25 @@ html(lang="es")
                                 input(type="hidden", name="idOrden", value=idOrden)
                                 div(class="col-md-3")
                                     label(for="fecha" class="form-label") Fecha
-                                    input(type="date" class="form-control" id="fecha" name="fecha" required)
+                                    input(type="date" class="form-control" id="fecha" name="fecha" value=result[0].fecha_cierre required)
                                 div(class="col-md-6")
                                     label(for="descripcion" class="form-label") Descripcion de la Reparacion
-                                    input(type="text", name="descripcion" class="form-control" id="descripcion")
+                                    input(type="text", name="descripcion" class="form-control" id="descripcion" value=result[0].descripcion_cierre)
                                 div(class="col-md-3")
                                     label(for="tiempo" class="form-label") Tiempo
-                                    input(type="number", name="tiempo" class="form-control" id="tiempo")
+                                    input(type="number", name="tiempo" class="form-control" id="tiempo" value=result[0].tiempo)
                             br
                             h5
                                 i(class='bx bxs-label bx-sm') Repuestos Utilizados
                             hr
-                            div(class="row")
-                                
-                                div(class="col-md-2")
-                                    label(for="c1" class="form-label") Codigo
-                                    input(type="text", name="c1" class="form-control" id="c1")
-                                div(class="col-md-8")
-                                    label(for="rto1" class="form-label") Descripcion
-                                    p(id="rto1" class="col-12 p-2 mb-2 bg-light bg-gradient")
-                                div(class="col-md-2")
-                                    label(for="cantidad1" class="form-label") Cantidad 
-                                    input(type="number", name="cantidad1" id="cantidad1" class="form-control" value=0)
-                            div(class="row")
-                                
-                                div(class="col-md-2")
-                                    label(for="c2" class="form-label") Codigo
-                                    input(type="text", name="c2" class="form-control" id="c2")
-                                div(class="col-md-8")
-                                    label(for="rto2" class="form-label") Descripcion
-                                    p(id="rto2" class="col-12 p-2 mb-2 bg-light bg-gradient")
-                                div(class="col-md-2")
-                                    label(for="cantidad2" class="form-label") Cantidad 
-                                    input(type="number", name="cantidad2" id="cantidad2" class="form-control" value=0)
-                            div(class="row")
-                                
-                                div(class="col-md-2")
-                                    label(for="c3" class="form-label") Codigo
-                                    input(type="text", name="c3" class="form-control" id="c3")
-                                div(class="col-md-8")
-                                    label(for="rto3" class="form-label") Descripcion
-                                    p(id="rto3" class="col-12 p-2 mb-2 bg-light bg-gradient")
-                                div(class="col-md-2")
-                                    label(for="cantidad3" class="form-label") Cantidad 
-                                    input(type="number", name="cantidad3" id="cantidad3" class="form-control" value=0)
+                            button(class="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal1") Agregar Repuesto
+                            div(class="container")
+                                table(class="table")
+                                    thead 
+                                        th Codigo 
+                                        th Descripcion 
+                                        th Cantidad
+                               
                             br
                             h5
                                 i(class='bx bxs-label bx-sm') Tareas pendientes
@@ -151,29 +127,25 @@ html(lang="es")
                             
                                 div(class="col-md-5")
                                     label(for="pendiente" class="form-label") Tareas pendientes 
-                                    input(type="text", name="pendiente" class="form-control" id="pendiente")
+                                    input(type="text", name="pendiente" class="form-control" id="pendiente" value=result[0].pendiente)
                                 div(class="col-md-5")
                                     label(for="observaciones" class="form-label") Observaciones 
-                                    input(type="text", name="observaciones" id="observaciones" class="form-control")
+                                    input(type="text", name="observaciones" id="observaciones" class="form-control" value=result[0].observaciones_cierre)
                             br
                             h5 
                                 i(class='bx bxs-label bx-sm') Responsables
                             hr
-                            div(class="row")
-                                
-                                div(class="col-md-4")
-                                    label(for="personas" class="form-label") Ejecutor 1
-                                    input(type="text", name="ejecutor1" class="form-control" id="personas")
-                        
-                                
-                                div(class="col-md-4")
-                                    label(for="personas" class="form-label") Ejecutor 2
-                                    input(type="text", name="ejecutor2" class="form-control" id="personas")
-                        
-                                
-                                div(class="col-md-4")
-                                    label(for="personas" class="form-label") Ejecutor 3
-                                    input(type="text", name="ejecutor3" class="form-control" id="personas")
+                            button(class="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal") Agregar Ejecutor
+                            table(class="table") 
+                                thead 
+                                    th ID 
+                                    th LEGAJO 
+                                    th NOMBRE 
+                                    th CALORICAS?
+                                    th TRABAJO EN ALTURA
+                                tbody 
+
+                           
                             br
                             h5
                                 i(class='bx bxs-label bx-sm') Estado 
@@ -194,13 +166,88 @@ html(lang="es")
                     else
                         h1= "No se encontraron resultados"
                                 
+                <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">+ Agregar Repuesto</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
                                 
+                                <form class="d-flex" method="POST" action="">
+                                            input(type="hidden", name="idOrden" value="/Qsb/cc")                               
+                                            
+
+                                            <label class="form-label"> Fecha
+                                            <input type="date" name="fecha" class="form-control">
+                                            <label class="form-label"> Codigo
+                                            select(name="codigo", class="form-select")
+                                                
+                                                option(value="") Lista de codigos + descripcion
+                                                
+                                            <label class="form-label"> Cantidad
+                                            <input type="number", name="accidentes" class="form-control" id="cantidad">
+                                                       
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+                            </div>
+                            </form>                         
+                    </div>
+                </div>                
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">+ Agregar interventor</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                
+                                <form class="d-flex" method="POST" action="">
+                                            input(type="hidden", name="idOrden" value="/Qsb/cc") 
+                                            input(type="hidden", name="sector" value=result[0].sector)                             
+                                            
+
+                                            <label class="form-label"> Fecha
+                                            <input type="date" name="fecha" class="form-control">
+                                            <label class="form-label"> Nombre
+                                            select(name="nombre" class="form-select") 
+                                                option(value="") Valores de Nomina
+                                            <label class="form-label"> Legajo
+                                            input(type="text", name="legajo" class="form-control")
+                                            <label class="form-label"> Calorias?
+                                            input(type="number" class="form-control" name="calorias")
+                                            <label class="form-label"> Trabajo en Altura
+                                            input(type="number" class="form-control" name="altura")
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+                            </div>
+                            </form>                         
+                    </div>
+                </div>                
                 footer 
                         br 
                         div(class="col-12" style="text-align:center")
-                            h6 &copy Copyright 2021 | Polimetal S.A            
+                            h6 &copy Copyright 2021 | Polimetal S.A     
+                       
 
-        script. 
+        script.
+            document.addEventListener("DOMContentLoaded", function() {
+                const menuToggle = document.getElementById('menu-toggle');
+                const sidebarContainer = document.getElementById('sidebar-container');
+
+                menuToggle.addEventListener('click', function() {
+                    sidebarContainer.classList.toggle('active');
+                });
+            }); 
             let c1 = document.getElementById("c1");
             let c2 = document.getElementById("c2");
             let c3 = document.getElementById("c3");
