@@ -15,6 +15,7 @@ function fechaEdit(x){
   let f = x.getUTCFullYear()+"-"+mes+"-"+dia;
   return f;
 }
+
 router.get('/items',(req,res)=>{
     if (req.session.loggedin && req.session.rol=="Mantenimiento") {
         connectToDatabase((error, conexion) => {
@@ -36,7 +37,6 @@ router.get('/items',(req,res)=>{
 
   
 });
-
 router.get('/sector',(req,res)=>{
     if (req.session.loggedin && req.session.rol=="Mantenimiento") {
         connectToDatabase((error, conexion) => {
@@ -59,7 +59,6 @@ router.get('/sector',(req,res)=>{
           mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
       }
 });
-
 router.get('/ordenTrabajo',(req,res)=>{
   if (req.session.loggedin  && req.session.rol=="Mantenimiento") {
 
@@ -218,12 +217,19 @@ router.get('/resolverOrden',(req,res)=>{
                 let dia = (result[0].fecha.getUTCDate()<10?'0':'')+result[0].fecha.getUTCDate();
                 let mes = ((result[0].fecha.getMonth()+1)<10?'0':'')+(result[0].fecha.getMonth()+1);
                 let f = dia+"/"+mes+"/"+result[0].fecha.getUTCFullYear();
+
                 let hi= result[0].horaInicio.getHours()+":"+result[0].horaInicio.getMinutes();
                 let hf= result[0].horaFin.getHours()+":"+result[0].horaFin.getMinutes();
                 let total=(result[0].horaFin-result[0].horaInicio)/1000/60;
+
+                let dia2 = (result[0].fecha_cierre.getUTCDate()<10?'0':'')+result[0].fecha_cierre.getUTCDate();
+                let mes2 = ((result[0].fecha_cierre.getMonth()+1)<10?'0':'')+(result[0].fecha_cierre.getMonth()+1);
+                let f2 = `${result[0].fecha_cierre.getUTCFullYear()}-${mes2}-${dia2}`;
+                
                 res.render('./Mantenimiento/resolverOrden',{
                     result:result,
                     f:f,
+                    f2:f2,
                     hi:hi,
                     hf:hf,
                     total:total,
@@ -246,24 +252,15 @@ router.post('/resolverOrden',(req,res)=>{
             if (error) {
                 return res.status(500).send('Error de conexión a la base de datos');
             }
-            const sql = "UPDATE ordentrabajo SET estado=?, fecha_cierre=?, descripcion_cierre=?, tiempo=?, c1=?, cantidad1=?, c2=?, cantidad2=?, c3=?, cantidad3=?, pendiente=?, observaciones_cierre=?, ejecutor1=?, ejecutor2=?, ejecutor3=? WHERE idOrden=?"
+            const sql = "UPDATE ordentrabajo SET estado=?, fecha_cierre=?, descripcion_cierre=?, tiempo=?, pendiente=?, observaciones_cierre=?, WHERE idOrden=?"
     
             conexion.query(sql,[
                 req.body.estado,
                 req.body.fecha,
                 req.body.descripcion,
                 parseInt(req.body.tiempo),
-                req.body.c1,
-                parseInt(req.body.cantidad1),
-                req.body.c2,
-                parseInt(req.body.cantidad2),
-                req.body.c3,
-                parseInt(req.body.cantidad3),
                 req.body.pendiente,
                 req.body.observaciones,
-                req.body.ejecutor1,
-                req.body.ejecutor2,
-                req.body.ejecutor3,
                 parseInt(req.body.idOrden)],(error)=>{
                     conexion.release();
                 if(!error){
