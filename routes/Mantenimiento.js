@@ -15,18 +15,37 @@ function fechaEdit(x){
   let f = x.getUTCFullYear()+"-"+mes+"-"+dia;
   return f;
 }
-
+router.get('/nomina',(req,res)=>{
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      let legajo = req.query.legajo;
+      let sql1 = `SELECT nombre FROM nomina WHERE	leg="${legajo}"`;
+      conexion.query(sql1,(error,result,files)=>{
+        conexion.release();
+          if(!error){
+             res.send(result[0]);
+             console.log(result[0])
+          }else{
+              alert("No se pudo obtener la nomina");
+          }
+      })
+      })
+});
 router.get('/items',(req,res)=>{
     if (req.session.loggedin && req.session.rol=="Mantenimiento") {
         connectToDatabase((error, conexion) => {
           if (error) {
               return res.status(500).send('Error de conexión a la base de datos');
           }
-          const sql = "SELECT * FROM items WHERE 1"
+          let codigo = req.query.codigo;
+          const sql = `SELECT Descripcion FROM items WHERE	item="${codigo}"`;
           conexion.query(sql,(error,result)=>{
             conexion.release();
               if(!error){
-                  res.send(result);
+                
+                  res.send(result[0]);
                 }
             })
           })

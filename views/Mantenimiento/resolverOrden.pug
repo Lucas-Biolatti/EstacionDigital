@@ -184,12 +184,11 @@ html(lang="es")
                                             
 
                                             <label class="form-label"> Fecha
-                                            <input type="date" name="fecha" class="form-control" id="fecha_item">
+                                            input(type="date" name="fecha" class="form-control" id="fecha_item" value=f2)
                                             <label class="form-label"> Codigo
-                                            select(name="codigo", class="form-select" id="Item")
-                                                
-                                                option(value="") Lista de codigos + descripcion
-                                                
+                                            <input type="text", name="codigo" id="codigo" class="form-control">
+                                            <label class="form-label"> Descripcion 
+                                            p(id="descripcion_repuesto")
                                             <label class="form-label"> Cantidad
                                             <input type="number", name="accidentes" class="form-control" id="cantidad">
                                                        
@@ -218,15 +217,16 @@ html(lang="es")
                                             
 
                                             <label class="form-label"> Fecha
-                                            <input type="date" name="fecha" class="form-control" id="fecha">
-                                            <label class="form-label"> Nombre
-                                            select(name="nombre" class="form-select" id="nombre") 
-                                                option(value="") Valores de Nomina
+                                            input(type="date" name="fecha" class="form-control" id="fecha" value=f2)
                                             <label class="form-label"> Legajo
+                                            
                                             input(type="text", name="legajo" class="form-control" id="legajo")
-                                            <label class="form-label"> Calorias?
+                                            <label class="form-label"> Nombre
+                                            input(type="text" name="nombre" class="form-control" id="nombre")
+                                            
+                                            <label class="form-label"> Minutos de Calorias
                                             input(type="number" class="form-control" name="calorias" id="calorias")
-                                            <label class="form-label"> Trabajo en Altura
+                                            <label class="form-label"> Minutos de Trabajo en Altura
                                             input(type="number" class="form-control" name="altura" id="altura")
 
                             </div>
@@ -253,26 +253,71 @@ html(lang="es")
                     sidebarContainer.classList.toggle('active');
                 });
             }); 
-            
-            
-            function loadSelectOptions() {
-                fetch("items")
-                    .then(resp => resp.json())
-                    .then(data => {
-                        const selectElement = document.getElementById('Item');
-                        selectElement.innerHTML = ''; // Limpiar las opciones existentes
-
-                        data.forEach(item => {
-                            const option = document.createElement('option');
-                            option.value = item.Item; // Asumiendo que 'codigo' es el identificador del item
-                            option.text = `${item.Item} - ${item.Descripcion}`
-                            selectElement.appendChild(option);
-                        });
-                    })
-                    .catch(error => console.error('Error al cargar los datos:', error));
-            }
             document.addEventListener('DOMContentLoaded', (event) => {
-                loadSelectOptions();
+                const input = document.getElementById('nombre');
+
+                function adjustInputWidth() {
+                    input.style.width = 'auto'; // Reiniciar el ancho para obtener el tamaño correcto del scroll
+                    input.style.width = (input.scrollWidth + 2) + 'px'; // Ajustar el ancho del input
+                }
+
+                // Ajustar el ancho del input inicialmente
+                adjustInputWidth();
+
+                // Ajustar el ancho del input cada vez que el contenido cambie
+                input.addEventListener('input', adjustInputWidth);
+            });
+            
+            
+            document.addEventListener('DOMContentLoaded', (event) => {
+                const codigoInput = document.getElementById('codigo');
+                const descripcionParrafo = document.getElementById('descripcion_repuesto');
+                const legajoInput = document.getElementById('legajo');
+                const nombreInput = document.getElementById('nombre')
+                codigoInput.addEventListener('change', () => {
+                    const codigo = codigoInput.value;
+
+                    if (codigo) {
+                        fetch(`items?codigo=${codigo}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                
+                                if (data.Descripcion) {
+                                    descripcionParrafo.textContent = data.Descripcion;
+                                } else {
+                                    descripcionParrafo.textContent = 'Descripción no encontrada';
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error al obtener la descripción:', error);
+                                descripcionParrafo.textContent = 'Error al obtener la descripción';
+                            });
+                    } else {
+                        descripcionParrafo.textContent = '';
+                    }
+                });
+                legajoInput.addEventListener('change', () => {
+                    const legajo = legajoInput.value;
+
+                    if (legajo) {
+                        fetch(`nomina?legajo=${legajo}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data)
+                                if (data.nombre) {
+                                    nombreInput.value = data.nombre;
+                                } else {
+                                    nombreInput.value = 'Descripción no encontrada';
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error al obtener la descripción:', error);
+                                nombreInput.value = 'Error al obtener la descripción';
+                            });
+                    } else {
+                        nombreInput.value = '';
+                    }
+                });
             });
                 
 
