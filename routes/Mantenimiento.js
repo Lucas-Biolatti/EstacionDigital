@@ -241,9 +241,16 @@ router.get('/resolverOrden',(req,res)=>{
                 let hf= result[0].horaFin.getHours()+":"+result[0].horaFin.getMinutes();
                 let total=(result[0].horaFin-result[0].horaInicio)/1000/60;
 
-                let dia2 = (result[0].fecha_cierre.getUTCDate()<10?'0':'')+result[0].fecha_cierre.getUTCDate();
-                let mes2 = ((result[0].fecha_cierre.getMonth()+1)<10?'0':'')+(result[0].fecha_cierre.getMonth()+1);
-                let f2 = `${result[0].fecha_cierre.getUTCFullYear()}-${mes2}-${dia2}`;
+                let f2;
+
+                if (result[0].fecha_cierre) {
+                    let dia2 = (result[0].fecha_cierre.getUTCDate() < 10 ? '0' : '') + result[0].fecha_cierre.getUTCDate();
+                    let mes2 = ((result[0].fecha_cierre.getMonth() + 1) < 10 ? '0' : '') + (result[0].fecha_cierre.getMonth() + 1);
+                    f2 = `${result[0].fecha_cierre.getUTCFullYear()}-${mes2}-${dia2}`;
+                } else {
+                    // Manejar el caso cuando fecha_cierre es null, por ejemplo, asignar una fecha predeterminada o dejar f2 como undefined
+                    f2 = 'Fecha no disponible'; // O cualquier otro valor que desees asignar
+                }
                 
                 res.render('./Mantenimiento/resolverOrden',{
                     result:result,
@@ -294,6 +301,151 @@ router.post('/resolverOrden',(req,res)=>{
       res.render('login',{
         mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
     }
+})
+//Manejo de nomina de ejecutores
+router.post('/agregarEjecutor',(req,res)=>{
+    if (req.session.loggedin && req.session.rol=="Mantenimiento") {
+        connectToDatabase((error, conexion) => {
+          if (error) {
+              return res.status(500).send('Error de conexión a la base de datos');
+          }
+            let idOrden = req.body.idOrden;
+            let sector = req.body.sector;
+            let fecha = req.body.fecha;
+            let legajo = req.body.legajo;
+            let nombre = req.body.nombre;
+            let calorias = req.body.calorias;
+            let altura = req.body.altura;
+
+            let sql =`INSERT INTO ejecutoresMtto(idOrden,fecha,sector,nombre,legajo,calorias,altura) VALUES(${idOrden},"${fecha}","${sector}","${nombre}","${legajo}",${calorias},${altura});`
+            conexion.query(sql,(error)=>{
+                conexion.release();
+                if (!error) {
+                    res.redirect(`resolverOrden?idOrden=${idOrden}`);
+                }else{
+                    res.send(error)
+                }
+            })
+          })
+      } else {
+        res.render('login',{
+          mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+      }
+})
+router.get('/nominaOrden',(req,res)=>{
+    if (req.session.loggedin && req.session.rol=="Mantenimiento") {
+        connectToDatabase((error, conexion) => {
+          if (error) {
+              return res.status(500).send('Error de conexión a la base de datos');
+          }
+            let idOrden = req.query.idOrden;
+            const sql = `SELECT * FROM ejecutoresMtto where idOrden = "${idOrden}"`
+            conexion.query(sql,(error,result)=>{
+                conexion.release();
+                if (!error) {
+                    res.send(result)
+                }else{
+                    res.send(error)
+                }
+            })
+          })
+      } else {
+        res.render('login',{
+          mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+      }
+})
+router.get('/editarEjecutor',(req,res)=>{
+    if (req.session.loggedin && req.session.rol=="Mantenimiento") {
+        connectToDatabase((error, conexion) => {
+          if (error) {
+              return res.status(500).send('Error de conexión a la base de datos');
+          }
+            let id = req.query.id
+            let sql = `select * from ejecutoresMtto where id=${id}`;
+            conexion.query(sql,(error,result)=>{
+                conexion.release();
+                if (!error) {
+                    let fecha = fechaEdit(result[0].fecha)
+                    res.render('./Mantenimiento/editarEjecutor',{fecha:fecha,result:result})
+                }
+            })
+          })
+      } else {
+        res.render('login',{
+          mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+      }
+})
+router.get('/eliminarEjecutor',(req,res)=>{
+    if (req.session.loggedin && req.session.rol=="Mantenimiento") {
+        connectToDatabase((error, conexion) => {
+          if (error) {
+              return res.status(500).send('Error de conexión a la base de datos');
+          }
+            let id = req.query.id;
+            let idOrden = req.query.idOrden;
+            const sql = `DELETE FROM ejecutoresMtto WHERE id = ${id}`
+            conexion.query(sql,(error)=>{
+                conexion.release();
+                if (!error) {
+                    res.redirect(`resolverOrden?idOrden=${idOrden}`);
+                }else{
+                    res.send(error);
+                }
+            })
+          })
+      } else {
+        res.render('login',{
+          mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+      }
+})
+//Manejo de items por orden
+router.post('/agregarCodigo',(req,res)=>{
+    if (req.session.loggedin && req.session.rol=="Mantenimiento") {
+        connectToDatabase((error, conexion) => {
+          if (error) {
+              return res.status(500).send('Error de conexión a la base de datos');
+          }
+            let idOrden = req.body.idOrden;
+            let fecha = req.body.fecha;
+            let codigo = req.body.codigo;
+            let descripcion = req.body.descripcion_repuesto;
+            let cantidad = req.body.cantidad;
+            const sql = `INSERT INTO repuestos_usados (idOrden,fecha,codigo,descripcion,cantidad) VALUES(${idOrden},"${fecha}","${codigo}","${descripcion}",${cantidad});`
+            conexion.query(sql,(error)=>{
+                conexion.release();
+                if (!error) {
+                    res.redirect(`resolverOrden?idOrden=${idOrden}`);
+                }else{
+                    res.send(error)
+                }
+            })
+          })
+      } else {
+        res.render('login',{
+          mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+      }
+})
+router.get('/itemsOrden',(req,res)=>{
+    if (req.session.loggedin && req.session.rol=="Mantenimiento") {
+        connectToDatabase((error, conexion) => {
+          if (error) {
+              return res.status(500).send('Error de conexión a la base de datos');
+          }
+            let idOrden = req.query.idOrden;
+            const sql = `SELECT * FROM repuestos_usados where idOrden = "${idOrden}"`
+            conexion.query(sql,(error,result)=>{
+                conexion.release();
+                if (!error) {
+                    res.send(result)
+                }else{
+                    res.send(error)
+                }
+            })
+          })
+      } else {
+        res.render('login',{
+          mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+      }
 })
 
 module.exports = router;

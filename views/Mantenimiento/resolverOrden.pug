@@ -5,12 +5,14 @@ html(lang="es")
         meta(http-equiv="X-UA-Compatible", content="IE=edge")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Cierre de Orden de Trabajo | Polimetal
+        
         link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous")
         script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous")
         link(href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet')
         script(src="https://unpkg.com/boxicons@2.0.9/dist/boxicons.js")
         link(href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet")
         link(rel="stylesheet" href="/stylesheets/styleIndex.css")
+        
         style.  
             h5{
                 color:rgb(185, 21, 21);
@@ -45,7 +47,7 @@ html(lang="es")
             div(class="w-100")
                 div(class="container")
                     button#menu-toggle.btn.btn-outline-primary ☰
-                    a(href="/cierremtto") 
+                    
                         div(style="text-align: center;")
                             img(src="/images/logo.jpg" alt="logo" class="img-fluid")
                     if result.length > 0        
@@ -113,7 +115,7 @@ html(lang="es")
                             hr
                             button(class="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal1") Agregar Repuesto
                             div(class="container")
-                                table(class="table")
+                                table(class="table" id="tableItems")
                                     thead 
                                         th ID
                                         th CODIGO
@@ -138,12 +140,12 @@ html(lang="es")
                                 i(class='bx bxs-label bx-sm') Responsables
                             hr
                             button(class="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal") Agregar Ejecutor
-                            table(class="table") 
+                            table(class="table" id="tableEjecutores") 
                                 thead 
                                     th ID 
                                     th LEGAJO 
                                     th NOMBRE 
-                                    th CALORICAS?
+                                    th CALORICAS
                                     th TRABAJO EN ALTURA
                                     th ACCION
                                 tbody 
@@ -178,8 +180,8 @@ html(lang="es")
                             </div>
                             <div class="modal-body">
                                 
-                                <form class="d-flex" method="POST" action="">
-                                            input(type="hidden", name="idOrden" value="/Qsb/cc") 
+                                <form class="d-flex" method="POST" action="agregarCodigo">
+                                            input(type="hidden", name="idOrden" value=result[0].idOrden) 
                                             input(type="hidden", name="idCodigo" id="idCodigo")                              
                                             
 
@@ -188,9 +190,9 @@ html(lang="es")
                                             <label class="form-label"> Codigo
                                             <input type="text", name="codigo" id="codigo" class="form-control">
                                             <label class="form-label"> Descripcion 
-                                            p(id="descripcion_repuesto")
+                                            input(type="text" id="descripcion_repuesto" name="descripcion_repuesto" class="form-control")
                                             <label class="form-label"> Cantidad
-                                            <input type="number", name="accidentes" class="form-control" id="cantidad">
+                                            <input type="number", name="cantidad" class="form-control" id="cantidad">
                                                        
                             </div>
                             <div class="modal-footer">
@@ -210,20 +212,16 @@ html(lang="es")
                             </div>
                             <div class="modal-body">
                                 
-                                <form class="d-flex" method="POST" action="">
-                                            input(type="hidden", name="idOrden" value="" id="idOrden") 
+                                <form class="d-flex" method="POST" action="agregarEjecutor">
+                                            input(type="hidden", name="idOrden" id="idOrden" value=result[0].idOrden) 
                                             input(type="hidden", name="sector" value=result[0].sector id="sector")
-                                            input(type="hidden", name="idEjecutor", id="idEjecutor")                          
-                                            
 
                                             <label class="form-label"> Fecha
                                             input(type="date" name="fecha" class="form-control" id="fecha" value=f2)
                                             <label class="form-label"> Legajo
-                                            
                                             input(type="text", name="legajo" class="form-control" id="legajo")
                                             <label class="form-label"> Nombre
                                             input(type="text" name="nombre" class="form-control" id="nombre")
-                                            
                                             <label class="form-label"> Minutos de Calorias
                                             input(type="number" class="form-control" name="calorias" id="calorias")
                                             <label class="form-label"> Minutos de Trabajo en Altura
@@ -237,13 +235,14 @@ html(lang="es")
                             </div>
                             </form>                         
                     </div>
-                </div>                
+                </div>
+                       
                 footer 
                         br 
                         div(class="col-12" style="text-align:center")
                             h6 &copy Copyright 2021 | Polimetal S.A     
                        
-
+        script(src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.16/dist/sweetalert2.all.min.js")
         script.
             document.addEventListener("DOMContentLoaded", function() {
                 const menuToggle = document.getElementById('menu-toggle');
@@ -253,20 +252,80 @@ html(lang="es")
                     sidebarContainer.classList.toggle('active');
                 });
             }); 
+            
             document.addEventListener('DOMContentLoaded', (event) => {
-                const input = document.getElementById('nombre');
+                let idOrden = document.getElementById('idOrden').value;
+                let tableEjecutores = document.getElementById('tableEjecutores');
+                fetch(`nominaOrden?idOrden=${idOrden}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(item => {
+                            let row = tableEjecutores.insertRow();
+                            
+                            let cellId = row.insertCell(0);
+                            let cellLegajo = row.insertCell(1);
+                            let cellNombre = row.insertCell(2);
+                            let cellCaloria = row.insertCell(3);
+                            let cellAltura = row.insertCell(4);
+                            let cellAccion = row.insertCell(5);
 
-                function adjustInputWidth() {
-                    input.style.width = 'auto'; // Reiniciar el ancho para obtener el tamaño correcto del scroll
-                    input.style.width = (input.scrollWidth + 2) + 'px'; // Ajustar el ancho del input
+                            cellId.textContent = item.id;
+                            cellLegajo.textContent = item.legajo;
+                            cellNombre.textContent = item.nombre;
+                            cellCaloria.textContent = item.calorias;
+                            cellAltura.textContent = item.altura;
+                            cellAccion.innerHTML = `
+                                 <a class="btn btn-primary btn-sm edit-btn" href="editarEjecutor?id=${item.id}">Editar</a>
+                    <a class="btn btn-danger btn-sm delete-btn" href="eliminarEjecutor?id=${item.id}&idOrden=${idOrden}" onclick="return confirmar(event)">Eliminar</a>
+                                `;
+                        }); 
+
+                        
+                            });
+                        });
+            document.addEventListener('DOMContentLoaded', (event) => {
+                let idOrden = document.getElementById('idOrden').value;
+                let tableItems = document.getElementById('tableItems');
+                fetch(`itemsOrden?idOrden=${idOrden}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(item => {
+                            let row = tableItems.insertRow();
+                            
+                            let cellId = row.insertCell(0);
+                            let cellCodigo = row.insertCell(1);
+                            let cellDesc = row.insertCell(2);
+                            let cellCantidad = row.insertCell(3);
+                            let cellAccion = row.insertCell(4);
+
+                            cellId.textContent = item.id;
+                            cellCodigo.textContent = item.codigo;
+                            cellDesc.textContent = item.descripcion;
+                            cellCantidad.textContent = item.cantidad;
+                            
+                            cellAccion.innerHTML = `
+                                 <a class="btn btn-primary btn-sm edit-btn" href="editarItem?id=${item.id}">Editar</a>
+                    <a class="btn btn-danger btn-sm delete-btn" href="eliminarItem?id=${item.id}&idOrden=${idOrden}" onclick="return confirmar(event)">Eliminar</a>
+                                `;
+                        }); 
+
+                        
+                            });
+                        });
+                
+            function confirmar(event) {
+                // Prevenir el comportamiento predeterminado del enlace
+                event.preventDefault();
+                
+                // Mostrar una alerta de confirmación
+                if (window.confirm('¿Estás seguro de que deseas eliminar este elemento?')) {
+                    // Redirigir a la URL del enlace si el usuario confirma
+                    window.location.href = event.target.href;
+                } else {
+                    // Si el usuario cancela, no hacer nada
+                    return false;
                 }
-
-                // Ajustar el ancho del input inicialmente
-                adjustInputWidth();
-
-                // Ajustar el ancho del input cada vez que el contenido cambie
-                input.addEventListener('input', adjustInputWidth);
-            });
+            }
             
             
             document.addEventListener('DOMContentLoaded', (event) => {
@@ -283,17 +342,17 @@ html(lang="es")
                             .then(data => {
                                 
                                 if (data.Descripcion) {
-                                    descripcionParrafo.textContent = data.Descripcion;
+                                    descripcionParrafo.value = data.Descripcion;
                                 } else {
-                                    descripcionParrafo.textContent = 'Descripción no encontrada';
+                                    descripcionParrafo.value = 'Descripción no encontrada';
                                 }
                             })
                             .catch(error => {
                                 console.error('Error al obtener la descripción:', error);
-                                descripcionParrafo.textContent = 'Error al obtener la descripción';
+                                descripcionParrafo.value = 'Error al obtener la descripción';
                             });
                     } else {
-                        descripcionParrafo.textContent = '';
+                        descripcionParrafo.value = '';
                     }
                 });
                 legajoInput.addEventListener('change', () => {
