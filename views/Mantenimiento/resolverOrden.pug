@@ -160,9 +160,10 @@ html(lang="es")
                                 div(class="col-md-4")
                                     label(for="observaciones" class="form-label") Estado
                                     select(name="estado" class="form-select")
-                                        option Pendiente 
-                                        option En Proceso 
-                                        option Cerrado 
+                                        option(value=result[0].estado)=result[0].estado
+                                        option(value="Pendiente") Pendiente ❌
+                                        option(value="En Proceso") En Proceso 🕐
+                                        option(values="Cerrado") Cerrado ✅
                             br
 
                             input(type="submit", value="Cerrar Orden" class="button btn-success")

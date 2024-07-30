@@ -125,7 +125,7 @@ html(lang="es")
                                 datos[i].fecha,
                                 datos[i].turno,
                                 datos[i].descripcion,
-                                datos[i].estado,
+                                `<td class="${datos[i].estado}">${datos[i].estado}</td>`,
                                 datos[i].accion,
                                 ]
                                 dataset.push(dat);

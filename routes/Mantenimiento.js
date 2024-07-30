@@ -447,6 +447,64 @@ router.get('/itemsOrden',(req,res)=>{
           mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
       }
 })
-
+router.get('/eliminarItem',(req,res)=>{
+    if (req.session.loggedin && req.session.rol=="Mantenimiento") {
+        connectToDatabase((error, conexion) => {
+          if (error) {
+              return res.status(500).send('Error de conexión a la base de datos');
+          }
+            let id = req.query.id;
+            let idOrden = req.query.idOrden;
+            const sql = `DELETE FROM repuestos_usados WHERE id = ${id}`
+            conexion.query(sql,(error)=>{
+                conexion.release();
+                if (!error) {
+                    res.redirect(`resolverOrden?idOrden=${idOrden}`);
+                }else{
+                    res.send(error);
+                }
+            })
+          })
+      } else {
+        res.render('login',{
+          mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+      }
+})
+router.get('/ordenesDia',(req,res)=>{
+    if (req.session.loggedin && req.session.rol=="Mantenimiento") {
+        connectToDatabase((error, conexion) => {
+          if (error) {
+              return res.status(500).send('Error de conexión a la base de datos');
+          }
+          
+          conexion.release();
+            res.render('./Mantenimiento/ordenDia')
+          })
+      } else {
+        res.render('login',{
+          mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+      }
+})
+router.get('/ordenDia',(req,res)=>{
+    if (req.session.loggedin && req.session.rol=="Mantenimiento") {
+        connectToDatabase((error, conexion) => {
+          if (error) {
+              return res.status(500).send('Error de conexión a la base de datos');
+          }
+            let fecha = req.query.fecha;
+            const sql = `select * from ordentrabajo where fecha = "${fecha}"`;
+            conexion.query(sql,(error,result)=>{
+                if (!error) {
+                    res.send(result);
+                }else{
+                    res.send(error);
+                }
+            })
+          })
+      } else {
+        res.render('login',{
+          mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+      }
+})
 
 module.exports = router;
