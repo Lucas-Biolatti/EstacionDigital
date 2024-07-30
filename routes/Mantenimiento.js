@@ -494,6 +494,7 @@ router.get('/ordenDia',(req,res)=>{
             let fecha = req.query.fecha;
             const sql = `select * from ordentrabajo where fecha = "${fecha}"`;
             conexion.query(sql,(error,result)=>{
+                conexion.release();
                 if (!error) {
                     res.send(result);
                 }else{
