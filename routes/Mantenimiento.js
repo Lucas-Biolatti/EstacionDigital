@@ -8,7 +8,6 @@ function fecha(x){
   let fecha = `${f.getDate()}/${f.getMonth()+1}/${f.getUTCFullYear()}`;
   return fecha;
 };
-
 function fechaEdit(x){
   let dia = (x.getUTCDate()<10?'0':'')+x.getUTCDate();
   let mes = ((x.getMonth()+1)<10?'0':'')+(x.getMonth()+1);
@@ -187,7 +186,7 @@ router.get('/ordenes',(req,res)=>{
           if (error) {
               return res.status(500).send('Error de conexión a la base de datos');
           }
-          const sql="SELECT * FROM ordentrabajo WHERE NOT estado='cerrado'"
+          const sql="SELECT * FROM ordentrabajo"
           conexion.query(sql,(error,fields)=>{
             conexion.release();
               if(!error){ 
@@ -202,7 +201,7 @@ router.get('/ordenes',(req,res)=>{
                           turno:fields[i].turno,
                           descripcion:fields[i].descripcion,
                           estado:fields[i].estado,
-                          accion:'<a href="resolverOrden?idOrden='+fields[i].idOrden+'">Cerrar</a>'
+                          accion:'<a class="btn btn-primary btn-sm" href="resolverOrden?idOrden='+fields[i].idOrden+'">Cerrar</a>'
         
                       }
                       data.push(dato)
@@ -278,7 +277,7 @@ router.post('/resolverOrden',(req,res)=>{
             if (error) {
                 return res.status(500).send('Error de conexión a la base de datos');
             }
-            const sql = "UPDATE ordentrabajo SET estado=?, fecha_cierre=?, descripcion_cierre=?, tiempo=?, pendiente=?, observaciones_cierre=?, WHERE idOrden=?"
+            const sql = "UPDATE ordentrabajo SET estado=?, fecha_cierre=?, descripcion_cierre=?, tiempo=?, pendiente=?, observaciones_cierre=? WHERE idOrden=?"
     
             conexion.query(sql,[
                 req.body.estado,
@@ -293,7 +292,8 @@ router.post('/resolverOrden',(req,res)=>{
                     res.redirect(`ordenTrabajo?mensaje=✅Se Actualizo orden Nro ${req.body.idOrden} Correctamente✅`);
                     
                 }else{
-                    res.redirect(`ordenTrabajo?mensaje=❌No se pudo Actualizar orden Nro ${req.body.idOrden}❌`)
+                    //res.redirect(`ordenTrabajo?mensaje=❌No se pudo Actualizar orden Nro ${req.body.idOrden}❌`)
+                    res.send(error);
                  }
             })
             })
