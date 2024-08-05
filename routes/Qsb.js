@@ -169,9 +169,12 @@ router.post("/agregaraccion",(req,res)=>{
     let ret_laca = req.body.ret_laca;
     let sc_laca = req.body.sc_laca;
     let entregas = req.body.entregas;
+    let hsReal = req.body.hsReal;
+    let hs_rd = req.body.hs_rd;
+    let rds_real = req.body.rds_real;
     let path = req.body.path;
 
-    const sql = `INSERT INTO indicadores (fecha,sector,accidentes,c_programa,retrabajo,scrap,disponibilidad,disp_molde,ret_laca,sc_laca,entregas,observaciones)VALUES ("${fecha}","${sector}",${accidentes},${c_programa},${retrabajo},${scrap},${disponibilidad},${disp_molde},${ret_laca},${sc_laca},${entregas},"${observaciones}");`
+    const sql = `INSERT INTO indicadores (fecha,sector,accidentes,c_programa,retrabajo,scrap,disponibilidad,disp_molde,ret_laca,sc_laca,entregas,observaciones,hsReal,hs_rd,rds_real)VALUES ("${fecha}","${sector}",${accidentes},${c_programa},${retrabajo},${scrap},${disponibilidad},${disp_molde},${ret_laca},${sc_laca},${entregas},"${observaciones}",${hsReal}, ${hs_rd}, ${rds_real});`
     conexion.query(sql,(error,row)=>{
       conexion.release();
       if (!error) {
@@ -280,6 +283,9 @@ router.get('/editarIndicador',(req,res)=>{
         'sc_laca': result[0].sc_laca,
         'entregas': result[0].entregas,
         'path': result[0].path,
+        'hsReal':result[0].hsReal,
+        'hs_rd':result[0].hs_rd,
+        'rds_real':result[0].rds_real,
       }
       console.log(datos)
       res.render('./Qsb/editarIndicador',{result:datos, id:id})
@@ -314,7 +320,10 @@ router.post('/editarIndicador',(req,res)=>{
   let sc_laca=req.body.sc_laca;
   let entregas=req.body.entregas;
   let path=req.body.path;
-  const sql = `UPDATE indicadores SET fecha="${fecha}",sector="${sector}",accidentes=${accidentes},c_programa=${c_programa},retrabajo=${retrabajo},scrap=${scrap},disponibilidad=${disponibilidad},disp_molde=${disp_molde},ret_laca=${ret_laca},sc_laca=${sc_laca},entregas=${entregas},observaciones="${observaciones}" WHERE id=${id};`
+  let hsReal = req.body.hsReal;
+  let hs_rd = req.body.hs_rd;
+  let rds_real = req.body.rds_real;
+  const sql = `UPDATE indicadores SET fecha="${fecha}",sector="${sector}",accidentes=${accidentes},c_programa=${c_programa},retrabajo=${retrabajo},scrap=${scrap},disponibilidad=${disponibilidad},disp_molde=${disp_molde},ret_laca=${ret_laca},sc_laca=${sc_laca},entregas=${entregas},observaciones="${observaciones}",hsReal=${hsReal},hs_rd=${hs_rd},rds_real=${rds_real} WHERE id=${id};`
   conexion.query(sql,(error,row)=>{
     conexion.release();
     if (!error) {
