@@ -320,14 +320,19 @@ html(lang="es")
                             type: 'line',
                             label: 'Objetivo',
                             data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                            borderWidth: 1
+                            borderWidth: 1,
+                            pointRadius:0,
                         }]
                     },
                     options: {
                         maintainAspectRatio: false,
                         scales: {
                             y: {
-                                beginAtZero: true
+                                beginAtZero: true,
+                                max:3,
+                                ticks: {
+                                    stepSize: 1
+                                }
                             }
                         }
                     },
@@ -352,7 +357,8 @@ html(lang="es")
                             type: 'line',
                             label: 'Objetivo',
                             data: [6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5],
-                            borderWidth: 1
+                            borderWidth: 1,
+                            pointRadius:0,
                         }]
                     },
                     options: {
@@ -360,6 +366,11 @@ html(lang="es")
                         scales: {
                             y: {
                                 beginAtZero: true,
+                                max:11,
+                                min:2,
+                                ticks: {
+                                    stepSize: 0.5
+                                }
                                 
                             },
                             x:{
@@ -389,7 +400,8 @@ html(lang="es")
                             type: 'line',
                             label: 'Objetivo',
                             data: [100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100],
-                            borderWidth: 1
+                            borderWidth: 1,
+                            pointRadius:0,
                         }]
                     },
                     options: {
@@ -397,6 +409,7 @@ html(lang="es")
                         scales: {
                             y: {
                                 beginAtZero: true,
+                                
                                 
                             },
                             x:{
@@ -420,13 +433,15 @@ html(lang="es")
                         datasets: [{
                             label: 'Disponibilidad MTTO',
                             data: [], // Los datos se actualizarán más tarde
-                            borderWidth: 1
+                            borderWidth: 1,
+                            
                         },
                         {
                             type: 'line',
                             label: 'Objetivo',
                             data: [96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96],
-                            borderWidth: 1
+                            borderWidth: 1,
+                            pointRadius:0,
                         }]
                     },
                     options: {
@@ -434,6 +449,11 @@ html(lang="es")
                         scales: {
                             y: {
                                 beginAtZero: true,
+                                min:60,
+                                max:100,
+                                ticks: {
+                                    stepSize: 2,
+                                }
                                 
                             },
                             x:{
@@ -463,7 +483,8 @@ html(lang="es")
                             type: 'line',
                             label: 'Objetivo',
                             data: [99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99],
-                            borderWidth: 1
+                            borderWidth: 1,
+                            pointRadius:0,
                         }]
                     },
                     options: {
@@ -471,6 +492,11 @@ html(lang="es")
                         scales: {
                             y: {
                                 beginAtZero: true,
+                                min:80,
+                                max:100,
+                                ticks: {
+                                    stepSize: 1,
+                                }
                                 
                             },
                             x:{
@@ -500,7 +526,8 @@ html(lang="es")
                             type: 'line',
                             label: 'Objetivo',
                             data: [0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9],
-                            borderWidth: 1
+                            borderWidth: 1,
+                            pointRadius:0,
                         }]
                     },
                     options: {
@@ -508,6 +535,12 @@ html(lang="es")
                         scales: {
                             y: {
                                 beginAtZero: true,
+                                max:2,
+                                min:0.5,
+                                
+                                ticks: {
+                                    stepSize: 0.1,
+                                }
                                 
                             },
                             x:{
@@ -559,11 +592,10 @@ html(lang="es")
                                     borderWidth: 4,
                                     pointBackgroundColor: '#007bff',
                                     datalabels:{
-                                    align:'top',
-                                    font:{
-                                        weight:'bold'
-                                    },
-                                    
+                                        align:'top',
+                                        font:{
+                                            weight:'bold'
+                                        },
                                     }
                                 },
                                 {
@@ -574,6 +606,7 @@ html(lang="es")
                                     backgroundColor: 'transparent',
                                     borderColor: '#990606',
                                     borderWidth: 4,
+                                    pointRadius:0,
                                     pointBackgroundColor: '#007bff',
                                     datalabels:{
                                     display:false
@@ -617,7 +650,7 @@ html(lang="es")
                                     backgroundColor: 'transparent',
                                     borderColor: '#990606',
                                     borderWidth: 2,
-                                    
+                                    pointRadius:0,
                                     pointBackgroundColor: '#007bff',
                                     datalabels:{
                                     display:false
@@ -661,6 +694,7 @@ html(lang="es")
                                     backgroundColor: 'transparent',
                                     borderColor: '#990606',
                                     borderWidth: 2,
+                                    pointRadius:0,
                                     
                                     pointBackgroundColor: '#007bff',
                                     datalabels:{
@@ -705,7 +739,7 @@ html(lang="es")
                                     backgroundColor: 'transparent',
                                     borderColor: '#990606',
                                     borderWidth: 2,
-                                    
+                                    pointRadius:0,
                                     pointBackgroundColor: '#007bff',
                                     datalabels:{
                                     display:false
@@ -749,7 +783,7 @@ html(lang="es")
                                     backgroundColor: 'transparent',
                                     borderColor: '#990606',
                                     borderWidth: 2,
-                                    
+                                    pointRadius:0,
                                     pointBackgroundColor: '#007bff',
                                     datalabels:{
                                     display:false
@@ -800,7 +834,7 @@ html(lang="es")
                                     backgroundColor: 'transparent',
                                     borderColor: '#990606',
                                     borderWidth: 2,
-                                    
+                                    pointRadius:0,
                                     pointBackgroundColor: '#007bff',
                                     datalabels:{
                                     display:false
