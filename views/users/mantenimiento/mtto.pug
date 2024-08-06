@@ -35,6 +35,7 @@ html(lang="es")
             div(class="w-100 " id="menus")
                 
                 div(class="container" style="padding: 20px;")
+                    button#menu-toggle.btn.btn-outline-primary ☰
                     div(class="alert alert-success" role="alert")= mensaje
                         
                          
@@ -73,4 +74,13 @@ html(lang="es")
                 footer
                     br 
                     div(class="col-12")
-                        h6 &copy Copyright 2021 | Polimetal S.A                                
+                        h6 &copy Copyright 2021 | Polimetal S.A      
+    script.
+        document.addEventListener("DOMContentLoaded", function() {
+            const menuToggle = document.getElementById('menu-toggle');
+            const sidebarContainer = document.getElementById('sidebar-container');
+
+            menuToggle.addEventListener('click', function() {
+                sidebarContainer.classList.toggle('active');
+            });
+        });                          

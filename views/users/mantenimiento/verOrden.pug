@@ -29,93 +29,95 @@ html(lang="es")
                             i(class='bx bx-arrow-back bx-tada bx-flip-vertical')
                     if result.length > 0        
 
-                        h2(class="col-9 bg-dark bg-gradient text-white")= "Descripcion de la Orden de trabajo N°"+idOrden 
+                        h2(class="col-9 bg-dark bg-gradient text-white w-100")= "Descripcion de la Orden de trabajo N°"+idOrden 
+                        input(type="hidden", name="idOrden" value=idOrden id="idOrden")
                         
-                        div(class="p-2")
+                        div(class="container")
                             br
                             div(class="row") 
-                                p(class="col-2 p-2 mb-2 bg-danger text-white bg-gradient") Detecto
+                                p(class="col-3 p-2 mb-2 bg-danger text-white bg-gradient") Detecto
                                 p(class="col-3 p-2 mb-2" id="detecto")= result[0].detecto
                                 
-                                p(class="col-2 p-2 mb-2 bg-danger text-white bg-gradient") Equipo
+                                p(class="col-3 p-2 mb-2 bg-danger text-white bg-gradient") Equipo
                                 p(class="col-3 p-2 mb-2" id="detecto")= result[0].equipo
                             div(class="row")
-                                p(class="col-2 p-2 mb-2 bg-danger text-white bg-gradient") Fecha
+                                p(class="col-3 p-2 mb-2 bg-danger text-white bg-gradient") Fecha
                                 p(class="col-3 p-2 mb-2" id="detecto")= f
                                 
-                                p(class="col-2 p-2 mb-2 bg-danger text-white bg-gradient") Turno
+                                p(class="col-3 p-2 mb-2 bg-danger text-white bg-gradient") Turno
                                 p(class="col-3 p-2 mb-2" id="detecto")= result[0].turno
                             div(class="row")
-                                p(class="col-2 p-2 mb-2 bg-danger text-white bg-gradient") Parada de Proceso?
+                                p(class="col-3 p-2 mb-2 bg-danger text-white bg-gradient") Parada de Proceso?
                                 p(class="col-3 p-2 mb-2" id="detecto")= result[0].paradaProceso
                                 
-                                p(class="col-2 p-2 mb-2 bg-danger text-white bg-gradient") Prioridad
+                                p(class="col-3 p-2 mb-2 bg-danger text-white bg-gradient") Prioridad
                                 p(class="col-3 p-2 mb-2" id="detecto")= result[0].prioridad
                             div(class="row")
-                                p(class="col-2 p-2 mb-2 bg-danger text-white bg-gradient") Tipo de Parada?
+                                p(class="col-3 p-2 mb-2 bg-danger text-white bg-gradient") Tipo de Parada?
                                 p(class="col-3 p-2 mb-2" id="detecto")= result[0].tipoParada
                                 
-                                p(class="col-2 p-2 mb-2 bg-danger text-white bg-gradient") Hora de Inicio
+                                p(class="col-3 p-2 mb-2 bg-danger text-white bg-gradient") Hora de Inicio
                                 p(class="col-3 p-2 mb-2" id="detecto")= hi
                             div(class="row")
-                                p(class="col-2 p-2 mb-2 bg-danger text-white bg-gradient") Hora de Finalizacion 
+                                p(class="col-3 p-2 mb-2 bg-danger text-white bg-gradient") Hora de Finalizacion 
                                 p(class="col-3 p-2 mb-2" id="detecto")= hf
 
-                                p(class="col-2 p-2 mb-2 bg-danger text-white bg-gradient") Tiempo de Parada
+                                p(class="col-3 p-2 mb-2 bg-danger text-white bg-gradient") Tiempo de Parada
                                 p(class="col-3 p-2 mb-2" id="detecto")= total+" Minutos"
                                 
                             
                             div(class="row")
-                                p(class="col-2 p-2 mb-2 bg-danger text-white bg-gradient") Descripcion de la parada
+                                p(class="col-3 p-2 mb-2 bg-danger text-white bg-gradient") Descripcion de la parada
                                 p(class="col-9 p-2 mb-2" id="detecto")= result[0].descripcion
                         
-                        h2(class="col-9 bg-dark bg-gradient text-white") Descripcion de la Resolucion
+                        h2(class="col-9 bg-dark bg-gradient text-white w-100") Descripcion de la Resolucion
                         div(class="p-2")
                         
 
                             div(class="row")
-                                p(class="col-2 p-2 mb-2 bg-danger text-white bg-gradient") Fecha
+                                p(class="col-3 p-2 mb-2 bg-danger text-white bg-gradient") Fecha
                                 p(class="col-3 p-2 mb-2" id="detecto")= fecha_cierre 
 
-                                p(class="col-2 p-2 mb-2 bg-danger text-white bg-gradient") Tiempo
+                                p(class="col-3 p-2 mb-2 bg-danger text-white bg-gradient") Tiempo
                                 p(class="col-3 p-2 mb-2" id="detecto")= result[0].tiempo
                                 
                                 
                             
                             div(class="row")
-                                p(class="col-2 p-2 mb-2 bg-danger text-white bg-gradient") Descripcion de la Reparacion
+                                p(class="col-3 p-2 mb-2 bg-danger text-white bg-gradient") Descripcion de la Reparacion
                                 p(class="col-9 p-2 mb-2" id="detecto")= result[0].descripcion_cierre
                                 
                             .row 
-                                h5(class="col-9" style="text-align:center;border-bottom:solid") Pendientes
+                                h5(class="col-9 w-100" style="text-align:center;border-bottom:solid") Pendientes
                             div(class="row")
                             
                                     
-                                    p(class="col-2 p-2 mb-2 bg-danger text-white bg-gradient") Tareas pendientes 
+                                    p(class="col-3 p-2 mb-2 bg-danger text-white bg-gradient") Tareas pendientes 
                                     p(class="col-3 p-2 mb-2" id="detecto")= result[0].pendiente
                                 
-                                    p(class="col-2 p-2 mb-2 bg-danger text-white bg-gradient") Observaciones 
+                                    p(class="col-3 p-2 mb-2 bg-danger text-white bg-gradient") Observaciones 
                                     p(class="col-3 p-2 mb-2" id="detecto")= result[0].observaciones_cierre
                             
                             .row 
-                                h5(class="col-9" style="text-align:center;border-bottom:solid") Responsables
-                            div(class="row")
+                                h5(class="col-9 w-100" style="text-align:center;border-bottom:solid") Responsables
+                            .row
+                                table(class="table" id="tableEjecutores") 
+                                    thead 
+                                        th ID 
+                                        th LEGAJO 
+                                        th NOMBRE 
+                                        th CALORICAS
+                                        th TRABAJO EN ALTURA
+                                        
+                                    tbody 
+
                                 
-                                
-                                    p(class="col-2 p-2 mb-2 bg-danger text-white bg-gradient") Ejecutor 1
-                                    p(class="col-3 p-2 mb-2" id="detecto")= result[0].ejecutor1
-                        
-                                    p(class="col-2 p-2 mb-2 bg-danger text-white bg-gradient") Ejecutor 2
-                                    p(class="col-3 p-2 mb-2" id="detecto")= result[0].ejecutor2
-                            .row 
-                        
-                                    p(class="col-2 p-2 mb-2 bg-danger text-white bg-gradient") Ejecutor 3
-                                    p(class="col-3 p-2 mb-2" id="detecto")= result[0].ejecutor3
+                                    
                             
                             .row 
-                                h5(class="col-9" style="text-align:center;border-bottom:solid") Estado
+                                h5(class="col-9 w-100" style="text-align:center;border-bottom:solid") Estado
                             div(class="row")
-                                    p(class="col-2 p-2 mb-2 bg-danger text-white text-aling-center bg-gradient") Estado
+                                    p(class="col-3 p-2 mb-2 bg-danger text-white text-aling-center bg-gradient") Estado
                                     p(class="col-3 p-2 mb-2" id="detecto")= result[0].estado
                             br
 
@@ -131,47 +133,32 @@ html(lang="es")
                             h6 &copy Copyright 2021 | Polimetal S.A            
 
         script. 
-            let c1 = document.getElementById("c1");
-            let c2 = document.getElementById("c2");
-            let c3 = document.getElementById("c3");
-            let d1 = document.getElementById("rto1");
-            let d2 = document.getElementById("rto2");
-            let d3 = document.getElementById("rto3");
-            
-            fetch("items")
-                .then(resp=>resp.json())
-                .then(data=>{
-                    c1.addEventListener('change',(e)=>{
-                        e.preventDefault();
-                        let valor;
-                        for(let i=0;i<data.length;i++){
-                            if(data[i].Item === document.getElementById("c1").value){
-                                d1.innerHTML = data[i].Descripcion;
-                            }
-                        }
-                    })
-                    c2.addEventListener('change',(e)=>{
-                        e.preventDefault();
-                        let valor;
-                        for(let i=0;i<data.length;i++){
-                            if(data[i].Item === document.getElementById("c2").value){
-                                d2.innerHTML = data[i].Descripcion;
-                                
-                            }
-                        }
+            document.addEventListener('DOMContentLoaded', (event) => {
+                let idOrden = document.getElementById('idOrden').value;
+                let tableEjecutores = document.getElementById('tableEjecutores');
+                fetch(`/Mantenimiento/nominaOrden?idOrden=${idOrden}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(item => {
+                            let row = tableEjecutores.insertRow();
+                            
+                            let cellId = row.insertCell(0);
+                            let cellLegajo = row.insertCell(1);
+                            let cellNombre = row.insertCell(2);
+                            let cellCaloria = row.insertCell(3);
+                            let cellAltura = row.insertCell(4);
+                           
+
+                            cellId.textContent = item.id;
+                            cellLegajo.textContent = item.legajo;
+                            cellNombre.textContent = item.nombre;
+                            cellCaloria.textContent = item.calorias;
+                            cellAltura.textContent = item.altura;
+                            
+                        }); 
+
                         
-                    });
-                    c3.addEventListener('change',(e)=>{
-                        e.preventDefault();
-                        let valor;
-                        for(let i=0;i<data.length;i++){
-                            if(data[i].Item === document.getElementById("c3").value){
-                                d3.innerHTML = data[i].Descripcion;
-                                
-                            }
-                        }
-                        
-                    });
-                });
+                            });
+                        });
                 
 

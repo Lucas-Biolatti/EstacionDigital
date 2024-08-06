@@ -333,7 +333,7 @@ router.post('/agregarEjecutor',(req,res)=>{
       }
 })
 router.get('/nominaOrden',(req,res)=>{
-    if (req.session.loggedin && req.session.rol=="Mantenimiento") {
+    if (req.session.loggedin ) {
         connectToDatabase((error, conexion) => {
           if (error) {
               return res.status(500).send('Error de conexión a la base de datos');
