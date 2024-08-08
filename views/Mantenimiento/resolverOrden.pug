@@ -109,7 +109,7 @@ html(lang="es")
                                     input(type="date" class="form-control" id="fecha" name="fecha" value=f2 required)
                                 div(class="col-md-6")
                                     label(for="descripcion" class="form-label") Descripcion de la Reparacion
-                                    input(type="text", name="descripcion" class="form-control" id="descripcion" value=result[0].descripcion_cierre)
+                                    textarea(name="descripcion" class="form-control" id="descripcion" )=result[0].descripcion_cierre
                                 div(class="col-md-3")
                                     label(for="tiempo" class="form-label") Tiempo
                                     input(type="number", name="tiempo" class="form-control" id="tiempo" value=result[0].tiempo)
@@ -228,9 +228,9 @@ html(lang="es")
                                             <label class="form-label"> Nombre
                                             input(type="text" name="nombre" class="form-control" id="nombre")
                                             <label class="form-label"> Minutos de Calorias
-                                            input(type="number" class="form-control" name="calorias" id="calorias")
+                                            input(type="number" class="form-control" name="calorias" id="calorias" value="0")
                                             <label class="form-label"> Minutos de Trabajo en Altura
-                                            input(type="number" class="form-control" name="altura" id="altura")
+                                            input(type="number" class="form-control" name="altura" id="altura" value="0")
 
                             </div>
                             <div class="modal-footer">

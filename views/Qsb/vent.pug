@@ -674,6 +674,14 @@ html(lang="es")
                                 
                                 } 
                         chart4.update();
+                        const indicadores = datos.map(e => {
+                                    const hsreal = e.hsReal;
+                                    const hs_rd = e.hs_rd;
+                                    const rds_real = e.rds_real;
+                                    const rds_teoricas = hsreal / hs_rd;
+                                    const indicador = rds_teoricas / rds_real;
+                                    return parseFloat(indicador.toFixed(3));;
+                                });
                         let chart5 = Chart.instances[4];
                             chart5.data = {
                                 labels: datos.map(e => fecha(e.fecha)),

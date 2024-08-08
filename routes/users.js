@@ -111,11 +111,13 @@ router.get('/listarOrden:?',(req,res)=>{
               let enProceso=0
               for(let i=0;i<result.length;i++){
               let f = new Date(result[i].fecha);
-              let fecha = `${f.getDate()}/${f.getMonth()+1}/${f.getUTCFullYear()}`;
-              let finicio  = new Date(result[i].horaInicio);
-              let ffin  = new Date(result[i].horaFin);
-              let inicio=finicio.getDate()+"/"+finicio.getMonth()+"/"+finicio.getUTCFullYear()+" - "+finicio.getHours()+":"+finicio.getMinutes();
-              let fin=ffin.getDate()+"/"+ffin.getMonth()+"/"+ffin.getUTCFullYear()+" - "+ffin.getHours()+":"+ffin.getMinutes();
+              let fecha = `${f.getDate().toString().padStart(2,'0')}/${(f.getMonth()+1).toString().padStart(2,'0')}/${f.getUTCFullYear()}`;
+              let finicio = new Date(result[i].horaInicio);
+              let ffin = new Date(result[i].horaFin);
+
+              let inicio = `${finicio.getDate().toString().padStart(2, '0')}/${(finicio.getMonth() + 1).toString().padStart(2, '0')}/${finicio.getUTCFullYear()} - ${finicio.getHours().toString().padStart(2, '0')}:${finicio.getMinutes().toString().padStart(2, '0')}`;
+
+              let fin = `${ffin.getDate().toString().padStart(2, '0')}/${(ffin.getMonth() + 1).toString().padStart(2, '0')}/${ffin.getUTCFullYear()} - ${ffin.getHours().toString().padStart(2, '0')}:${ffin.getMinutes().toString().padStart(2, '0')}`;
               let resultado={
                   idOrden: result[i].idOrden,
                   detecto: result[i].detecto,
