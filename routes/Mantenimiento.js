@@ -507,5 +507,33 @@ router.get('/ordenDia',(req,res)=>{
           mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
       }
 })
+router.get('/hsEjecutores',(req,res)=>{
+    if (req.session.loggedin && req.session.rol=="Mantenimiento") {
+        connectToDatabase((error, conexion) => {
+          if (error) {
+              return res.status(500).send('Error de conexión a la base de datos');
+          }
+            let fini = req.query.fini;
+            let ffin = req.query.ffin;
+
+            const sql = `SELECT legajo, nombre, SUM(calorias) AS calorias, SUM(altura) AS altura FROM ejecutoresMtto WHERE fecha <= "${ffin}" AND fecha >= "${fini}" GROUP BY legajo;`;
+            conexion.query(sql,(error,result)=>{
+                conexion.release();
+                if (!error) {
+                    res.send(result);
+                }else{
+                    res.send(error);
+                }
+            })
+          })
+      } else {
+        res.render('login',{
+          mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+      }
+})
+router.get('/reporteHs',(req,res)=>{
+    res.render('./Mantenimiento/reportes/hs_ejecutores')
+})
+
 
 module.exports = router;

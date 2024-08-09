@@ -11,6 +11,7 @@ html(lang="es")
         link(rel="stylesheet", href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css")
         link(rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css")
         link(rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css")
+        
         link(href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet')
         script(src="https://kit.fontawesome.com/d3705cd4bb.js" crossorigin="anonymous")
         link(rel="stylesheet" href="/stylesheets/styleIndex.css")
@@ -58,40 +59,36 @@ html(lang="es")
             div(class="w-100") 
                 div(class="container" style="padding: 20px;")
                     button#menu-toggle.btn.btn-outline-primary ☰
-                    a(href="/") 
-                        div(style="text-align: center;")
-                            img(src="/images/logo.jpg" alt="logo" class="img-fluid")
-                
-                    div(style="text-align: center;")
-                        h2 Ordenes por Sector
-                    div(class="table-responsive")
-                        table(class="table table-striped table-hover")
-                            thead 
-                                th Id 
-                                th Sector 
-                                th Mtto 
-                                
-                            tbody 
-                                each i in sector
-                                    tr 
-                                        td= i.idSector
-                                        td= i.Descripcion
-                                        td 
-                                            
-                                            a(href="ordenXSector?id="+i.idSector+"&nombre="+i.Descripcion)
-                                                button(class="btn btn-success") Ver Todas  
-                                        
+                    <nav class="navbar navbar-light bg-light">
+                        <div class="container-fluid">
+                            button#menu-toggle.btn.btn-outline-primary ☰
+                            h3(class="navbar-brand") Ordenes del dia
                             
-                                    
-                    br
-                    hr
-                    h2 Todas las Ordenes Pendientes
-                
-                table(id="t1" class="table table-hover" style="width:100%; " )
-                    
-                    
 
+                            <form class="d-flex">
+                                
+                                label(class="form-label") Seleccione Fecha inicial
 
+                                input(type="date", name="fecha" id="fini" class="form-control")
+                                label(class="form-label") Seleccione Fecha Final
+
+                                input(type="date", name="fecha" id="ffin" class="form-control")
+
+                                <button class="btn btn-outline-success" type="button" id="consultar">Consultar</button>
+                            </form>
+
+                        </div>
+                    </nav>
+                     
+                        
+                    
+                    table(id="t1" class="table table-striped" )
+                        thead
+                            th Legajo 
+                            th Nombre 
+                            th Minutos Calorias
+                            th Minutos Altura
+                            
                     
                 script(src="https://code.jquery.com/jquery-3.5.1.js")
                 script(src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous")
@@ -121,85 +118,52 @@ html(lang="es")
                             sidebarContainer.classList.toggle('active');
                         });
                     }); 
-                    fetch('/Mantenimiento/ordenes')
-                        .then(response=>response.json())
-                        .then(datos=>{
-                            
-                            let dataset=[];
-                            for(let i=0;i<datos.length;i++){
-                                if(datos[i].estado){
-                                    var dat=[
-                                datos[i].idOrden,
-                                datos[i].sector,
-                                datos[i].avisar,
-                                datos[i].equipo,
-                                datos[i].fecha,
-                                datos[i].turno,
-                                datos[i].descripcion,
-                                `<td class="${datos[i].estado}">${datos[i].estado}</td>`,
-                                datos[i].accion,
-                                ]
-                                dataset.push(dat);
-                                }
-                            
-                            }
-                            console.log(dataset);
-                            $(document).ready(function () {
-                            var table = $('#t1').DataTable({
-                                
-                                dom: 'Bfrtlip',
-                                buttons: [
-                                    
-                                {
-                                    
-                                    "extend":"excelHtml5",
-                                    "text":'Excel',
-                                    "textAttr":"Descargar Excel",
-                                    "className":"btn btn-success",
-                                    
-                                },
-                                {
-                                    extend:'print',
-                                    text:'Imprimir',
-                                    textAttr:'Imprimir Reporte',
-                                    className:'btn btn-info',
-                                },
-                                {
-                                    extend:'pdfHtml5',
-                                    text:'PDF',
-                                    textAttr:'Guardar en PDF',
-                                    className:'btn btn-danger'
-                                }
-                                    
-                                    
-                                ],
-                                data:dataset,
-                                columns:[
-                                    {title:'Id'},
-                                    {title:'Sector'},
-                                    {title:'Avisar a'},
-                                    {title:'Equipo'},
-                                    {title:'fecha'},
-                                    {title:'Turno'},
-                                    {title:'Descripcion'},
-                                    {title:'Estado'},
-                                    {title:'Accion'},
-                                ],
-                        });
-                        $('#t1 thead tr').clone(true).appendTo('#t1 thead');
-                        $('#t1 thead tr:eq(1) th').each(function(i) {
-                            var title = $(this).text();
-                            $(this).html('<input type="text" placeholder="Buscar..."/>');
+                    let consultar = document.getElementById('consultar');
+           
 
-                            $('input', this).on('keyup change', function() {
-                                if (table.column(i).search() !== this.value) {
-                                    table
-                                        .column(i)
-                                        .search(this.value)
-                                        .draw();
-                                }
-                            });
-                        });
-                    }); 
+                    consultar.addEventListener('click',(e)=>{
+                        e.preventDefault();
                         
-                        })
+                        let fini = document.getElementById('fini').value;
+                        
+                        let ffin = document.getElementById('ffin').value;
+                        let table = document.getElementById('t1');
+                        
+                        
+                        fetch(`hsEjecutores?fini=${fini}&ffin=${ffin}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                function fecha(x){
+                                let f = new Date(x);
+                                let fecha = `${f.getDate()}/${f.getMonth()+1}/${f.getUTCFullYear()}`;
+                                return fecha;
+                                };
+                                function fechahs(x) {
+                                    let f = new Date(x);
+                                    let day = f.getDate().toString().padStart(2, '0');
+                                    let month = (f.getMonth() + 1).toString().padStart(2, '0');
+                                    let year = f.getFullYear();
+                                    let hours = f.getHours().toString().padStart(2, '0');
+                                    let minutes = f.getMinutes().toString().padStart(2, '0');
+                                    return `${day}/${month}/${year} ${hours}:${minutes}`;
+                                }
+                                while (table.rows.length > 1) {
+                                    table.deleteRow(1);
+                                    
+                                }
+                            
+                                data.forEach(i => {
+                                        let row = table.insertRow();
+
+                                        let cellLegajo = row.insertCell(0);
+                                        let cellNombre= row.insertCell(1);
+                                        let cellCalorias= row.insertCell(2);
+                                        let cellAltura= row.insertCell(3);
+                                        
+                                        cellLegajo.textContent = i.legajo;
+                                        cellNombre.textContent = i.nombre;
+                                        cellCalorias.textContent = i.calorias;
+                                        cellAltura.textContent = i.altura;
+                                })
+                            })
+                    })
