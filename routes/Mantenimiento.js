@@ -289,7 +289,7 @@ router.post('/resolverOrden',(req,res)=>{
                 parseInt(req.body.idOrden)],(error)=>{
                     conexion.release();
                 if(!error){
-                    res.redirect(`ordenTrabajo?mensaje=✅Se Actualizo orden Nro ${req.body.idOrden} Correctamente✅`);
+                    res.redirect(`ordenesdia?mensaje=✅Se Actualizo orden Nro ${req.body.idOrden} Correctamente✅`);
                     
                 }else{
                     //res.redirect(`ordenTrabajo?mensaje=❌No se pudo Actualizar orden Nro ${req.body.idOrden}❌`)
