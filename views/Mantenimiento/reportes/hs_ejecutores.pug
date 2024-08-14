@@ -4,7 +4,7 @@ html(lang="es")
         meta(charset="UTF-8")
         meta(http-equiv="X-UA-Compatible", content="IE=edge")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        title Polimetal S.A | Ordenes de Trabajo
+        title Polimetal S.A | Reporte de Horas - Personal de Mantenimiento
         
         link(href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet")
         link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css")
@@ -133,37 +133,70 @@ html(lang="es")
                         fetch(`hsEjecutores?fini=${fini}&ffin=${ffin}`)
                             .then(response => response.json())
                             .then(data => {
-                                function fecha(x){
-                                let f = new Date(x);
-                                let fecha = `${f.getDate()}/${f.getMonth()+1}/${f.getUTCFullYear()}`;
-                                return fecha;
-                                };
-                                function fechahs(x) {
+                               function fecha(x){
                                     let f = new Date(x);
-                                    let day = f.getDate().toString().padStart(2, '0');
-                                    let month = (f.getMonth() + 1).toString().padStart(2, '0');
-                                    let year = f.getFullYear();
-                                    let hours = f.getHours().toString().padStart(2, '0');
-                                    let minutes = f.getMinutes().toString().padStart(2, '0');
-                                    return `${day}/${month}/${year} ${hours}:${minutes}`;
-                                }
-                                while (table.rows.length > 1) {
-                                    table.deleteRow(1);
-                                    
-                                }
-                            
+                                    let fecha = `${f.getDate()}/${f.getMonth()+1}/${f.getUTCFullYear()}`;
+                                    return fecha;
+                                };
+                                $('#t1').DataTable().destroy();
+                                let dataset=[];
                                 data.forEach(i => {
-                                        let row = table.insertRow();
-
-                                        let cellLegajo = row.insertCell(0);
-                                        let cellNombre= row.insertCell(1);
-                                        let cellCalorias= row.insertCell(2);
-                                        let cellAltura= row.insertCell(3);
                                         
-                                        cellLegajo.textContent = i.legajo;
-                                        cellNombre.textContent = i.nombre;
-                                        cellCalorias.textContent = i.calorias;
-                                        cellAltura.textContent = i.altura;
+                                    let dat = [
+                                        i.legajo,
+                                        i.nombre,
+                                        i.calorias,
+                                        i.altura,
+                                    ]
+                                    dataset.push(dat);
                                 })
+                            $(document).ready(function () {
+                            var table = $('#t1').DataTable({
+                                
+                                dom: 'Bfrtlip',
+                                buttons: [
+                                    
+                                {
+                                    
+                                    extend:"excelHtml5",
+                                    text:'Excel',
+                                    textAttr:"Descargar Excel",
+                                    className:"btn btn-success",
+                                    messageTop: `Fecha de Inicio: ${fini} | Fecha de Fin: ${ffin}`
+                                    
+                                },
+                                {
+                                    extend:'print',
+                                    text:'Imprimir',
+                                    textAttr:'Imprimir Reporte',
+                                    className:'btn btn-info',
+                                    messageTop: function () {
+                                        return `Fecha de Inicio: ${fini} | Fecha de Fin: ${ffin}`;
+                                    }
+                                },
+                                {
+                                    extend:'pdfHtml5',
+                                    text:'PDF',
+                                    textAttr:'Guardar en PDF',
+                                    className:'btn btn-danger',
+                                    messageTop: `Fecha de Inicio: ${fini} | Fecha de Fin: ${ffin}`,
+                                    customize: function (doc) {
+                                        doc.content.splice(0, 1, {
+                                            text: [
+                                                { text: 'Reporte de Horas - Pesonal de Mantenimiento\n', fontSize: 18, bold: true, margin: [0, 0, 0, 8] },
+                                                
+                                            ],
+                                            alignment: 'center'
+                                        });
+                                    }
+                                }
+                                    
+                                    
+                                ],
+                                data:dataset,
+                                
+                        });
+                      }); 
+                    
                             })
                     })
