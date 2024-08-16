@@ -129,10 +129,11 @@ router.get('/ordenXSector',(req,res)=>{
                             let fecha = `${f.getDate()}/${f.getMonth()+1}/${f.getUTCFullYear()}`;
                             let finicio  = new Date(result[i].horaInicio);
                             let ffin  = new Date(result[i].horaFin);
-                            let inicio=finicio.getDate()+"/"+finicio.getMonth()+"/"+finicio.getUTCFullYear()+" - "+finicio.getHours()+":"+finicio.getMinutes();
-                            let fin=ffin.getDate()+"/"+ffin.getMonth()+"/"+ffin.getUTCFullYear()+" - "+ffin.getHours()+":"+ffin.getMinutes();
+                            let inicio=`${finicio.getDate()}/${finicio.getMonth()+1}/${finicio.getUTCFullYear()} - ${finicio.getHours()}:${finicio.getMinutes()}`;
+                            let fin=`${ffin.getDate()}/${ffin.getMonth()+1}/${ffin.getUTCFullYear()} - ${ffin.getHours()}:${ffin.getMinutes()}`;
                             let resultado={
                                 idOrden: result[i].idOrden,
+                                avisar:result[i].avisar,
                                 detecto: result[i].detecto,
                                 equipo: result[i].equipo,
                                 fecha: fecha,

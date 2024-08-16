@@ -240,7 +240,7 @@ html(lang="es")
                                             <label class="form-label"> Horas Reales
                                             <input type="number"  name="hsReal" class="form-control" id="hsReal" >
                                             <label class="form-label"> Variable del Area
-                                            <input type="number" step="0.01" name="hs_rd" class="form-control" id="hs_rd" >
+                                            <input type="number" step="0.001" name="hs_rd" class="form-control" id="hs_rd" >
                                             <label class="form-label"> Ruedas ok Reales
                                             <input type="number" step="0.01" name="rds_real" class="form-control" id="rds_real" >
                                             <label class="form-label"> Observaciones 
@@ -281,7 +281,7 @@ html(lang="es")
         
         $(document).ready(function () {
                         
-                            var tabla2 = $('#table2').DataTable();
+                            
                             
                            
                             
@@ -292,7 +292,13 @@ html(lang="es")
             initChart3();
             initChart4();
             initChart5();
-            
+            var tabla2 = $('#table2').DataTable();
+            const currentDate = new Date();
+            const currentMonth = currentDate.getMonth() + 1; 
+            const currentYear = currentDate.getFullYear();
+            document.getElementById('mes').value = currentMonth;
+            document.getElementById('year').value = currentYear;
+            updateChart(currentMonth, currentYear,"Ventilado");
 
             let cons = document.getElementById('consultar');
             cons.addEventListener('click', (e) => {
@@ -746,6 +752,7 @@ html(lang="es")
                         $('#table2').DataTable({
                             
                             dom: 'Bfrtlip',
+                            paging:false,
                             data:dataset,
                             
                         }); 

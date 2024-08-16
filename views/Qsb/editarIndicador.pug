@@ -81,13 +81,13 @@ html(lang="es")
                             .row 
                                 .col-4 
                                     <label class="form-label"> Scrap
-                                    input(type="number" step="0.01" name="scrap" class="form-control" id="scrap" value=result.scrap)
+                                    input(type="number" step="0.001" name="scrap" class="form-control" id="scrap" value=result.scrap)
                                 .col-4     
                                     <label class="form-label"> Cumplimiento de Programa
-                                    input(type="number" step="0.01" name="c_programa" class="form-control" id="c_programa" value=result.c_programa)
+                                    input(type="number" step="0.001" name="c_programa" class="form-control" id="c_programa" value=result.c_programa)
                                 .col-4
                                     <label class="form-label"> Disponibilidad Mantenimiento
-                                    input(type="number" step="0.01" name="disponibilidad" class="form-control" id="disponibilidad" value=result.disponibilidad)
+                                    input(type="number" step="0.001" name="disponibilidad" class="form-control" id="disponibilidad" value=result.disponibilidad)
                             .row 
                                 .col-4 
                                     <label class="form-label"> Horas Reales
@@ -97,11 +97,11 @@ html(lang="es")
                                     input(type="number" step="0.001" name="hs_rd" class="form-control" id="hs_rd" value=result.hs_rd)
                                 .col-4
                                     <label class="form-label"> Ruedas ok Reales
-                                    input(type="number" step="0.01" name="rds_real" class="form-control" id="rds_real" value=result.rds_real)
+                                    input(type="number" step="0.001" name="rds_real" class="form-control" id="rds_real" value=result.rds_real)
                             .row 
                                 .col-4
                                     <label class="form-label"> Disponibilidad de moldes
-                                    input(type="number" step="0.01" name="disp_molde" class="form-control" id="disp_molde" value=result.disp_molde)
+                                    input(type="number" step="0.001" name="disp_molde" class="form-control" id="disp_molde" value=result.disp_molde)
                                 .col-4    
                                     <label class="form-label"> Observaciones 
                                     textarea(name="observaciones", cols="30", rows="5" class="form-control" )= result.observaciones
@@ -141,17 +141,17 @@ html(lang="es")
                             .row 
                                 .col-4 
                                     <label class="form-label"> Scrap
-                                    input(type="number" step="0.01" name="scrap" class="form-control" id="scrap" value=result.scrap)
+                                    input(type="number" step="0.001" name="scrap" class="form-control" id="scrap" value=result.scrap)
                                 .col-4     
                                     <label class="form-label"> Cumplimiento de Programa
-                                    input(type="number" step="0.01" name="c_programa" class="form-control" id="c_programa" value=result.c_programa)
+                                    input(type="number" step="0.001" name="c_programa" class="form-control" id="c_programa" value=result.c_programa)
                                 .col-4
                                     <label class="form-label"> Disponibilidad Mantenimiento
-                                    input(type="number" step="0.01" name="disponibilidad" class="form-control" id="disponibilidad" value=result.disponibilidad)
+                                    input(type="number" step="0.001" name="disponibilidad" class="form-control" id="disponibilidad" value=result.disponibilidad)
                             .row 
                                 .col-4
                                     <label class="form-label"> Retrabajo
-                                    input(type="number" step="0.01" name="retrabajo" class="form-control" id="retrabajo" value=result.retrabajo)
+                                    input(type="number" step="0.001" name="retrabajo" class="form-control" id="retrabajo" value=result.retrabajo)
                             .row 
                                 .col-4 
                                     <label class="form-label"> Horas Reales
@@ -161,7 +161,7 @@ html(lang="es")
                                     input(type="number" step="0.001" name="hs_rd" class="form-control" id="hs_rd" value=result.hs_rd)
                                 .col-4
                                     <label class="form-label"> Ruedas ok Reales
-                                    input(type="number" step="0.01" name="rds_real" class="form-control" id="rds_real" value=result.rds_real)
+                                    input(type="number" step="0.001" name="rds_real" class="form-control" id="rds_real" value=result.rds_real)
                                 .col-4    
                                     <label class="form-label"> Observaciones 
                                     textarea(name="observaciones", cols="30", rows="5" class="form-control" )= result.observaciones
@@ -170,6 +170,63 @@ html(lang="es")
                                     
                                     <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                         </form>
+                    else if result.sector === "Ventilado"
+                        <form  method="POST" action="editarIndicador">
+                            .row 
+                                .col-4
+                                    input(type="number" step="0.001" name="retrabajo" class="form-control" id="retrabajo" value="NULL")
+                                    input(type="hidden", name="id" value=id)
+                                    input(type="hidden", name="path" value="/Qsb/vent")                               
+                                    input(type="hidden" name="disp_molde" value="NULL")
+                                    input(type="hidden" name="ret_laca" value="NULL")
+                                    input(type="hidden" name="sc_laca" value="NULL")
+                                    input(type="hidden" name="entregas" value="NULL")
+                                    <label class="form-label"> Fecha
+                                    input(type="date" name="fecha" class="form-control" value=result.fecha)
+                                .col-4
+                                    <label class="form-label"> Sector
+                                    select(name="sector", class="form-select")
+                                        option(value=result.sector)=result.sector
+                                        
+                                        option(value="Ventilado") Ventilado
+                                        
+                                        
+                                    
+                                .col-4
+                                    <label class="form-label"> Accidentes    
+                                    input(type="number", name="accidentes" class="form-control" id="accidentes" value= result.accidentes)
+                            .row 
+                                .col-4 
+                                    <label class="form-label"> Scrap
+                                    input(type="number" step="0.001" name="scrap" class="form-control" id="scrap" value=result.scrap)
+                                .col-4     
+                                    <label class="form-label"> Cumplimiento de Programa
+                                    input(type="number" step="0.001" name="c_programa" class="form-control" id="c_programa" value=result.c_programa)
+                                .col-4
+                                    <label class="form-label"> Disponibilidad Mantenimiento
+                                    input(type="number" step="0.001" name="disponibilidad" class="form-control" id="disponibilidad" value=result.disponibilidad)
+                            .row 
+                                .col-4
+                                    <label class="form-label"> Retrabajo
+                                    input(type="number" step="0.001" name="retrabajo" class="form-control" id="retrabajo" value=result.retrabajo)
+                            .row 
+                                .col-4 
+                                    <label class="form-label"> Horas Reales
+                                    input(type="number"  name="hsReal" class="form-control" id="hsReal" value=result.hsReal)
+                                .col-4    
+                                    <label class="form-label"> Variable del Area
+                                    input(type="number" step="0.001" name="hs_rd" class="form-control" id="hs_rd" value=result.hs_rd)
+                                .col-4
+                                    <label class="form-label"> Ruedas ok Reales
+                                    input(type="number" step="0.001" name="rds_real" class="form-control" id="rds_real" value=result.rds_real)
+                                .col-4    
+                                    <label class="form-label"> Observaciones 
+                                    textarea(name="observaciones", cols="30", rows="5" class="form-control" )= result.observaciones
+                            .row 
+                                .col-6
+                                    
+                                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                        </form>    
                     else if result.sector === "TTCC"
                         <form  method="POST" action="editarIndicador">
                             .row 
@@ -180,8 +237,8 @@ html(lang="es")
                                     input(type="hidden" name="ret_laca" value="NULL")
                                     input(type="hidden" name="sc_laca" value="NULL")
                                     input(type="hidden" name="entregas" value="NULL")
-                                    input(type="hidden" step="0.01" name="scrap" class="form-control" id="scrap" value="NULL")
-                                    input(type="hidden" step="0.01" name="disp_molde" class="form-control" id="disp_molde" value="NULL")
+                                    input(type="hidden" step="0.001" name="scrap" class="form-control" id="scrap" value="NULL")
+                                    input(type="hidden" step="0.001" name="disp_molde" class="form-control" id="disp_molde" value="NULL")
                                     <label class="form-label"> Fecha
                                     input(type="date" name="fecha" class="form-control" value=result.fecha)
                                 .col-4
@@ -197,10 +254,10 @@ html(lang="es")
                                                                     
                                 .col-4     
                                     <label class="form-label"> Cumplimiento de Programa
-                                    input(type="number" step="0.01" name="c_programa" class="form-control" id="c_programa" value=result.c_programa)
+                                    input(type="number" step="0.001" name="c_programa" class="form-control" id="c_programa" value=result.c_programa)
                                 .col-4
                                     <label class="form-label"> Disponibilidad Mantenimiento
-                                    input(type="number" step="0.01" name="disponibilidad" class="form-control" id="disponibilidad" value=result.disponibilidad)
+                                    input(type="number" step="0.001" name="disponibilidad" class="form-control" id="disponibilidad" value=result.disponibilidad)
                             .row 
                                 .col-4 
                                     <label class="form-label"> Horas Reales
@@ -210,7 +267,7 @@ html(lang="es")
                                     input(type="number" step="0.001" name="hs_rd" class="form-control" id="hs_rd" value=result.hs_rd)
                                 .col-4
                                     <label class="form-label"> Ruedas ok Reales
-                                    input(type="number" step="0.01" name="rds_real" class="form-control" id="rds_real" value=result.rds_real)
+                                    input(type="number" step="0.001" name="rds_real" class="form-control" id="rds_real" value=result.rds_real)
                             .row 
                                 
                                 .col-4    
@@ -231,8 +288,8 @@ html(lang="es")
                                     input(type="hidden" name="ret_laca" value="NULL")
                                     input(type="hidden" name="sc_laca" value="NULL")
                                     input(type="hidden" name="entregas" value="NULL")
-                                    input(type="hidden" step="0.01" name="scrap" class="form-control" id="scrap" value="NULL")
-                                    input(type="hidden" step="0.01" name="disp_molde" class="form-control" id="disp_molde" value="NULL")
+                                    input(type="hidden" step="0.001" name="scrap" class="form-control" id="scrap" value="NULL")
+                                    input(type="hidden" step="0.001" name="disp_molde" class="form-control" id="disp_molde" value="NULL")
                                     <label class="form-label"> Fecha
                                     input(type="date" name="fecha" class="form-control" value=result.fecha)
                                 .col-4
@@ -248,11 +305,11 @@ html(lang="es")
                                                                     
                                 .col-4     
                                     
-                                    input(type="hidden" step="0.01" name="c_programa" class="form-control" id="c_programa" value="NULL")
+                                    input(type="hidden" step="0.001" name="c_programa" class="form-control" id="c_programa" value="NULL")
                                 .col-4
                                     <label class="form-label"> Entregas 
                                     input(type="hidden" name="disponibilidad" value="NULL")
-                                    input(type="number" step="0.01" name="entregas" class="form-control" id="entregas" value=result.entregas)
+                                    input(type="number" step="0.001" name="entregas" class="form-control" id="entregas" value=result.entregas)
                             .row 
                                 
                                 .col-4    

@@ -121,6 +121,7 @@ html(lang="es")
                             table(id="t1" class="table table-striped" style="width:100%")
                                 thead(id="thmtto")
                                     th Id
+                                    th Aviso
                                     th Sector 
                                     th Detecto 
                                     th Equipo
@@ -140,6 +141,7 @@ html(lang="es")
                                     each i in orden
                                         tr     
                                             td= i.idOrden
+                                            td= i.avisar
                                             td= i.sector
                                             td= i.detecto 
                                             td= i.equipo 

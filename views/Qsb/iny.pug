@@ -285,7 +285,7 @@ html(lang="es")
         
         $(document).ready(function () {
                         
-                            var tabla2 = $('#table2').DataTable();
+                            
                                                      
                             
                     });
@@ -296,7 +296,13 @@ html(lang="es")
             initChart4();
             initChart5();
             initChart6();
-            
+            var tabla2 = $('#table2').DataTable();
+            const currentDate = new Date();
+            const currentMonth = currentDate.getMonth() + 1; 
+            const currentYear = currentDate.getFullYear();
+            document.getElementById('mes').value = currentMonth;
+            document.getElementById('year').value = currentYear;
+            updateChart(currentMonth, currentYear,"Inyeccion");
 
             let cons = document.getElementById('consultar');
             cons.addEventListener('click', (e) => {
@@ -554,7 +560,14 @@ html(lang="es")
 
                 return chart6;
             }
-            function updateChart(){
+            
+
+            
+            
+        })
+        
+        function updateChart(mes,year,sector){
+
                 function fecha(x){
                     let f = new Date(x);
                     let dia=f.getDate();
@@ -563,14 +576,14 @@ html(lang="es")
                     let fecha = dia+"/"+mes+"/"+año;
                     return fecha
                 }
-                var mes = document.getElementById('mes').value;
-                var year = document.getElementById('year').value;
-                var sector = document.getElementById('sector').value;
+                
                 
                 var tabla2 = document.getElementById('table2');
                 
                 tabla2.innerHTML="";
-               
+                var mes = document.getElementById('mes').value;
+                var year = document.getElementById('year').value;
+                var sector = document.getElementById('sector').value;
 
                 
                 fetch(`/Qsb/datos?sector=${sector}&mes=${mes}&year=${year}`)
@@ -864,7 +877,7 @@ html(lang="es")
                         $('#table2').DataTable({
                             
                             dom: 'Bfrtlip',
-                            
+                            paging:false,
                             data:dataset,
                             columns:[
                                 {title:'id'},
@@ -876,7 +889,5 @@ html(lang="es")
 
                      
                     })
-            }
-            
-        })  
+            }  
 

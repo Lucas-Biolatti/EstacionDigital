@@ -122,6 +122,30 @@ html(lang="es")
                 menuToggle.addEventListener('click', function() {
                     sidebarContainer.classList.toggle('active');
                 });
+                
+            });
+            document.addEventListener("DOMContentLoaded", function() {
+                function getCurrentDay() {
+                    const currentDate = new Date();
+                    const currentHour = currentDate.getHours();
+
+                    // Si la hora actual es menor a 6, toma la fecha de ayer
+                    if (currentHour < 6) {
+                        currentDate.setDate(currentDate.getDate() - 1);
+                    }
+
+                    // Formato yyyy-mm-dd para la fecha ajustada
+                    return currentDate.toISOString().split('T')[0];
+                }
+
+                const currentDay = getCurrentDay();
+                
+                const fechaInput = document.getElementById('fecha');
+                if (fechaInput) {
+                    fechaInput.value = currentDay;
+                }
+               
+                updateTable(currentDay);
             });
 
             let consultar = document.getElementById('btn_consultar');
@@ -129,18 +153,21 @@ html(lang="es")
 
             consultar.addEventListener('click',(e)=>{
                 e.preventDefault();
-                
                 let fecha = document.getElementById('fecha').value;
+                updateTable(fecha)
+            })
+            function updateTable(fecha) {
+
+                // Se elimina la redeclaración de la variable 'fecha'
                 let tableAbiertas = document.getElementById('t1');
                 let tableCerradas = document.getElementById('t2');
                 
-                fetch(`ordenDia?fecha=${fecha}`)
+                fetch(`ordenDia?fecha=${fecha}`)  // Utiliza la variable 'fecha' pasada como argumento
                     .then(response => response.json())
                     .then(data => {
-                        function fecha(x){
-                        let f = new Date(x);
-                        let fecha = `${f.getDate()}/${f.getMonth()+1}/${f.getUTCFullYear()}`;
-                        return fecha;
+                        function formatFecha(x) {
+                            let f = new Date(x);
+                            return `${f.getDate()}/${f.getMonth() + 1}/${f.getUTCFullYear()}`;
                         };
                         function fechahs(x) {
                             let f = new Date(x);
@@ -153,81 +180,69 @@ html(lang="es")
                         }
                         while (tableAbiertas.rows.length > 1) {
                             tableAbiertas.deleteRow(1);
-                            
                         }
                         while (tableCerradas.rows.length > 1) {
                             tableCerradas.deleteRow(1);
-                            
                         }
                         data.forEach(i => {
-                            
-                            if(i.estado === "Pendiente"||i.estado==="En Proceso"){
+                            if (i.estado === "Pendiente" || i.estado === "En Proceso") {
                                 let row = tableAbiertas.insertRow();
 
                                 let cellId = row.insertCell(0);
-                                let cellDetecto= row.insertCell(1);
-                                let cellAvisar= row.insertCell(2);
-                                let cellEquipo= row.insertCell(3);
+                                let cellDetecto = row.insertCell(1);
+                                let cellAvisar = row.insertCell(2);
+                                let cellEquipo = row.insertCell(3);
                                 let cellFecha = row.insertCell(4);
                                 let cellTurno = row.insertCell(5);
-                                let cellParadaProc= row.insertCell(6);
+                                let cellParadaProc = row.insertCell(6);
                                 let cellPrioridad = row.insertCell(7);
                                 let cellTipo = row.insertCell(8);
-                                let cellHsInicio= row.insertCell(9);
-                                let cellDescripcion= row.insertCell(10);
-                                let cellAccion= row.insertCell(11);
+                                let cellHsInicio = row.insertCell(9);
+                                let cellDescripcion = row.insertCell(10);
+                                let cellAccion = row.insertCell(11);
 
                                 cellId.textContent = i.idOrden;
                                 cellDetecto.textContent = i.detecto;
                                 cellAvisar.textContent = i.avisar;
                                 cellEquipo.textContent = i.equipo;
-                                cellFecha.textContent = fecha(i.fecha);
+                                cellFecha.textContent = formatFecha(i.fecha); // Uso de la función 'formatFecha'
                                 cellTurno.textContent = i.turno;
                                 cellParadaProc.textContent = i.paradaProceso;
                                 cellPrioridad.textContent = i.prioridad;
                                 cellTipo.textContent = i.tipoParada;
                                 cellHsInicio.textContent = fechahs(i.horaInicio);
                                 cellDescripcion.textContent = i.descripcion;
-                                cellAccion.innerHTML = `<a href="resolverOrden?idOrden=${i.idOrden}"> Cerrar`;
+                                cellAccion.innerHTML = `<a href="resolverOrden?idOrden=${i.idOrden}"> Cerrar</a>`;
 
-
-                            }else{
+                            } else {
                                 let row = tableCerradas.insertRow();
 
                                 let cellId = row.insertCell(0);
-                                let cellDetecto= row.insertCell(1);
-                                let cellAvisar= row.insertCell(2);
-                                let cellEquipo= row.insertCell(3);
+                                let cellDetecto = row.insertCell(1);
+                                let cellAvisar = row.insertCell(2);
+                                let cellEquipo = row.insertCell(3);
                                 let cellFecha = row.insertCell(4);
                                 let cellTurno = row.insertCell(5);
-                                let cellParadaProc= row.insertCell(6);
+                                let cellParadaProc = row.insertCell(6);
                                 let cellPrioridad = row.insertCell(7);
                                 let cellTipo = row.insertCell(8);
-                                let cellHsInicio= row.insertCell(9);
-                                let cellDescripcion= row.insertCell(10);
-                                let cellAccion= row.insertCell(11);
+                                let cellHsInicio = row.insertCell(9);
+                                let cellDescripcion = row.insertCell(10);
+                                let cellAccion = row.insertCell(11);
 
                                 cellId.textContent = i.idOrden;
                                 cellDetecto.textContent = i.detecto;
                                 cellAvisar.textContent = i.avisar;
                                 cellEquipo.textContent = i.equipo;
-                                cellFecha.textContent = fecha(i.fecha);
+                                cellFecha.textContent = formatFecha(i.fecha); // Uso de la función 'formatFecha'
                                 cellTurno.textContent = i.turno;
                                 cellParadaProc.textContent = i.paradaProceso;
                                 cellPrioridad.textContent = i.prioridad;
                                 cellTipo.textContent = i.tipoParada;
                                 cellHsInicio.textContent = fechahs(i.horaInicio);
                                 cellDescripcion.textContent = i.descripcion;
-                                cellAccion.innerHTML = `<a href="resolverOrden?idOrden=${i.idOrden}"> Modificar`;
-
-
+                                cellAccion.innerHTML = `<a href="resolverOrden?idOrden=${i.idOrden}"> Modificar</a>`;
                             }
-                            
-                            
-
-                        })
-                    })
-            })
-
-                
-                
+                        });
+                    });
+            }
