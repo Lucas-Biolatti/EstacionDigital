@@ -128,6 +128,29 @@ router.get('/datos',(req,res)=>{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 });
+router.get('/datosSector',(req,res)=>{
+  
+  if (req.session.loggedin && req.session.rol=="Qsb") {
+    connectToDatabase((error, conexion) => {
+        if (error) {
+            return res.status(500).send('Error de conexión a la base de datos');
+        }
+
+        const sql = "SELECT sector_resp,COUNT(id) AS cantidad FROM planAccionQsb WHERE estado != 'Completado' GROUP BY sector ORDER BY cantidad desc";
+        conexion.query(sql, (error, results) => {
+          conexion.release();
+            if (!error) {
+                res.send(results);
+            } else {
+                res.send(error);
+            }
+        });
+    });
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+})
 router.get('/datosPlan', (req, res) => {
   if (req.session.loggedin && req.session.rol=="Qsb") {
     connectToDatabase((error, conexion) => {

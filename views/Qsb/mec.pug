@@ -784,8 +784,9 @@ html(lang="es")
                                     const hs_rd = e.hs_rd;
                                     const rds_real = e.rds_real;
                                     const rds_teoricas = hsreal / hs_rd;
-                                    const indicador = rds_teoricas / rds_real;
-                                    return parseFloat(indicador.toFixed(3));;
+                                    const indicador = rds_real / rds_teoricas;
+                                    const ind = 0.9 / indicador;
+                                    return parseFloat(ind.toFixed(3));;
                                 });
                         let chart6 = Chart.instances[5];
                             chart6.data = {

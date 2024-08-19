@@ -63,11 +63,14 @@ html(lang="es")
                 
                 <div class="container text-center my-4">
                     <h4>INDICADOR</h4>
-                    <div class="d-flex justify-content-center">
+                    <div class="d-flex justify-content-center ">
                         <div style="width: 100%; max-width: 500px; height: 400px;">
                             <canvas id="myChart"></canvas>
                         </div>
-                    </div>
+                        <div style="width: 100%; max-width: 500px; height: 400px;">
+                            <canvas id="myChart2"></canvas>
+                            </div>
+                        </div>
                 </div>
                 <div class="container">
                     <h4>PLAN DE ACCION</h4>
@@ -273,152 +276,184 @@ html(lang="es")
                 sidebarContainer.classList.toggle('active');
             });
         });
-        fetch('Qsb/datosPlan')
-            .then(response => response.json())
-            .then(datos => {
-                
-                let noIniciado = 0;
-                let enProceso = 0;
-                let completado=0;
-                let total = 0;
+       
+         document.addEventListener("DOMContentLoaded", function() {
 
-                let dataset = [];
-                datos.forEach(dato => {
-                    let f01 = new Date(dato.fecha);
-                    let f1 = `${f01.getDate()}/${f01.getMonth()+1}/${f01.getUTCFullYear()}`;
-
-                    let f02 = dato.fecha_tent ? new Date(dato.fecha_tent) : null;
-                    let f2 = f02 ? `${f02.getDate()}/${f02.getMonth()+1}/${f02.getUTCFullYear()}` : null;
-                    let f21 = f2 !== "30/11/1899" ? f2 : "";
+            fetch('Qsb/datosPlan')
+                .then(response => response.json())
+                .then(datos => {
                     
-                    let f03 = dato.fecha_cierre ? new Date(dato.fecha_cierre) : null;
-                    let f3 = f03 ? `${f03.getDate()}/${f03.getMonth()+1}/${f03.getUTCFullYear()}` : null;
-                    let f31 = f3 !== "30/11/1899" ? f3 : "";
-                   
-                    dataset.push([
-                        dato.id,
-                        f1,
-                        dato.sector,
-                        dato.descripcion,
-                        dato.accion,
-                        dato.responsable,
-                        dato.sector_resp,
-                        dato.comentario,
-                        f21,
-                        f31,
-                        dato.estado,
-                        `<button type="button" class="btn btn-primary btn-edit" data-bs-toggle="modal" data-bs-target="#exampleModal1" data-id="${dato.id}"> Editar</button>`
-                    ]);
+                    let noIniciado = 0;
+                    let enProceso = 0;
+                    let completado=0;
+                    let total = 0;
 
-                    if(dato.estado == "No Iniciado"){
-                        noIniciado++
-                        total++
-                    }else if(dato.estado == "En Proceso"){
-                        enProceso++
-                        total++
-                    }else{
-                        completado++
-                        total++
-                    }
-                });
+                    let dataset = [];
+                    datos.forEach(dato => {
+                        let f01 = new Date(dato.fecha);
+                        let f1 = `${f01.getDate()}/${f01.getMonth()+1}/${f01.getUTCFullYear()}`;
 
-                const ctx = document.getElementById('myChart');
+                        let f02 = dato.fecha_tent ? new Date(dato.fecha_tent) : null;
+                        let f2 = f02 ? `${f02.getDate()}/${f02.getMonth()+1}/${f02.getUTCFullYear()}` : null;
+                        let f21 = f2 !== "30/11/1899" ? f2 : "";
+                        
+                        let f03 = dato.fecha_cierre ? new Date(dato.fecha_cierre) : null;
+                        let f3 = f03 ? `${f03.getDate()}/${f03.getMonth()+1}/${f03.getUTCFullYear()}` : null;
+                        let f31 = f3 !== "30/11/1899" ? f3 : "";
+                    
+                        dataset.push([
+                            dato.id,
+                            f1,
+                            dato.sector,
+                            dato.descripcion,
+                            dato.accion,
+                            dato.responsable,
+                            dato.sector_resp,
+                            dato.comentario,
+                            f21,
+                            f31,
+                            dato.estado,
+                            `<button type="button" class="btn btn-primary btn-edit" data-bs-toggle="modal" data-bs-target="#exampleModal1" data-id="${dato.id}"> Editar</button>`
+                        ]);
 
-                new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['NO INICIADO', 'EN PROCESO', 'CERRADO'],
-                        datasets: [{
-                            label: '# de Acciones',
-                            data: [noIniciado, enProceso, completado],
-                            borderWidth: 1,
-                            backgroundColor: [
-                                'rgb(255, 99, 132)',
-                                'rgb(54, 162, 235)',
-                                'green'
-                            ],
-                        }]
-                    },
-                    options: {
-                        plugins: {
-                            datalabels: {
-                                formatter: (value, context) => {
-                                    const percentage = (value / total * 100).toFixed(1) + '%';
-                                    return percentage;
-                                },
-                                color: '#fff',
-                            }
+                        if(dato.estado == "No Iniciado"){
+                            noIniciado++
+                            total++
+                        }else if(dato.estado == "En Proceso"){
+                            enProceso++
+                            total++
+                        }else{
+                            completado++
+                            total++
                         }
-                    },
-                    plugins: [ChartDataLabels]
-                    
-                });
-
-                $(document).ready(function () {
-                    var table = $('#tabla').DataTable({
-                        fixedHeader: true,
-                        dom: 'Bfrtlip',
-                        data: dataset,
-                        columns: [
-                            { title: 'Id' },
-                            { title: 'Fecha' },
-                            { title: 'Sector' },
-                            { title: 'Descripcion' },
-                            { title: 'Accion' },
-                            { title: 'Responsable' },
-                            { title: 'Sector Responsable' },
-                            { title: 'Comentario' },
-                            { title: 'Fecha tentativa' },
-                            { title: 'Fecha Cierre' },
-                            { title: 'Estado' },
-                            { title: '☰' },
-                        ],
                     });
 
-                    $('#tabla thead tr').clone(true).appendTo('#tabla thead');
-                    $('#tabla thead tr:eq(1) th').each(function(i) {
-                        var title = $(this).text();
-                        $(this).html('<input type="text" placeholder="Buscar..."/>');
+                    const ctx = document.getElementById('myChart');
 
-                        $('input', this).on('keyup change', function() {
-                            if (table.column(i).search() !== this.value) {
-                                table
-                                    .column(i)
-                                    .search(this.value)
-                                    .draw();
+                    new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['NO INICIADO', 'EN PROCESO', 'CERRADO'],
+                            datasets: [{
+                                label: '# de Acciones',
+                                data: [noIniciado, enProceso, completado],
+                                borderWidth: 1,
+                                backgroundColor: [
+                                    'rgb(255, 99, 132)',
+                                    'rgb(54, 162, 235)',
+                                    'green'
+                                ],
+                            }]
+                        },
+                        options: {
+                            plugins: {
+                                datalabels: {
+                                    formatter: (value, context) => {
+                                        const percentage = (value / total * 100).toFixed(1) + '%';
+                                        return percentage;
+                                    },
+                                    color: '#fff',
+                                }
+                            }
+                        },
+                        plugins: [ChartDataLabels]
+                        
+                    });
+
+                    $(document).ready(function () {
+                        var table = $('#tabla').DataTable({
+                            fixedHeader: true,
+                            dom: 'Bfrtlip',
+                            data: dataset,
+                            columns: [
+                                { title: 'Id' },
+                                { title: 'Fecha' },
+                                { title: 'Sector' },
+                                { title: 'Descripcion' },
+                                { title: 'Accion' },
+                                { title: 'Responsable' },
+                                { title: 'Sector Responsable' },
+                                { title: 'Comentario' },
+                                { title: 'Fecha tentativa' },
+                                { title: 'Fecha Cierre' },
+                                { title: 'Estado' },
+                                { title: '☰' },
+                            ],
+                        });
+             fetch('Qsb/datosSector')
+                .then(response => response.json())
+                .then(datos => {
+                    const ctx1 = document.getElementById('myChart2');
+
+                    new Chart(ctx1, {
+                        type: 'bar',
+                        data: {
+                            labels: datos.map(e => e.sector_resp),
+                            datasets: [{
+                                label: '# de Acciones sin Concluir',
+                                data: datos.map(e => e.cantidad),
+                                borderWidth: 1,
+                                
+                            }]
+                        },
+                        options: {
+                            maintainAspectRatio: false,
+                            plugins: {
+                                
+                            }
+                        },
+                        plugins: [ChartDataLabels]
+                        
+                    });
+                })
+                        $('#tabla thead tr').clone(true).appendTo('#tabla thead');
+                        $('#tabla thead tr:eq(1) th').each(function(i) {
+                            var title = $(this).text();
+                            $(this).html('<input type="text" placeholder="Buscar..."/>');
+
+                            $('input', this).on('keyup change', function() {
+                                if (table.column(i).search() !== this.value) {
+                                    table
+                                        .column(i)
+                                        .search(this.value)
+                                        .draw();
+                                }
+                            });
+                        });
+                        function fechaEdit(x){
+                            let dia = (x.getUTCDate()<10?'0':'')+x.getUTCDate();
+                            let mes = ((x.getMonth()+1)<10?'0':'')+(x.getMonth()+1);
+                            let f = x.getUTCFullYear()+"-"+mes+"-"+dia;
+                            return f;
+                            }
+                        $('#tabla tbody').on('click', '.btn-edit', function() {
+                            let dataId = $(this).data('id');
+                            let rowData = datos.find(dato => dato.id == dataId);
+
+                            if (rowData) {
+                                $('#id').val(rowData.id);
+
+           
+            // Formatear las fechas a 'YYYY-MM-DD'
+            let fechaFormatted = rowData.fecha ? new Date(rowData.fecha).toISOString().split('T')[0] : '';
+            let fechaTentFormatted = rowData.fecha_tent || rowData.fecha_tent==="0000-00-00" ? new Date(rowData.fecha_tent).toISOString().split('T')[0] : null;
+            let fechaCierreFormatted = rowData.fecha_cierre ? new Date(rowData.fecha_cierre).toISOString().split('T')[0] : null;
+
+            // Pre-cargar los valores en el formulario
+            $('#fecha').val(fechaFormatted);
+            $('#sector').val(rowData.sector);
+            $('#descripcion').val(rowData.descripcion);
+            $('#accion').val(rowData.accion);
+            $('#responsable').val(rowData.responsable);
+            $('#sector_resp').val(rowData.sector_resp);
+            $('#comentario').val(rowData.comentario);
+            $('#estado').val(rowData.estado);
+            $('#fecha_tent').val(fechaTentFormatted || "");
+            $('#fecha_cierre').val(fechaCierreFormatted);
                             }
                         });
                     });
-                    function fechaEdit(x){
-                        let dia = (x.getUTCDate()<10?'0':'')+x.getUTCDate();
-                        let mes = ((x.getMonth()+1)<10?'0':'')+(x.getMonth()+1);
-                        let f = x.getUTCFullYear()+"-"+mes+"-"+dia;
-                        return f;
-                        }
-                    $('#tabla tbody').on('click', '.btn-edit', function() {
-                        let dataId = $(this).data('id');
-                        let rowData = datos.find(dato => dato.id == dataId);
-
-                        if (rowData) {
-                            $('#id').val(rowData.id);
-
-        // Formatear las fechas a 'YYYY-MM-DD'
-        let fechaFormatted = rowData.fecha ? new Date(rowData.fecha).toISOString().split('T')[0] : '';
-        let fechaTentFormatted = rowData.fecha_tent || rowData.fecha_tent==="0000-00-00" ? new Date(rowData.fecha_tent).toISOString().split('T')[0] : null;
-        let fechaCierreFormatted = rowData.fecha_cierre ? new Date(rowData.fecha_cierre).toISOString().split('T')[0] : null;
-
-        // Pre-cargar los valores en el formulario
-        $('#fecha').val(fechaFormatted);
-        $('#sector').val(rowData.sector);
-        $('#descripcion').val(rowData.descripcion);
-        $('#accion').val(rowData.accion);
-        $('#responsable').val(rowData.responsable);
-        $('#sector_resp').val(rowData.sector_resp);
-        $('#comentario').val(rowData.comentario);
-        $('#estado').val(rowData.estado);
-        $('#fecha_tent').val(fechaTentFormatted || "");
-        $('#fecha_cierre').val(fechaCierreFormatted);
-                        }
-                    });
                 });
-            });
+
+         })
+        
