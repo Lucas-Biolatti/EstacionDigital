@@ -146,7 +146,7 @@ html(lang="es")
                                 <form class="d-flex" action="actionplan" method="POST">                               
                                             input(type="hidden", name="sector1" value=sector)
                                             <label class="form-label"> Fecha
-                                            <input type="date", name="fecha" class="form-control">
+                                            <input type="date", name="fecha" class="form-control" required>
                                             <label class="form-label"> Sector
                                             select(name="sector", class="form-select")
                                                 option(value="Matriceria") Matriceria
@@ -221,7 +221,7 @@ html(lang="es")
                                             input(type="hidden" name="sc_laca" value="NULL")
                                             input(type="hidden" name="entregas" value="NULL")
                                             <label class="form-label"> Fecha
-                                            <input type="date" name="fecha" class="form-control">
+                                            <input type="date" name="fecha" class="form-control" required>
                                             <label class="form-label"> Sector
                                             select(name="sector", class="form-select")
                                                
