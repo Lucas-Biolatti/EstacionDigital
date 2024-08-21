@@ -195,15 +195,19 @@ router.get('/editarOrden',(req,res)=>{
           let dia = (result[0].fecha.getUTCDate()<10?'0':'')+result[0].fecha.getUTCDate();
           let mes = ((result[0].fecha.getMonth()+1)<10?'0':'')+(result[0].fecha.getMonth()+1);
           let f = result[0].fecha.getUTCFullYear()+"-"+mes+"-"+dia;
-          //hs inicio
-          let diahi = (result[0].horaInicio.getUTCDate()<10?'0':'')+result[0].horaInicio.getUTCDate();
-          let meshi = ((result[0].horaInicio.getMonth()+1)<10?'0':'')+(result[0].horaInicio.getMonth()+1);
-          let fhi = result[0].horaInicio.getUTCFullYear()+"-"+meshi+"-"+diahi+"T"+result[0].horaInicio.getHours()+":"+((result[0].horaInicio.getMinutes()<10?'0':'')+result[0].horaInicio.getMinutes());
-          
-          //hs fin
-          let diahf = (result[0].horaFin.getUTCDate()<10?'0':'')+result[0].horaFin.getUTCDate();
-          let meshf = ((result[0].horaFin.getMonth()+1)<10?'0':'')+(result[0].horaFin.getMonth()+1);
-          let fhf = result[0].horaFin.getUTCFullYear()+"-"+meshf+"-"+diahf+"T"+result[0].horaFin.getHours()+":"+((result[0].horaFin.getMinutes()<10?'0':'')+result[0].horaFin.getMinutes());
+          // hs inicio
+          let diahi = (result[0].horaInicio.getUTCDate() < 10 ? '0' : '') + result[0].horaInicio.getUTCDate();
+          let meshi = (result[0].horaInicio.getMonth() + 1 < 10 ? '0' : '') + (result[0].horaInicio.getMonth() + 1);
+          let fhi = result[0].horaInicio.getUTCFullYear() + "-" + meshi + "-" + diahi + "T" + 
+                    (result[0].horaInicio.getHours() < 10 ? '0' : '') + result[0].horaInicio.getHours() + ":" + 
+                    (result[0].horaInicio.getMinutes() < 10 ? '0' : '') + result[0].horaInicio.getMinutes();
+
+          // hs fin
+          let diahf = (result[0].horaFin.getUTCDate() < 10 ? '0' : '') + result[0].horaFin.getUTCDate();
+          let meshf = (result[0].horaFin.getMonth() + 1 < 10 ? '0' : '') + (result[0].horaFin.getMonth() + 1);
+          let fhf = result[0].horaFin.getUTCFullYear() + "-" + meshf + "-" + diahf + "T" + 
+          (result[0].horaFin.getHours() < 10 ? '0' : '') + result[0].horaFin.getHours() + ":" + 
+          (result[0].horaFin.getMinutes() < 10 ? '0' : '') + result[0].horaFin.getMinutes();
           
           res.render('./users/mantenimiento/editar',{
               result:result,
