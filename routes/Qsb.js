@@ -31,6 +31,37 @@ router.get('/',(req,res)=>{
         mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
     }
 });
+router.get('/dashboard',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="Qsb") {
+     
+    res.render('./Qsb/dashboard',{sector:req.query.sector})
+  
+
+} else {
+  res.render('login',{
+    mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+}
+})
+router.get('/datosMes',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="Qsb") {
+    let mes = req.query.mes;
+    const sql = `SELECT * FROM indicadores WHERE MONTH(fecha) = "${mes}" ORDER BY sector,fecha`
+    conexion.query(sql,(error,result)=>{
+      conexion.release();
+      if(!error){
+        res.send(result);
+      }else{
+        res.send(error);
+      }
+    })    
+     
+  
+
+} else {
+  res.render('login',{
+    mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+}
+})
 //Sectores 
 router.get('/iny',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="Qsb") {
