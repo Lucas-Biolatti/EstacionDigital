@@ -26,77 +26,137 @@ html(lang="es")
 
         </div>
     </nav>
-    
-    <div class="carousel-item active">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-2"><p>Sector</p></div>
-                <div class="col-md-2"><p>Accidentes</p></div>
-                <div class="col-md-2"><p>Scrap</p></div>
-                <div class="col-md-2"><p>Cump Programa</p></div>
-                <div class="col-md-2"><p>Disponibilidad</p></div>
-                <div class="col-md-2"><p>Disp Molde/Retrabajo</p></div>
-            </div>
+    <div id="sectorCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-item active">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-2"><p>Sector</p></div>
+                    <div class="col-md-2"><p>Accidentes</p></div>
+                    <div class="col-md-2"><p>Scrap</p></div>
+                    <div class="col-md-2"><p>Cump Programa</p></div>
+                    <div class="col-md-2"><p>Disponibilidad</p></div>
+                    <div class="col-md-2"><p>Disp Molde/Retrabajo</p></div>
+                </div>
 
-            <div class="row">
-                <div class="col-md-2"><p>INYECCION</p></div>
-                <div class="col-md-2">
-                    <div style="width: 100%; height: 100%;">
-                        <canvas id="myChart"></canvas>
+                <div class="row">
+                    <div class="col-md-2"><p>INYECCION</p></div>
+                    <div class="col-md-2">
+                        <div style="width: 100%; height: 100%;">
+                            <canvas id="myChart"></canvas>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-2">
-                    <div style="width: 100%; height: 100%;">
-                        <canvas id="myChart2"></canvas>
+                    <div class="col-md-2">
+                        <div style="width: 100%; height: 100%;">
+                            <canvas id="myChart2"></canvas>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-2">
-                    <div style="width: 100%; height: 100%;">
-                        <canvas id="myChart3"></canvas>
+                    <div class="col-md-2">
+                        <div style="width: 100%; height: 100%;">
+                            <canvas id="myChart3"></canvas>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-2">
-                    <div style="width: 100%; height: 100%;">
-                        <canvas id="myChart4"></canvas>
+                    <div class="col-md-2">
+                        <div style="width: 100%; height: 100%;">
+                            <canvas id="myChart4"></canvas>
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-2">
-                    <div style="width: 100%; height: 100%;">
-                        <canvas id="myChart5"></canvas>
+                    <div class="col-md-2">
+                        <div style="width: 100%; height: 100%;">
+                            <canvas id="myChart5"></canvas>
+                        </div>
                     </div>
+                    
                 </div>
+
+                <div class="row">
+                    <div class="col-md-2"><p>TT&CC</p></div>
+                    <div class="col-md-2">
+                        <div style="width: 100%; height: 100%;">
+                            <canvas id="myChart6"></canvas>
+                        </div>
+                    </div>
+
+
+
+
+                    
+                    
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2"><p>MECANIZADO</p></div>
+                    <div class="col-md-2">
+                        <div style="width: 100%; height: 100%;">
+                            <canvas id="myChart7"></canvas>
+                        </div>
+                    </div>
                 
-            </div>
-
-            <div class="row">
-                <div class="col-md-2"><p>TT&CC</p></div>
-                <div class="col-md-2">
-                    <div style="width: 100%; height: 100%;">
-                        <canvas id="myChart6"></canvas>
-                    </div>
                 </div>
-                
-            </div>
-
-            <div class="row">
-                <div class="col-md-2"><p>MECANIZADO</p></div>
-                <div class="col-md-2">
-                    <div style="width: 100%; height: 100%;">
-                        <canvas id="myChart7"></canvas>
-                    </div>
-                </div>
-              
             </div>
         </div>
+        <div class="carousel-item">
+            <div class="container">
+                <div class="row">
+                    <div class="row">
+                        <div class="col-md-2"><p>VENTILADO</p></div>
+                        <div class="col-md-2">
+                            <div style="width: 100%; height: 100%;">
+                                <canvas id="myChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div style="width: 100%; height: 100%;">
+                                <canvas id="myChart2"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div style="width: 100%; height: 100%;">
+                                <canvas id="myChart3"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div style="width: 100%; height: 100%;">
+                                <canvas id="myChart4"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div style="width: 100%; height: 100%;">
+                                <canvas id="myChart5"></canvas>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-2"><p>PINTURA</p></div>
+                            <div class="col-md-2">
+                                <div style="width: 100%; height: 100%;">
+                                    <canvas id="myChart6"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                    <div class="row">
+                        <div class="col-md-2"><p>LACA</p></div>
+                            <div class="col-md-2">
+                                <div style="width: 100%; height: 100%;">
+                                    <canvas id="myChart7"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#sectorCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#sectorCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>                    
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#sectorCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#sectorCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>                    
+    
                    
     script(src="https://code.jquery.com/jquery-3.5.1.js")
     
