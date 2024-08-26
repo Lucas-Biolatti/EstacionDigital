@@ -45,15 +45,21 @@ router.get('/dashboard',(req,res)=>{
 router.get('/datosMes',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="Qsb") {
     let mes = req.query.mes;
-    const sql = `SELECT * FROM indicadores WHERE MONTH(fecha) = "${mes}" ORDER BY sector,fecha`
-    conexion.query(sql,(error,result)=>{
-      conexion.release();
-      if(!error){
-        res.send(result);
-      }else{
-        res.send(error);
+    let year = req.query.year;
+    const sql = `SELECT * FROM indicadores WHERE MONTH(fecha) = "${mes}" AND YEAR(fecha)=${year} ORDER BY sector,fecha`
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
       }
-    })    
+      conexion.query(sql,(error,result)=>{
+        conexion.release();
+        if (!error) {
+          res.send(result);
+        }else{
+          res.send("ERROR......:"+error);
+        }
+      })
+    });  
      
   
 
