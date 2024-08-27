@@ -6,8 +6,8 @@ var logger = require('morgan');
 const session = require('express-session');
 var conexion = require('./db/db');
 var methodOverride = require('method-override')
-var upload = require('express-fileupload');
-
+//var upload = require('express-fileupload');
+const multer = require('multer');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var SeguridadRouter = require('./routes/Seguridad');
@@ -37,8 +37,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'uploads')));
 app.use(express.static(path.join(__dirname, 'public/accidentes')));
-app.use(upload());
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+const upload = multer({ storage: storage });
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

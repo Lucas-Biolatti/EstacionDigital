@@ -54,7 +54,7 @@ html(lang="es")
                             i.icon.ion-md-menu
                         h3(class="navbar-brand") Reunion de respuesta rapida       
                             <button class="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Agregar Datos</button>
-                       
+                            <button class="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal3">+ Alerta de Calidad</button>
 
                     </div>
                     
@@ -256,6 +256,54 @@ html(lang="es")
                                 </div>
                             </form>
                         </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">+ Carga de Datos del dia</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                
+                                <form class="d-flex" method="POST" action="Qsb/agregaraccion" enctype="multipart/form-data">
+                                            input(type="hidden", name="path" value="/Qsb")                               
+                                            input(type="hidden" name="retrabajo" value="NULL")
+                                            input(type="hidden", name="accidentes" class="form-control" id="accidentes" value="NULL")
+                                            input(type="hidden" step="0.01" name="scrap" class="form-control" id="scrap" value="NULL")
+                                            input(type="hidden" step="0.01" name="c_programa" class="form-control" id="c_programa" value="NULL")
+                                            input(type="hidden" step="0.01" name="disponibilidad" class="form-control" id="disponibilidad" value="NULL")
+                                            input(type="hidden" step="0.01" name="disp_molde" class="form-control" id="disp_molde" value="NULL")
+                                            input(type="hidden"  name="hsReal" class="form-control" id="hsReal" value="NULL")
+                                            input(type="hidden" step="0.001" name="hs_rd" class="form-control" id="hs_rd" value="NULL")
+                                            input(type="hidden" step="0.01" name="rds_real" class="form-control" id="rds_real" value="NULL")
+                                            input(type="hidden" name="entregas" value="NULL")
+                                            
+                                            <label class="form-label"> Fecha
+                                            <input type="date" name="fecha" class="form-control" required>
+                                            <label class="form-label"> Sector
+                                            select(name="sector", class="form-select")
+                                                option(value="Calidad") Calidad 
+                                                
+                                            
+                                            
+                                            <label class="form-label"> Descripcion de la Alerta 
+                                                textarea(name="ret_laca", cols="30", rows="5" class="form-control")
+                                            <label class="form-label"> Agregar Imagen 
+                                            input(type="file" name="sc_laca" class="form-control") 
+                                            <label class="form-label"> Observaciones 
+                                            textarea(name="observaciones", cols="30", rows="5" class="form-control") 
+                                           
+                                            
+                                                           
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+                            </div>
+                            </form>                         
                     </div>
                 </div>
 

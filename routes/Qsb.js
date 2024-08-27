@@ -3,7 +3,19 @@ const url = require('url');
 var router = express.Router();
 //var conexion = require('../db/db');
 const { connectToDatabase } = require('../db/db');
+const multer = require('multer');
+const path = require('path');
 
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage: storage });
 
 function fecha(x){
   let f = new Date(x);
@@ -211,46 +223,48 @@ router.get('/datosPlan', (req, res) => {
   }
 });
 
-router.post("/agregaraccion",(req,res)=>{
-  if (req.session.loggedin && req.session.rol=="Qsb") {
-    connectToDatabase((error, conexion) => {
-      if (error) {
-          return res.status(500).send('Error de conexión a la base de datos');
-      }
-    let fecha = req.body.fecha;
-    let sector = req.body.sector;
-    let scrap = req.body.scrap;
-    let accidentes = req.body.accidentes;
-    let c_programa = req.body.c_programa;
-    let disponibilidad = req.body.disponibilidad;
-    let disp_molde = req.body.disp_molde;
-    let observaciones = req.body.observaciones;
-    let retrabajo = req.body.retrabajo;
-    let ret_laca = req.body.ret_laca;
-    let sc_laca = req.body.sc_laca;
-    let entregas = req.body.entregas;
-    let hsReal = req.body.hsReal;
-    let hs_rd = req.body.hs_rd;
-    let rds_real = req.body.rds_real;
-    let path = req.body.path;
+router.post("/agregaraccion", upload.single('sc_laca'), (req, res) => {
+  if (req.session.loggedin && req.session.rol == "Qsb") {
+      connectToDatabase((error, conexion) => {
+          if (error) {
+              return res.status(500).send('Error de conexión a la base de datos');
+          }
 
-    const sql = `INSERT INTO indicadores (fecha,sector,accidentes,c_programa,retrabajo,scrap,disponibilidad,disp_molde,ret_laca,sc_laca,entregas,observaciones,hsReal,hs_rd,rds_real)VALUES ("${fecha}","${sector}",${accidentes},${c_programa},${retrabajo},${scrap},${disponibilidad},${disp_molde},${ret_laca},${sc_laca},${entregas},"${observaciones}",${hsReal}, ${hs_rd}, ${rds_real});`
-    conexion.query(sql,(error,row)=>{
-      conexion.release();
-      if (!error) {
-        res.redirect(`${path}?sector=${sector}`)
-        
-      }else{
-        res.send(error)
-      }
-    })
-  });
+          let fecha = req.body.fecha;
+          let sector = req.body.sector;
+          let scrap = req.body.scrap;
+          let accidentes = req.body.accidentes;
+          let c_programa = req.body.c_programa;
+          let disponibilidad = req.body.disponibilidad;
+          let disp_molde = req.body.disp_molde;
+          let observaciones = req.body.observaciones;
+          let retrabajo = req.body.retrabajo;
+          let ret_laca = req.body.ret_laca;
+          let sc_laca = req.file ? req.file.filename : null;  // El nombre del archivo se guarda
+          let entregas = req.body.entregas;
+          let hsReal = req.body.hsReal;
+          let hs_rd = req.body.hs_rd;
+          let rds_real = req.body.rds_real;
+          let path = req.body.path;
 
-    } else {
-        res.render('login',{
-          mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
-      }
-  });
+          const sql = `INSERT INTO indicadores (fecha,sector,accidentes,c_programa,retrabajo,scrap,disponibilidad,disp_molde,ret_laca,sc_laca,entregas,observaciones,hsReal,hs_rd,rds_real)
+          VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+
+          conexion.query(sql, [fecha, sector, accidentes, c_programa, retrabajo, scrap, disponibilidad, disp_molde, ret_laca, sc_laca, entregas, observaciones, hsReal, hs_rd, rds_real], (error, row) => {
+              conexion.release();
+              if (!error) {
+                  res.redirect(`${path}?sector=${sector}`);
+              } else {
+                  res.send(error);
+              }
+          });
+      });
+  } else {
+      res.render('login', {
+          mensaje: `No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`
+      });
+  }
+});
 router.post('/actionplan',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="Qsb") {
     connectToDatabase((error, conexion) => {

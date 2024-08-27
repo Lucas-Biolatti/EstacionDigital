@@ -22,7 +22,7 @@ html(lang="es")
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid">
             button#menu-toggle.btn.btn-outline-primary ☰
-            img(src="/images/logo.jpg", alt="", srcset="")
+            img(src="/images/logo.jpg" style="height:90px")
             h3(class="navbar-brand") Dashboard
 
         </div>
@@ -38,11 +38,10 @@ html(lang="es")
                     <div class="col-md-2 d-flex justify-content-center align-items-center"><p>Disponibilidad</p></div>
                     <div class="col-md-2 d-flex justify-content-center align-items-center"><p>Disp Molde/Retrabajo</p></div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-2 d-flex justify-content-center align-items-center"><p>INYECCION</p></div>
                     <div class="col-md-2">
-                        <div style="width: 100%; height: 100%;">
+                        <div style="width: 100%; height: 140px;">
                             <canvas id="myChart"></canvas>
                         </div>
                     </div>
@@ -66,9 +65,7 @@ html(lang="es")
                             <canvas id="myChart5"></canvas>
                         </div>
                     </div>
-                    
                 </div>
-
                 <div class="row">
                     <div class="col-md-2 d-flex justify-content-center align-items-center"><p>TT&CC</p></div>
                     <div class="col-md-2">
@@ -77,7 +74,6 @@ html(lang="es")
                         </div>
                     </div>
                     <div class="col-md-2">
-                        
                     </div>
                     <div class="col-md-2">
                         <div style="width: 100%; height: 100%;">
@@ -89,14 +85,7 @@ html(lang="es")
                             <canvas id="myChart8"></canvas>
                         </div>
                     </div>
-                    
-
-
-
-                    
-                    
                 </div>
-
                 <div class="row">
                     <div class="col-md-2 d-flex justify-content-center align-items-center"><p>MECANIZADO</p></div>
                     <div class="col-md-2">
@@ -124,7 +113,6 @@ html(lang="es")
                             <canvas id="myChart13"></canvas>
                         </div>
                     </div>
-                
                 </div>
             </div>
         </div>
@@ -138,7 +126,6 @@ html(lang="es")
                     <div class="col-md-2 d-flex justify-content-center align-items-center"><p>Disponibilidad</p></div>
                     <div class="col-md-2 d-flex justify-content-center align-items-center"><p>Disp Molde/Retrabajo</p></div>
                 </div>
-                
                 <div class="row">
                     <div class="col-md-2 d-flex justify-content-center align-items-center"><p>DIAMANTADO</p></div>
                     <div class="col-md-2">
@@ -166,10 +153,7 @@ html(lang="es")
                             <canvas id="myChart18"></canvas>
                         </div>
                     </div>
-                    
-                    
                 </div>
-
                 <div class="row">
                     <div class="col-md-2 d-flex justify-content-center align-items-center"><p>VENTILADO</p></div>
                     <div class="col-md-2">
@@ -192,11 +176,7 @@ html(lang="es")
                             <canvas id="myChart22"></canvas>
                         </div>
                     </div>
-                    
-                    
-                    
                 </div>
-
                 <div class="row">
                     <div class="col-md-2 d-flex justify-content-center align-items-center"><p>PINTURA</p></div>
                     <div class="col-md-2">
@@ -224,12 +204,60 @@ html(lang="es")
                             <canvas id="myChart27"></canvas>
                         </div>
                     </div>
-                    
-                    
                 </div>
             </div>
+        </div>
+        <div class="carousel-item">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-2 d-flex justify-content-center align-items-center"><p>LACA</p></div>
+                    <div class="col-md-2">
+                        <div style="width: 100%; height: 140px;">
+                            <canvas id="myChart28"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div style="width: 100%; height: 100%;">
+                            <canvas id="myChart29"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div style="width: 100%; height: 100%;">
+                            <canvas id="myChart30"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div style="width: 100%; height: 100%;">
+                            <canvas id="myChart31"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div style="width: 100%; height: 140px;">
+                            <canvas id="myChart32"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 d-flex justify-content-center align-items-center"><p>PRODUCTO TERMINADO</p></div>
+                    <div class="col-md-10">
+                        <div style="width: 100%; height: 140px;">
+                            <canvas id="myChart33"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 d-flex justify-content-center align-items-center"><p>PRODUCTO TERMINADO</p></div>
+                    <div class="col-md-2 d-flex justify-content-center align-items-center"><p id="fecha_calidad"></p></div>
+                    <div class="col-md-4 d-flex justify-content-center align-items-center"><p id="desc_calidad"></p></div>
+                    <div class="col-md-4 d-flex justify-content-center align-items-center">
+                        <img id="imagen_calidad" src="" alt="Imagen de Calidad" style="max-width: 100%;height: 300px;">
+                    </div>
+
+
+                </div>
             </div>
         </div>
+    </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#sectorCarousel" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
@@ -238,7 +266,7 @@ html(lang="es")
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
         </button>                    
-    </div>
+    
     
                    
     script(src="https://code.jquery.com/jquery-3.5.1.js")
@@ -290,12 +318,20 @@ html(lang="es")
             initChart20();
             initChart21();
             initChart22();
-            //Pinturaq
+            //Pintura
             initChart23();
             initChart24();
             initChart25();
             initChart26();
             initChart27();
+            //Laca
+            initChart28();
+            initChart29();
+            initChart30();
+            initChart31();
+            initChart32();
+            //tERMINADO
+             initChart33();
 
             
             
@@ -1474,6 +1510,260 @@ html(lang="es")
 
                 return chart27;
             }
+            //Pintura
+            function initChart28() {
+                // Crea el gráfico en la carga de la página
+                let ctx = document.getElementById('myChart28').getContext("2d");
+                let chart28 = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],
+                        datasets: [{
+                            label: 'Accidentes',
+                            data: [], // Los datos se actualizarán más tarde
+                            borderWidth: 1
+                        },
+                        {
+                            type: 'line',
+                            label: 'Objetivo',
+                            data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                            borderWidth: 1,
+                            pointRadius:0,
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        plugins:{
+                            legend:{
+                                display:false,
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    },
+                    
+                });
+
+                return chart28;
+            }
+            function initChart29() {
+                // Crea el gráfico en la carga de la página
+                let ctx = document.getElementById('myChart29').getContext("2d");
+                let chart29 = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],
+                        datasets: [{
+                            label: 'Scrap',
+                            data: [], // Los datos se actualizarán más tarde
+                            borderWidth: 1
+                        },
+                        {
+                            type: 'line',
+                            label: 'Objetivo',
+                            data: [6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5,6.5],
+                            borderWidth: 1,
+                            pointRadius:0,
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        plugins:{
+                            legend:{
+                                display:false,
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                
+                            },
+                            x:{
+                            beginAtZero: true,
+                            stacked:true
+                            }
+                        }
+                    },
+                    
+                });
+
+                return chart29;
+            }
+            function initChart30() {
+                // Crea el gráfico en la carga de la página
+                let ctx = document.getElementById('myChart30').getContext("2d");
+                let chart30 = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],
+                        datasets: [{
+                            label: 'Cumplimiento de Programa',
+                            data: [], // Los datos se actualizarán más tarde
+                            borderWidth: 1
+                        },
+                        {
+                            type: 'line',
+                            label: 'Objetivo',
+                            data: [100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100],
+                            borderWidth: 1,
+                            pointRadius:0,
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        plugins:{
+                            legend:{
+                                display:false,
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                
+                            },
+                            x:{
+                            beginAtZero: true,
+                            stacked:true
+                            }
+                        }
+                    },
+                    
+                });
+
+                return chart30;
+            }
+            function initChart31() {
+                // Crea el gráfico en la carga de la página
+                let ctx = document.getElementById('myChart31').getContext("2d");
+                let chart31 = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],
+                        datasets: [{
+                            label: 'Disponibilidad MTTO',
+                            data: [], // Los datos se actualizarán más tarde
+                            borderWidth: 1
+                        },
+                        {
+                            type: 'line',
+                            label: 'Objetivo',
+                            data: [96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96,96],
+                            borderWidth: 1,
+                            pointRadius:0
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        plugins:{
+                            legend:{
+                                display:false,
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                
+                            },
+                            x:{
+                            beginAtZero: true,
+                            stacked:true
+                            }
+                        }
+                    },
+                   
+                });
+
+                return chart31;
+            }
+            function initChart32() {
+                // Crea el gráfico en la carga de la página
+                let ctx = document.getElementById('myChart32').getContext("2d");
+                let chart32 = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],
+                        datasets: [{
+                            label: 'Retrabajo',
+                            data: [], // Los datos se actualizarán más tarde
+                            borderWidth: 1
+                        },
+                        {
+                            type: 'line',
+                            label: 'Objetivo',
+                            data: [99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99],
+                            borderWidth: 1,
+                            pointRadius:0,
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        plugins:{
+                            legend:{
+                                display:false,
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                
+                            },
+                            x:{
+                            beginAtZero: true,
+                            stacked:true
+                            }
+                        }
+                    },
+                    
+                });
+
+                return chart32;
+            }
+            function initChart33() {
+                // Crea el gráfico en la carga de la página
+                let ctx = document.getElementById('myChart33').getContext("2d");
+                let chart33 = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],
+                        datasets: [{
+                            label: 'Retrabajo',
+                            data: [], // Los datos se actualizarán más tarde
+                            borderWidth: 1
+                        },
+                        {
+                            type: 'line',
+                            label: 'Objetivo',
+                            data: [99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99],
+                            borderWidth: 1,
+                            pointRadius:0,
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        plugins:{
+                            legend:{
+                                display:false,
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                
+                            },
+                            x:{
+                            beginAtZero: true,
+                            stacked:true
+                            }
+                        }
+                    },
+                    
+                });
+
+                return chart33;
+            }
             
             
         })
@@ -1488,6 +1778,15 @@ html(lang="es")
                     let fecha = dia;
                     return fecha
                 }
+                function fecha2(x){
+                    let f = new Date(x);
+                    let dia=f.getDate();
+                    let mes = f.getMonth()+1;
+                    let año = f.getUTCFullYear();
+                    let fecha = dia+"/"+mes+"/"+año;
+                    return fecha
+                }
+                
                 fetch(`/Qsb/datosMes?mes=${mes}&year=${year}`)
                     .then(response => response.json())
                     .then(datos =>{
@@ -2749,7 +3048,437 @@ html(lang="es")
                                 } 
                         chart25.update();
 
-                     
+                        let chart26 = Chart.instances[25];
+                            chart26.data = {
+                                labels: datos
+                                    .filter(e => e.sector==="Pintura")
+                                    .map(e => fecha(e.fecha)),
+                                
+                                datasets: [{
+                                    data: datos
+                                        .filter(e => e.sector==="Pintura")
+                                        .map(e => e.disponibilidad),
+                                    label:'Disponibilidad MTTO',
+                                    type:'line',
+                                    lineTension: 0,
+                                    backgroundColor: '#007bff',
+                                    borderColor: '#007bff',
+                                    borderWidth: 1,
+                                    borderRadius:5,
+                                    pointRadius:0,
+                                    pointBackgroundColor: '#007bff',
+                                    datalabels:{
+                                    offset:'top',
+                                    anchor:'end',
+                                    font:{
+                                        weight:'bold',
+                                        
+                                    }
+                                    }
+                                
+                                },
+                            
+                                {
+                                    data: datos
+                                        .filter(e => e.sector==="Pintura")
+                                        .map(e => 85),
+                                    label:'Objetivo',
+                                    type:'line',
+                                    lineTension: 0,
+                                    backgroundColor: 'transparent',
+                                    borderColor: '#990606',
+                                    borderWidth: 2,
+                                    pointRadius:0,
+                                    pointBackgroundColor: '#007bff',
+                                    datalabels:{
+                                    display:false
+                                    }
+                                }],
+                                
+                                
+                                } 
+                        chart26.update();  
+
+                        let chart27 = Chart.instances[26];
+                            chart27.data = {
+                                labels: datos
+                                .filter(e => e.sector==="Pintura")
+                                .map(e => fecha(e.fecha)),
+                                
+                                datasets: [{
+                                    data: datos
+                                        .filter(e => e.sector==="Pintura")
+                                        .map(e => e.retrabajo),
+                                    label:'Retrabajo',
+                                    type:'line',
+                                    lineTension: 0,
+                                    backgroundColor: '#007bff',
+                                    borderColor: '#007bff',
+                                    borderWidth: 1,
+                                    borderRadius:5,
+                                    pointRadius:0,
+                                    pointBackgroundColor: '#007bff',
+                                    datalabels:{
+                                    offset:'top',
+                                    anchor:'end',
+                                    font:{
+                                        weight:'bold',
+                                        
+                                    }
+                                    }
+                                
+                                },
+                            
+                                {
+                                    data: datos
+                                        .filter(e => e.sector==="Pintura")
+                                        .map(e => e.sector==="Pintura" ? 17 : 20),
+                                    label:'Objetivo',
+                                    type:'line',
+                                    lineTension: 0,
+                                    backgroundColor: 'transparent',
+                                    borderColor: '#990606',
+                                    borderWidth: 2,
+                                    pointRadius:0,
+                                    pointBackgroundColor: '#007bff',
+                                    datalabels:{
+                                    display:false
+                                    }
+                                }],
+                                
+                                
+                                } 
+                        chart27.update();
+
+                        //Laca
+                        let chart28 = Chart.instances[27];
+                            chart28.data = {
+                                labels: datos
+                                    .filter(e => e.sector === "Laca")
+                                    .map(e => fecha(e.fecha))                              
+                                ,
+                                datasets: [{
+                                    data: datos
+                                        .filter(e => e.sector === "Laca")
+                                        .map(e => e.accidentes),
+                                    label:'Accidentes',
+                                    type:'line',
+                                    lineTension: 0,
+                                    backgroundColor: 'transparent',
+                                    borderColor: '#007bff',
+                                    borderWidth: 4,
+                                    pointRadius:0,
+                                    pointBackgroundColor: '#007bff',
+                                    datalabels:{
+                                        align:'top',
+                                        font:{
+                                            weight:'bold'
+                                        },
+                                    }
+                                },
+                                {
+                                    data: datos
+                                        .filter(e => e.sector==="Laca")
+                                        .map(e => 0),
+                                    
+                                    type:'line',
+                                    lineTension: 0,
+                                    backgroundColor: 'transparent',
+                                    borderColor: '#990606',
+                                    borderWidth: 4,
+                                    pointRadius:0,
+                                    pointBackgroundColor: '#007bff',
+                                    datalabels:{
+                                    display:false
+                                    }
+                                }],
+                                
+                                
+                            }
+                        chart28.update();
+
+                        let chart29 = Chart.instances[28];
+                            chart29.data = {
+                                labels: datos
+                                    .filter(e => e.sector==="Laca")
+                                    .map(e => fecha(e.fecha)),
+                                
+                                datasets: [{
+                                    data: datos
+                                        .filter(e => e.sector==="Laca")
+                                        .map(e => e.scrap),
+                                    label:'Scrap',
+                                    type:'line',
+                                    lineTension: 0,
+                                    backgroundColor: '#007bff',
+                                    borderColor: '#007bff',
+                                    borderWidth: 1,
+                                    borderRadius:5,
+                                    pointRadius:0,
+                                    pointBackgroundColor: '#007bff',
+                                    datalabels:{
+                                    offset:'top',
+                                    anchor:'end',
+                                    font:{
+                                        weight:'bold',
+                                        
+                                    }
+                                    }
+                                
+                                },
+                            
+                                {
+                                    data: datos
+                                        .filter(e => e.sector==="Laca")
+                                        .map(e => e.sector==="Pintura" ? 1.4 : 0.8),
+                                    label:'Objetivo',
+                                    type:'line',
+                                    lineTension: 0,
+                                    backgroundColor: 'transparent',
+                                    borderColor: '#990606',
+                                    borderWidth: 2,
+                                    pointRadius:0,
+                                    pointBackgroundColor: '#007bff',
+                                    datalabels:{
+                                    display:false
+                                    }
+                                }],
+                                
+                                
+                                }  
+                        chart29.update(); 
+
+                        let chart30 = Chart.instances[29];
+                            chart30.data = {
+                                labels: datos
+                                    .filter(e => e.sector==="Laca")
+                                    .map(e => fecha(e.fecha)),
+                                
+                                datasets: [{
+                                    data: datos
+                                        .filter(e => e.sector==="Laca")
+                                        .map(e => e.c_programa),
+                                    label:'Cumplimiento de Programa',
+                                    type:'line',
+                                    lineTension: 0,
+                                    backgroundColor: '#007bff',
+                                    borderColor: '#007bff',
+                                    borderWidth: 1,
+                                    borderRadius:5,
+                                    pointRadius:0,
+                                    datalabels:{
+                                    offset:'top',
+                                    anchor:'end',
+                                    font:{
+                                        weight:'bold',
+                                        
+                                    }
+                                    }
+                                
+                                },
+                            
+                                {
+                                    data: datos
+                                        .filter(e => e.sector==="Laca")
+                                        .map(e => 100),
+                                   
+                                    type:'line',
+                                    lineTension: 0,
+                                    backgroundColor: 'transparent',
+                                    borderColor: '#990606',
+                                    borderWidth: 2,
+                                    pointRadius:0,
+                                    
+                                    pointBackgroundColor: '#007bff',
+                                    datalabels:{
+                                    display:false
+                                    }
+                                }],
+                                
+                                
+                                } 
+                        chart30.update();
+
+                        let chart31 = Chart.instances[30];
+                            chart31.data = {
+                                labels: datos
+                                    .filter(e => e.sector==="Laca")
+                                    .map(e => fecha(e.fecha)),
+                                
+                                datasets: [{
+                                    data: datos
+                                        .filter(e => e.sector==="Pintura")
+                                        .map(e => e.disponibilidad),
+                                    label:'Disponibilidad MTTO',
+                                    type:'line',
+                                    lineTension: 0,
+                                    backgroundColor: '#007bff',
+                                    borderColor: '#007bff',
+                                    borderWidth: 1,
+                                    borderRadius:5,
+                                    pointRadius:0,
+                                    pointBackgroundColor: '#007bff',
+                                    datalabels:{
+                                    offset:'top',
+                                    anchor:'end',
+                                    font:{
+                                        weight:'bold',
+                                        
+                                    }
+                                    }
+                                
+                                },
+                            
+                                {
+                                    data: datos
+                                        .filter(e => e.sector==="Laca")
+                                        .map(e => 85),
+                                    label:'Objetivo',
+                                    type:'line',
+                                    lineTension: 0,
+                                    backgroundColor: 'transparent',
+                                    borderColor: '#990606',
+                                    borderWidth: 2,
+                                    pointRadius:0,
+                                    pointBackgroundColor: '#007bff',
+                                    datalabels:{
+                                    display:false
+                                    }
+                                }],
+                                
+                                
+                                } 
+                        chart31.update();  
+
+                        let chart32 = Chart.instances[31];
+                            chart32.data = {
+                                labels: datos
+                                .filter(e => e.sector==="Laca")
+                                .map(e => fecha(e.fecha)),
+                                
+                                datasets: [{
+                                    data: datos
+                                        .filter(e => e.sector==="Laca")
+                                        .map(e => e.retrabajo),
+                                    label:'Retrabajo',
+                                    type:'line',
+                                    lineTension: 0,
+                                    backgroundColor: '#007bff',
+                                    borderColor: '#007bff',
+                                    borderWidth: 1,
+                                    borderRadius:5,
+                                    pointRadius:0,
+                                    pointBackgroundColor: '#007bff',
+                                    datalabels:{
+                                    offset:'top',
+                                    anchor:'end',
+                                    font:{
+                                        weight:'bold',
+                                        
+                                    }
+                                    }
+                                
+                                },
+                            
+                                {
+                                    data: datos
+                                        .filter(e => e.sector==="Laca")
+                                        .map(e => e.sector==="Pintura" ? 17 : 20),
+                                    label:'Objetivo',
+                                    type:'line',
+                                    lineTension: 0,
+                                    backgroundColor: 'transparent',
+                                    borderColor: '#990606',
+                                    borderWidth: 2,
+                                    pointRadius:0,
+                                    pointBackgroundColor: '#007bff',
+                                    datalabels:{
+                                    display:false
+                                    }
+                                }],
+                                
+                                
+                                } 
+                        chart32.update();
+
+                        let chart33 = Chart.instances[32];
+                            chart33.data = {
+                                labels: datos
+                                .filter(e => e.sector==="Logistica")
+                                .map(e => fecha(e.fecha)),
+                                
+                                datasets: [{
+                                    data: datos
+                                        .filter(e => e.sector==="Logistica")
+                                        .map(e => e.entregas),
+                                    label:'Retrabajo',
+                                    type:'line',
+                                    lineTension: 0,
+                                    backgroundColor: '#007bff',
+                                    borderColor: '#007bff',
+                                    borderWidth: 1,
+                                    borderRadius:5,
+                                    pointRadius:0,
+                                    pointBackgroundColor: '#007bff',
+                                    datalabels:{
+                                    offset:'top',
+                                    anchor:'end',
+                                    font:{
+                                        weight:'bold',
+                                        
+                                    }
+                                    }
+                                
+                                },
+                            
+                                {
+                                    data: datos
+                                        .filter(e => e.sector==="Logistica")
+                                        .map(e => 100),
+                                    label:'Objetivo',
+                                    type:'line',
+                                    lineTension: 0,
+                                    backgroundColor: 'transparent',
+                                    borderColor: '#990606',
+                                    borderWidth: 2,
+                                    pointRadius:0,
+                                    pointBackgroundColor: '#007bff',
+                                    datalabels:{
+                                    display:false
+                                    }
+                                }],
+                                
+                                
+                                } 
+                        chart33.update();
+
+                        //document.getElementById('fecha_calidad').innerText = data.filter(e => e.sector==="Calidad").map(e => e.fecha);
+                        //document.getElementById('desc_calidad').innerText = data.descripcion;
+                        const calidadDatos = datos.filter(e => e.sector === "Calidad");
+
+                        // Encuentra el objeto con la fecha más reciente
+                        const datoMasReciente = calidadDatos.reduce((latest, item) => {
+                        const fechaActual = new Date(item.fecha);
+                        return fechaActual > new Date(latest.fecha) ? item : latest;
+                        }, { fecha: '1970-01-01' }); // Objeto inicial con fecha antigua
+
+                        // Extrae la fecha, descripción y URL de la imagen
+                        const fechaMasReciente = fecha2(datoMasReciente.fecha);
+                        const descripcion = datoMasReciente.ret_laca; // Asumiendo que la descripción está en 'observaciones'
+                        const imagenUrl = `/${datoMasReciente.sc_laca}`; // Asumiendo que el nombre del archivo está en 'sc_laca'
+                        console.log(datoMasReciente.sc_laca)
+                        console.log(imagenUrl)
+                        // Actualiza el elemento HTML
+                        document.getElementById('fecha_calidad').innerText = fechaMasReciente;
+                        document.getElementById('desc_calidad').innerText = descripcion;
+
+                        // Actualiza la imagen
+                        const imagenElemento = document.getElementById('imagen_calidad');
+                        if (imagenElemento) {
+                        imagenElemento.src = imagenUrl;
+                        imagenElemento.style.display = 'block'; // Asegúrate de que la imagen sea visible
+                        }
+
                     })
             }  
 
