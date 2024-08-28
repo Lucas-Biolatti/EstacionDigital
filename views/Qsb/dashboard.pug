@@ -21,14 +21,18 @@ html(lang="es")
     
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid">
+            
             button#menu-toggle.btn.btn-outline-primary ☰
             img(src="/images/logo.jpg" style="height:90px")
-            h3(class="navbar-brand") Dashboard
+            a(href="/" class="d-block p-1"     )
+                    i(class="icon ion-md-home lead") Inicio
+            h3(class="navbar-brand") Dashboard - Mes Corriente
+            
 
         </div>
     </nav>
-    <div id="sectorCarousel" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-item active">
+    <div id="sectorCarousel" class="carousel slide" data-bs-ride="carousel" >
+        <div class="carousel-item active" data-bs-interval="10000">
             <div class="container">
                 <div class="row">
                     <div class="col-md-2 d-flex justify-content-center align-items-center"><p>Sector</p></div>
@@ -116,7 +120,7 @@ html(lang="es")
                 </div>
             </div>
         </div>
-        <div class="carousel-item">
+        <div class="carousel-item" data-bs-interval="10000">
             <div class="container">
                 <div class="row">
                     <div class="col-md-2 d-flex justify-content-center align-items-center"><p>Sector</p></div>
@@ -207,7 +211,7 @@ html(lang="es")
                 </div>
             </div>
         </div>
-        <div class="carousel-item">
+        <div class="carousel-item" data-bs-interval="10000">
             <div class="container">
                 <div class="row">
                     <div class="col-md-2 d-flex justify-content-center align-items-center"><p>LACA</p></div>
@@ -246,7 +250,7 @@ html(lang="es")
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-2 d-flex justify-content-center align-items-center"><p>PRODUCTO TERMINADO</p></div>
+                    <div class="col-md-2 d-flex justify-content-center align-items-center"><p>ULTIMO RECLAMO DE CALIDAD</p></div>
                     <div class="col-md-2 d-flex justify-content-center align-items-center"><p id="fecha_calidad"></p></div>
                     <div class="col-md-4 d-flex justify-content-center align-items-center"><p id="desc_calidad"></p></div>
                     <div class="col-md-4 d-flex justify-content-center align-items-center">

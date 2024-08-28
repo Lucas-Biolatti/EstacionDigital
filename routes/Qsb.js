@@ -207,7 +207,7 @@ router.get('/datosPlan', (req, res) => {
             return res.status(500).send('Error de conexión a la base de datos');
         }
 
-        const sql = 'SELECT * FROM planAccionQsb ORDER BY fecha';
+        const sql = "SELECT * FROM planAccionQsb ORDER BY CASE WHEN estado = 'No iniciado' THEN 1 WHEN estado = 'En proceso' THEN 2 WHEN estado = 'Completado' THEN 3 END,fecha;";
         conexion.query(sql, (error, results) => {
           conexion.release();
             if (!error) {

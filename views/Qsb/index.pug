@@ -12,6 +12,7 @@ html(lang="es")
     
     <title>Polimetal S.A</title>
     <link rel="stylesheet" href="/stylesheets/styleIndex.css">
+    
   body
    
     div(class="d-flex")
@@ -23,6 +24,9 @@ html(lang="es")
             div(class="menu")
                 a(href="/" class="d-block p-1 text-light"     )
                     i(class="icon ion-md-home m-2 lead") Inicio
+                a(href="Qsb/dashboard" class="d-block p-1 text-light")
+                    i(class="icon ion-md-chart m-2 lead") Dashboard
+                
                
                 hr
                 h6(class="p-3 text-light") Sectores
@@ -411,9 +415,10 @@ html(lang="es")
 
                     $(document).ready(function () {
                         var table = $('#tabla').DataTable({
-                            fixedHeader: true,
+                            fixedHeader: false,
                             dom: 'Bfrtlip',
                             data: dataset,
+                            autoWidth: false,
                             columns: [
                                 { title: 'Id' },
                                 { title: 'Fecha' },
@@ -428,6 +433,11 @@ html(lang="es")
                                 { title: 'Estado' },
                                 { title: '☰' },
                             ],
+                            "order": [],  // Desactiva el ordenamiento automático en todas las columnas
+                            "columnDefs": [
+                                    { "orderable": false, "targets": 10 }, // Desactiva el ordenamiento en la columna "Estado"
+                                    { width: "40%", targets: 7 }, // Aumenta el tamaño de la columna "Comentario"
+                                ]
                         });
              fetch('Qsb/datosSector')
                 .then(response => response.json())
@@ -455,20 +465,7 @@ html(lang="es")
                         
                     });
                 })
-                        $('#tabla thead tr').clone(true).appendTo('#tabla thead');
-                        $('#tabla thead tr:eq(1) th').each(function(i) {
-                            var title = $(this).text();
-                            $(this).html('<input type="text" placeholder="Buscar..."/>');
-
-                            $('input', this).on('keyup change', function() {
-                                if (table.column(i).search() !== this.value) {
-                                    table
-                                        .column(i)
-                                        .search(this.value)
-                                        .draw();
-                                }
-                            });
-                        });
+                        
                         function fechaEdit(x){
                             let dia = (x.getUTCDate()<10?'0':'')+x.getUTCDate();
                             let mes = ((x.getMonth()+1)<10?'0':'')+(x.getMonth()+1);
