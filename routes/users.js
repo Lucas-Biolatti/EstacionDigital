@@ -1097,8 +1097,6 @@ router.get('/nomina',(req,res)=>{
     })
   
 });
-
-
 router.get('/ordenes',(req,res)=>{
   if (req.session.loggedin) {
     connectToDatabase((error, conexion) => {
@@ -1147,5 +1145,13 @@ router.get('/tarjetas',(req,res)=>{
       }
   })
 });
+
+// MODULOS DE PRODUCCION
+
+//INYECCION
+router.get('/produccion',(req,res)=>{
+  const sector = req.session.sector;
+  res.render(`./users/produccion/${sector}/index`)
+})
 
 module.exports = router;

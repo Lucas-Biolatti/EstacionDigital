@@ -60,6 +60,7 @@ router.post('/auth', function(request, response) {
                     request.session.rol = results[0].rol;
                     request.session.nombre = results[0].nombre;
                     request.session.apellido = results[0].apellido;
+                    request.session.sector = results[0].sector;
 
                     // Redirigir a la página de inicio
 					//const returnTo = request.session.returnTo || '/';
