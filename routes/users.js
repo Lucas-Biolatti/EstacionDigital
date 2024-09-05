@@ -1149,9 +1149,148 @@ router.get('/tarjetas',(req,res)=>{
 // MODULOS DE PRODUCCION
 
 //INYECCION
+function fechabd(x){
+  let f = new Date(x);
+  let mes= f.getMonth()+Number(1);
+  let fecha = `${f.getUTCFullYear()}-${mes}-${f.getDate()};`
+  return fecha;
+}
 router.get('/produccion',(req,res)=>{
   const sector = req.session.sector;
   res.render(`./users/produccion/${sector}/index`)
-})
+});
+router.get('/produccion/inyeccion/modelos', function(req, res, next) {
+  res.render('users/produccion/inyeccion/modelos', { title: 'Express' });
+});
+router.get('/produccion/inyeccion/moldesEntreFecha',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="users" && req.session.sector=="inyeccion") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      let fini=req.query.fini;
+      let ffin=req.query.ffin;
+      let molde=req.query.molde;
+    
+      let sql = `CALL moldeEntreFecha('${fini}','${ffin}','${molde}')`
+      conexion.query(sql,(err,result)=>{
+        conexion.release();
+        if (!err) {
+          res.send(result[0]);
+        }else{
+          console.log(err);
+        }
+      })
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+});
+router.get('/produccion/inyeccion/modeloEntreFecha',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="users" && req.session.sector =="inyeccion") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      let fini=req.query.fini;
+      let ffin=req.query.ffin;
+      let molde=req.query.molde;
+    
+      let sql = `CALL modeloEntreFecha('${fini}','${ffin}','${molde}')`
+      conexion.query(sql,(err,result)=>{
+        conexion.release();
+        if (!err) {
+          res.send(result[0]);
+        }else{
+          console.log(err);
+        }
+      })
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+});
+router.get('/produccion/inyeccion/tornillos', async (req, res) => {
+  if (req.session.loggedin && req.session.rol === "users" && req.session.sector==="inyeccion") {
+    connectToDatabase(async (error, conexion) => {
+      if (error) {
+        return res.status(500).send('Error de conexión a la base de datos');
+      }
+      try {
+        const sql1 = 'SELECT * FROM tornillosInyectoras';
+        const result = await new Promise((resolve, reject) => {
+          conexion.query(sql1, (err, result) => {
+            if (err) {
+              console.error(err);
+              reject(err);
+            } else {
+              resolve(result);
+            }
+          });
+        });
+
+        const promises = result.map((e) => {
+          return new Promise((resolve, reject) => {
+            conexion.query(`CALL tornillosMaquina("${fechabd(e.ftornillo)}", "${e.gima}")`, (error, result1) => {
+              conexion.release();              
+              if (!error && result1[0][0].GIMA === e.gima) {
+                let r = {
+                  Gima: result1[0][0].GIMA,
+                  Golpes: result1[0][0].golpes,
+                  ftornillo: fecha(result1[0][0].ftornillo),
+                  observaciones: result1[0][0].observaciones,
+                };
+                resolve(r);
+              } else {
+                console.error(error);
+                resolve(null); // Resolver con null en caso de error para que no rompa Promise.all
+              }
+            });
+          });
+        });
+
+        const resultsArray = await Promise.all(promises);
+        const validResults = resultsArray.filter((result) => result !== null);
+
+        res.render('users/produccion/inyeccion/tornillos', { resultados: validResults });
+      } catch (error) {
+        console.error(error);
+        res.status(500).send('Error en la consulta');
+      } finally {
+        conexion.release(); // Asegúrate de liberar la conexión
+      }
+    });
+  } else {
+    res.render('login', {
+      mensaje: `No está logeado o no tiene autorización para este sitio. Verifique sus credenciales`,
+    });
+  }
+});
+router.post('/produccion/inyeccion/editarTornillo',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="Qsb") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      let fecha=req.body.fecha;
+      let observaciones = req.body.observaciones;
+      let gima=req.body.gima;
+      const sql = `UPDATE tornillosInyectoras SET ftornillo='${fecha}', observaciones='${observaciones}' WHERE gima='${gima}'` ;
+      conexion.query(sql,(err,rows)=>{
+        conexion.release();
+        if (!err) {
+          res.redirect('/tornillos');
+        }else{
+          res.send("Error al tratar de realizar la actualizacion de los datos:"+err)
+        }
+      })
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+});
 
 module.exports = router;

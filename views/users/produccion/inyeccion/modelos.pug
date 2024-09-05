@@ -39,19 +39,19 @@
           <div class="position-sticky pt-3">
             <ul class="nav flex-column">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="produccion/">
+                <a class="nav-link" aria-current="page" href="/">
                   <span data-feather="bar-chart-2"></span>
                     | Moldes
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="inyeccion/tornillos">
+                <a class="nav-link" href="/tornillos">
                   <span data-feather="file"></span>
                    |Tornillos
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="inyeccion/modelos">
+                <a class="nav-link active" href="/modelos">
                   <span data-feather="bar-chart-2"></span>
                    |Modelos
                 </a>
@@ -113,7 +113,7 @@
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h2 class="h2">Inyección - Moldes</h2>
+            <h2 class="h2">Inyección - Modelos</h2>
             <div class="btn-toolbar mb-2 mb-md-0">
               <div class="btn-group me-2">
                 label(class="form-label" for="fini") Desde
@@ -187,7 +187,7 @@
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" ></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="../javascripts/dashboard.js"></script>
+    <script src="./javascripts/dashboard.js"></script>
     <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     
@@ -290,7 +290,7 @@
             var ok = document.getElementById('ok');
             var scrap = document.getElementById('scrap');
             
-          fetch(`produccion/inyeccion/moldesEntreFecha?fini=${fini}&ffin=${ffin}&molde=${molde}`)
+          fetch(`modeloEntreFecha?fini=${fini}&ffin=${ffin}&molde=${molde}`)
             .then(response => response.json())
             .then(datos =>{
 
@@ -403,10 +403,10 @@
                   let is=0;
                   let rxs=0;
                   
-                  datos.forEach(e => {
-                    golp += Number(e.Golpes);
-                    is += Number(e.Isla);
-                    rxs += Number(e.Rx);
+                  datos.map(e => {
+                    golp += e.Golpes;
+                    is += e.Isla;
+                    rxs += e.Rx;
                     });
                   let oks=golp-(is+rxs);
                   let scraps=Number(((1-(oks/golp))*100).toFixed(2));
