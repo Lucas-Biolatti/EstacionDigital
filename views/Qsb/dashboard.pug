@@ -214,6 +214,14 @@ html(lang="es")
         <div class="carousel-item" data-bs-interval="10000">
             <div class="container">
                 <div class="row">
+                    <div class="col-md-2 d-flex justify-content-center align-items-center"><p>Sector</p></div>
+                    <div class="col-md-2 d-flex justify-content-center align-items-center"><p>Accidentes</p></div>
+                    <div class="col-md-2 d-flex justify-content-center align-items-center"><p>Scrap</p></div>
+                    <div class="col-md-2 d-flex justify-content-center align-items-center"><p>Cump Programa</p></div>
+                    <div class="col-md-2 d-flex justify-content-center align-items-center"><p>Disponibilidad</p></div>
+                    <div class="col-md-2 d-flex justify-content-center align-items-center"><p>Disp Molde/Retrabajo</p></div>
+                </div>
+                <div class="row">
                     <div class="col-md-2 d-flex justify-content-center align-items-center"><p>LACA</p></div>
                     <div class="col-md-2">
                         <div style="width: 100%; height: 140px;">
@@ -3459,6 +3467,7 @@ html(lang="es")
                         //document.getElementById('fecha_calidad').innerText = data.filter(e => e.sector==="Calidad").map(e => e.fecha);
                         //document.getElementById('desc_calidad').innerText = data.descripcion;
                         const calidadDatos = datos.filter(e => e.sector === "Calidad");
+                        console.log(calidadDatos);
 
                         // Encuentra el objeto con la fecha más reciente
                         const datoMasReciente = calidadDatos.reduce((latest, item) => {

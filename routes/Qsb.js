@@ -58,7 +58,7 @@ router.get('/datosMes',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="Qsb") {
     let mes = req.query.mes;
     let year = req.query.year;
-    const sql = `SELECT * FROM indicadores WHERE MONTH(fecha) = "${mes}" AND YEAR(fecha)=${year} ORDER BY sector,fecha`
+    const sql = `SELECT * FROM indicadores WHERE (MONTH(fecha) = ${mes} AND YEAR(fecha) = ${year}) OR sector = "Calidad" ORDER BY sector, fecha;`
     connectToDatabase((error, conexion) => {
       if (error) {
           return res.status(500).send('Error de conexión a la base de datos');
