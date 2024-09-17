@@ -1281,7 +1281,7 @@ router.post('/produccion/inyeccion/editarTornillo',(req,res)=>{
       conexion.query(sql,(err,rows)=>{
         conexion.release();
         if (!err) {
-          res.redirect('/tornillos');
+          res.redirect('produccion/inyeccion/tornillos');
         }else{
           res.send("Error al tratar de realizar la actualizacion de los datos:"+err)
         }
@@ -1292,5 +1292,15 @@ router.post('/produccion/inyeccion/editarTornillo',(req,res)=>{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 });
+//Registros de produccion Inyeccion
 
+router.get('/produccion/inyeccion/rp21',(req,res)=>{
+  if (req.session.loggedin && req.session.rol === "users" && req.session.sector==="inyeccion") {
+    res.render('users/produccion/inyeccion/rp21',{nombre:`${req.session.apellido}, ${req.session.nombre}`})
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+  
+})
 module.exports = router;
