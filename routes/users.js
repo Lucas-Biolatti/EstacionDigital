@@ -3,6 +3,7 @@ const { start } = require('repl');
 const url = require('url');
 var router = express.Router();
 var conexion = require('../db/db');
+const fs = require('fs');
 const { connectToDatabase } = require('../db/db');
 const { nextTick } = require('process');
 /* GET users listing. */
@@ -17,7 +18,18 @@ function fechaEdit(x){
   let f = x.getUTCFullYear()+"-"+mes+"-"+dia;
   return f;
 }
-
+// Función para guardar los errores en un archivo de texto
+function logError(message) {
+  const timestamp = new Date().toISOString();
+  const errorMessage = `${timestamp} - ${message}\n`;
+  
+  // Escribe el error en un archivo log.txt
+  fs.appendFile('log.txt', errorMessage, (err) => {
+      if (err) {
+          console.error('No se pudo escribir en el archivo log:', err);
+      }
+  });
+}
 
 
 //const nombre = `${req.session.apellido}, ${req.session.nombre}`
@@ -28,6 +40,7 @@ router.get('/mtto:?',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="users") {
     connectToDatabase((error, conexion) => {
       if (error) {
+          logError('Error de conexión a la base de datos: ' + error.message);
           return res.status(500).send('Error de conexión a la base de datos');
       }
       let sql1 = "SELECT * FROM sector";
@@ -42,6 +55,8 @@ router.get('/mtto:?',(req,res)=>{
                   sector.push(result[i])
               }
            
+          }else{
+            logError('Error al obtener sectores: ' + error.message);
           }
       
         await res.render("./users/mantenimiento/mtto",{sector:sector,
@@ -61,6 +76,7 @@ router.get('/ordenMtto',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="users") {
     connectToDatabase((error, conexion) => {
       if (error) {
+          logError('Error de conexión a la base de datos: ' + error.message);
           return res.status(500).send('Error de conexión a la base de datos');
       }
       let idSector = url.parse(req.url,true).query.id;
@@ -96,6 +112,7 @@ router.get('/listarOrden:?',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="users") {
     connectToDatabase((error, conexion) => {
       if (error) {
+          logError('Error de conexión a la base de datos: ' + error.message);      
           return res.status(500).send('Error de conexión a la base de datos');
       }
       let idSector = req.query.id;
@@ -158,6 +175,7 @@ router.get('/listarOrden:?',(req,res)=>{
               });
            }
           else{
+              logError('Error de conexion: ' + error.message);
               res.send("Error de conexion:"+error);
           }
       })
@@ -172,6 +190,7 @@ router.get('/editarOrden',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="users") {
     connectToDatabase((error, conexion) => {
       if (error) {
+          logError('Error de conexión a la base de datos: ' + error.message);
           return res.status(500).send('Error de conexión a la base de datos');
       }
       let idOrden = url.parse(req.url,true).query.idOrden;
@@ -231,7 +250,8 @@ router.post('/ordenMtto',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="users") {
     connectToDatabase((error, conexion) => {
       if (error) {
-          return res.status(500).send('Error de conexión a la base de datos');
+        logError('Error de conexión a la base de datos: ' + error.message);
+        return res.status(500).send('Error de conexión a la base de datos');
       }
       let sql = "INSERT INTO `ordentrabajo`(`detecto`,`avisar`,`tel`, `sector`, `equipo`, `fecha`, `turno`, `paradaProceso`, `prioridad`, `tipoParada`, `horaInicio`, `horaFin`, `descripcion`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
       conexion.query(sql,[
@@ -266,7 +286,8 @@ router.delete('/ordenMtto:?',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="users") {
     connectToDatabase((error, conexion) => {
       if (error) {
-          return res.status(500).send('Error de conexión a la base de datos');
+        logError('Error de conexión a la base de datos: ' + error.message);
+        return res.status(500).send('Error de conexión a la base de datos');
       }
       let id = req.body.id;
     
@@ -287,7 +308,8 @@ router.put('/editarOrden',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="users") {
     connectToDatabase((error, conexion) => {
       if (error) {
-          return res.status(500).send('Error de conexión a la base de datos');
+        logError('Error de conexión a la base de datos: ' + error.message);
+        return res.status(500).send('Error de conexión a la base de datos');
       }
       let sqlupdate = "UPDATE `ordentrabajo` SET `detecto`=?,`equipo`=?,`fecha`=?,`turno`=?,`paradaProceso`=?,`prioridad`=?,`tipoParada`=?,`horaInicio`=?,`horaFin`=?,`descripcion`=? WHERE `idOrden`=?";
       let resultados = [
@@ -326,7 +348,8 @@ router.get('/verOrden',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="users") {
     connectToDatabase((error, conexion) => {
       if (error) {
-          return res.status(500).send('Error de conexión a la base de datos');
+        logError('Error de conexión a la base de datos: ' + error.message);
+        return res.status(500).send('Error de conexión a la base de datos');
       }
       let idOrden = url.parse(req.url,true).query.idOrden;
       const sqlorden = "SELECT * FROM ordentrabajo WHERE idOrden = ?"

@@ -1,0 +1,2 @@
+2024-09-18T20:12:35.611Z - Error de conexión a la base de datos: undefined
+2024-09-18T20:14:43.203Z - Error de conexión a la base de datos: Error: connect ETIMEDOUT

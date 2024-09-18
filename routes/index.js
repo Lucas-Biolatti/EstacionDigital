@@ -1,9 +1,21 @@
 var express = require('express');
+const fs = require('fs');
 var router = express.Router();
 //var conexion = require('../db/db')
 const { connectToDatabase } = require('../db/db');
 var session = require('express-session')
 
+function logError(message) {
+    const timestamp = new Date().toISOString();
+    const errorMessage = `${timestamp} - ${message}\n`;
+    
+    // Escribe el error en un archivo log.txt
+    fs.appendFile('log.txt', errorMessage, (err) => {
+        if (err) {
+            console.error('No se pudo escribir en el archivo log:', err);
+        }
+    });
+  }
 /* GET home page. */
 router.get('/login', function(req, res, next) {
 	if(req.session.loggedin){
@@ -37,6 +49,7 @@ router.post('/auth', function(request, response) {
         // Conectar a la base de datos y refrescar la conexión si es necesario
         connectToDatabase((error, conexion) => {
             if (error) {
+                logError('Error de conexión a la base de datos: '+error);
                 return response.status(500).send('Error de conexión a la base de datos');
             }
 
