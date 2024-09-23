@@ -116,20 +116,15 @@
             <h2 class="h2">Inyección - Moldes</h2>
             <div class="btn-toolbar mb-2 mb-md-0">
               <div class="btn-group me-2">
-                label(class="form-label" for="fini") Desde
+                label(class="form-label" for="fini") Fecha
                 input(type="date", name="fini", class="form-control", id="fini")
               
-                label(class="form-label") Hasta
-                input(type="date", name="ffin", class="form-control", id="ffin")
-                input(type="text", name="molde", placeholder="molde", id="molde")
+                
                 <button type="button" class="btn btn-sm btn-outline-secondary" id="consultar">
                   <span data-feather="search"></span>
                     |Consultar
                 </button>
-                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="limpiar()">
-                  <span data-feather="refresh-cw"></span>
-                    |Limpiar
-                </button>
+                
               </div>
               
             </div>
@@ -139,39 +134,17 @@
             
             <canvas id="myChart"></canvas>
           </div>
-          <h2>Golpes vs OK RX - Dia a Dia</h2>
-          <div style="width: 100%; height: 450px;">
-              
-              <canvas id="myChart2"></canvas>
-          </div>
-          
-         
-
-          <h2>Resumen Entre Fechas</h2>
-          div(class="table-responsive")
-            table(class="table table-striped table-sm")
-              thead 
-                th GOLPES
-                th ISLA
-                th RX 
-                th Ok 
-                th % SCRAP
-              tbody
-                td(id="golpes")
-                td(id="isla")
-                td(id="rx")
-                td(id="ok")
-                td(id="scrap") 
 
           <h2>Tabla Dia a Dia</h2>
           <div class="table-responsive">
             <table class="table table-striped table-sm" >
               <thead>
                 <tr>
-                  <th scope="col">FECHA</th>
+                  <th scope="col">MOLDE</th>
                   <th scope="col">GOLPES</th>
                   <th scope="col">ISLA</th>
                   <th scope="col">RX</th>
+                  <th scope="col">OK</th>
                   <th scope="col">SCRAP</th>
                 </tr>
               </thead>
@@ -195,7 +168,7 @@
       feather.replace({ 'aria-hidden': 'true' })
       document.addEventListener('DOMContentLoaded',function(){
         initChart();
-        initChart2();
+       
         let cons = document.getElementById('consultar');
         cons.addEventListener('click', (e) => {
           e.preventDefault();
@@ -234,43 +207,7 @@
 
             return chart;
         }
-        function initChart2() {
-            // Crea el gráfico en la carga de la página
-            let ctx = document.getElementById('myChart2').getContext("2d");
-            let chart2 = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-                    datasets: [{
-                        label: 'Promedio de vida util',
-                        data: [], // Los datos se actualizarán más tarde
-                        borderWidth: 1
-                    },
-                    {
-                        type: 'line',
-                        label: 'Objetivo',
-                        data: [400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            
-                        },
-                        x:{
-                          beginAtZero: true,
-                          stacked:true
-                        }
-                    }
-                },
-                plugins:[ChartDataLabels]
-            });
-
-            return chart2;
-        }
+      
         function updateChart(){
           function fecha(x){
             let f = new Date(x);
@@ -281,22 +218,18 @@
             return fecha
           }
             var fini = document.getElementById('fini').value;
-            var ffin = document.getElementById('ffin').value;
-            var molde = document.getElementById('molde').value;
-            var tabla = document.getElementById('tabla');
-            var golpes = document.getElementById('golpes');
-            var isla = document.getElementById('isla');
-            var rx = document.getElementById('rx');
-            var ok = document.getElementById('ok');
-            var scrap = document.getElementById('scrap');
             
-          fetch(`produccion/inyeccion/moldesEntreFecha?fini=${fini}&ffin=${ffin}&molde=${molde}`)
+          
+            var tabla = document.getElementById('tabla');
+            
+            
+          fetch(`produccion/inyeccion/prod_dia?fecha=${fini}`)
             .then(response => response.json())
             .then(datos =>{
 
                 let chart = Chart.instances[0];
                 chart.data = {
-                          labels: datos.map(e => fecha(e.FECHA)),
+                          labels: datos.map(e => e.modelo),
                           
                           datasets: [{
                             data: datos.map(e => e.Scrap),
@@ -318,7 +251,7 @@
                             }
                           },
                           {
-                            data: datos.map(e => 0.055),
+                            data: datos.map(e => 0.045),
                             label:'Objetivo',
                             type:'line',
                             lineTension: 0,
@@ -334,71 +267,6 @@
                           
                         }
                     chart.update();
-
-                    let chart2 = Chart.instances[1];
-                    chart2.data = {
-                          labels: datos.map(e => fecha(e.FECHA)),
-                          
-                          datasets: [{
-                            data: datos.map(e => e.Golpes),
-                            label:'Golpes dia a dia',
-                            type:'bar',
-                            lineTension: 0,
-                            backgroundColor: 'transparent',
-                            borderColor: '##007bff',
-                            borderWidth: 1,
-                            borderRadius:5,
-                            pointBackgroundColor: '#007bff',
-                            datalabels:{
-                              offset:'top',
-                              anchor:'end',
-                              font:{
-                                weight:'bold',
-                                
-                              }
-                            }
-                           
-                          },
-                          {
-                            data: datos.map(e => e.ok),
-                            label:'ok dia a dia',
-                            type:'bar',
-                            lineTension: 0,
-                            backgroundColor: '#1E82CB',
-                            borderColor: '#1E82CB',
-                            borderWidth: 1,
-                            borderRadius:5,
-                            datalabels:{
-                              color:'white',
-                              anchor:'center',
-                              font:{
-                                weight:'bold',
-                                
-                              }
-                            }
-                           
-                          },
-                          {
-                            data: datos.map(e => 230),
-                            label:'Objetivo',
-                            type:'line',
-                            lineTension: 0,
-                            backgroundColor: 'transparent',
-                            borderColor: '#990606',
-                            borderWidth: 2,
-                            
-                            pointBackgroundColor: '#007bff',
-                            datalabels:{
-                             display:false
-                            }
-                          }],
-                          
-                          
-                        }  
-                    chart2.update(); 
-                        
-                       
-
                   let golp=0;
                   let is=0;
                   let rxs=0;
@@ -411,35 +279,20 @@
                   let oks=golp-(is+rxs);
                   let scraps=Number(((1-(oks/golp))*100).toFixed(2));
                   
-                  golpes.innerHTML = golp;
-                  isla.innerHTML = is;
-                  rx.innerHTML = rxs;
-                  ok.innerHTML = oks;
-                  scrap.innerHTML = scraps;
+                  //Colocar los inners para mostrar los totales
 
                   tabla.innerHTML ="";
                   for(let i=0; i<datos.length;i++){
-                    if((datos[i].Scrap*100).toFixed(2)>5){
-                      
+                    
                       tabla.innerHTML += `
                     <tr>
-                      <td>${fecha(datos[i].FECHA)}</td>
+                      <td>${datos[i].modelo)}</td>
                       <td>${datos[i].Golpes}</td>
-                      <td>${datos[i].Isla}</td>
-                      <td>${datos[i].Rx}</td>
-                      <td>${(datos[i].Scrap*100).toFixed(2)}% ❌</td>
-                    </tr>`
-                    }else{
-                      tabla.innerHTML += `
-                    <tr>
-                      <td>${fecha(datos[i].FECHA)}</td>
-                      <td>${datos[i].Golpes}</td>
-                      <td>${datos[i].Isla}</td>
-                      <td>${datos[i].Rx}</td>
+                      <td>${datos[i].isla}</td>
+                      <td>${datos[i].rx}</td>
+                      <td>${datos[i].ok}</td>
                       <td>${(datos[i].Scrap*100).toFixed(2)}%</td>
                     </tr>`
-                    }
-                    
                   }
                   
                     
@@ -447,14 +300,7 @@
           
                   
 
-        }
-      })
-
-        
-      
-
-
-            
+       
     
   </body>
 </html>
