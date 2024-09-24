@@ -1351,7 +1351,38 @@ router.get('/produccion/inyeccion/prod_dia', function(req, res, next) {
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 });
+router.get('/produccion/inyeccion/prod_dia_maquina', function(req, res, next) {
+  if (req.session.loggedin && req.session.rol=="users" && req.session.sector=="inyeccion") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+        let fecha = req.query.fecha;
+        const sql = `CALL prod_dia_maquina('${fecha}')`
+        conexion.query(sql,(error,result)=>{
+         
+          conexion.release();
+          if (!error) {
+            res.send(result[0]);
+          }else{
+           
+            res.send(error)
+          }
+        })
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+});
 router.get('/produccion/inyeccion/produccionDia', function(req, res, next) {
-  res.render('users/produccion/inyeccion/report_prod_dia', { title: 'Express' });
+  if (req.session.loggedin && req.session.rol=="users" && req.session.sector =="inyeccion") {
+    res.render('users/produccion/inyeccion/report_prod_dia');
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+ 
 });
 module.exports = router;

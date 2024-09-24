@@ -3,20 +3,35 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Hugo 0.84.0">
+    
     <title>Polimetal SA - Inyeccion</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
     <link href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-
-    
-
-
     <link href="/assets/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="/stylesheets/dashboard.css" rel="stylesheet">
+    style.
+      .chart-container {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        width: 100%;
+        flex-wrap: wrap; /* Esto permite que los elementos se vayan a la siguiente línea si no hay espacio */
+      }
+
+      .chart-box {
+        width: 45%;
+        height: 450px;
+        margin-bottom: 20px; /* Espacio entre los gráficos */
+      }
+
+      @media (max-width: 768px) {
+        .chart-box {
+          width: 100%; /* Los gráficos ocuparán el 100% del ancho en pantallas pequeñas */
+        }
+      }
+   
   </head>
   <body>
     
@@ -113,7 +128,7 @@
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
           <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h2 class="h2">Inyección - Moldes</h2>
+            <h4 class="">Inyección - Reporte Diario</h4>
             <div class="btn-toolbar mb-2 mb-md-0">
               <div class="btn-group me-2">
                 label(class="form-label" for="fini") Fecha
@@ -129,29 +144,105 @@
               
             </div>
           </div>
-          <h2>Scrap - Dia a Dia</h2>
-          <div style="width: 100%; height: 450px;">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="card text-center">
+                <div class="card-body">
+                  <i class="fas fa-hammer fa-3x"></i>
+                  <h5 class="card-title">Total Golpes</h5>
+                  <p class="card-text" id="golpes"></p>
+                </div>
+              </div>
+            </div>
             
-            <canvas id="myChart"></canvas>
+            <div class="col-md-3">
+              <div class="card text-center">
+                <div class="card-body">
+                  <i class="fas fa-industry fa-3x"></i>
+                  <h5 class="card-title">Total Isla</h5>
+                  <p class="card-text" id="isla"></p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-3">
+              <div class="card text-center">
+                <div class="card-body">
+                  <i class="fas fa-x-ray fa-3x"></i>
+                  <h5 class="card-title">Total Rx</h5>
+                  <p class="card-text" id="rx"></p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-3">
+              <div class="card text-center">
+                <div class="card-body">
+                  <i class="fas fa-check-circle fa-3x"></i>
+                  <h5 class="card-title">Total OK</h5>
+                  <p class="card-text" id="ok"></p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-3 mt-3">
+              <div class="card text-center">
+                <div class="card-body">
+                  <i class="fas fa-percentage fa-3x"></i>
+                  <h5 class="card-title">Scrap %</h5>
+                  <p class="card-text" id="scrap"></p>
+                </div>
+              </div>
+            </div>
           </div>
+          <h5>Scrap por Molde y Scrap por Máquina</h5>
 
-          <h2>Tabla Dia a Dia</h2>
-          <div class="table-responsive">
-            <table class="table table-striped table-sm" >
-              <thead>
-                <tr>
-                  <th scope="col">MOLDE</th>
-                  <th scope="col">GOLPES</th>
-                  <th scope="col">ISLA</th>
-                  <th scope="col">RX</th>
-                  <th scope="col">OK</th>
-                  <th scope="col">SCRAP</th>
-                </tr>
-              </thead>
-              <tbody id="tabla">
+          <div class="chart-container">
+            <div class="chart-box">
+              <canvas id="myChart"></canvas>
+            </div>
+            
+            <div class="chart-box">
+              <canvas id="myChart1"></canvas>
+            </div>
+          </div>
+          <h5>Resumen del dia</h5>
+          <div class="chart-container">
+            <div class="table-responsive">
+              <table class="table table-striped table-sm" >
+                <thead>
+                  <tr>
+                    <th scope="col">MOLDE</th>
+                    <th scope="col">GOLPES</th>
+                    <th scope="col">ISLA</th>
+                    <th scope="col">RX</th>
+                    <th scope="col">OK</th>
+                    <th scope="col">SCRAP</th>
+                  </tr>
+                </thead>
+                <tbody id="tabla">
 
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </div>
+          
+            <div class="table-responsive">
+              <table class="table table-striped table-sm" >
+                <thead>
+                  <tr>
+                    <th scope="col">MAQUINA</th>
+                    <th scope="col">GOLPES</th>
+                    <th scope="col">ISLA</th>
+                    <th scope="col">RX</th>
+                    <th scope="col">OK</th>
+                    <th scope="col">SCRAP</th>
+                  </tr>
+                </thead>
+                <tbody id="tabla1">
+
+                </tbody>
+              </table>
+            </div>    
           </div>
         </main>
       </div>
@@ -160,21 +251,17 @@
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" ></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="../javascripts/dashboard.js"></script>
-    <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/javascripts/dashboard.js"></script>
+    <script src="/assets/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     
     script.
       feather.replace({ 'aria-hidden': 'true' })
       document.addEventListener('DOMContentLoaded',function(){
         initChart();
-       
-        let cons = document.getElementById('consultar');
-        cons.addEventListener('click', (e) => {
-          e.preventDefault();
-          
-          updateChart();
-        });
+        initChart1();
+        })
+
         function initChart() {
             // Crea el gráfico en la carga de la página
             let ctx = document.getElementById('myChart').getContext("2d");
@@ -206,9 +293,50 @@
             });
 
             return chart;
+
         }
-      
-        function updateChart(){
+        function initChart1() {
+            // Crea el gráfico en la carga de la página
+            let ctx = document.getElementById('myChart1').getContext("2d");
+            let chart1 = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Scrap dia a dia',
+                        data: [], // Los datos se actualizarán más tarde
+                        borderWidth: 1
+                    },
+                    {
+                        type: 'line',
+                        label: 'Objetivo',
+                        data: [],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                },
+                plugins:[ChartDataLabels]
+            });
+
+            return chart1;
+        }
+
+        let cons = document.getElementById('consultar');
+        cons.addEventListener('click', (e) => {
+          e.preventDefault();
+          updateChart();
+          
+        });
+       
+        
+         function updateChart(){
           function fecha(x){
             let f = new Date(x);
             let dia=f.getDate();
@@ -217,16 +345,14 @@
             let fecha = dia+"/"+mes+"/"+año;
             return fecha
           }
-            var fini = document.getElementById('fini').value;
-            
-          
-            var tabla = document.getElementById('tabla');
+          var fini = document.getElementById('fini').value;
+          var tabla = document.getElementById('tabla');
             
             
-          fetch(`produccion/inyeccion/prod_dia?fecha=${fini}`)
+          fetch(`prod_dia?fecha=${fini}`)
             .then(response => response.json())
             .then(datos =>{
-
+                
                 let chart = Chart.instances[0];
                 chart.data = {
                           labels: datos.map(e => e.modelo),
@@ -234,12 +360,8 @@
                           datasets: [{
                             data: datos.map(e => e.Scrap),
                             label:'Scrap',
-                            type:'line',
-                            lineTension: 0,
-                            backgroundColor: 'transparent',
-                            borderColor: '#007bff',
-                            borderWidth: 4,
-                            pointBackgroundColor: '#007bff',
+                            type:'bar',
+                            
                             datalabels:{
                               align:'top',
                               font:{
@@ -249,54 +371,116 @@
                                   return Number(value*100).toFixed(2) + '%';
                                 }
                             }
-                          },
-                          {
-                            data: datos.map(e => 0.045),
-                            label:'Objetivo',
-                            type:'line',
-                            lineTension: 0,
-                            backgroundColor: 'transparent',
-                            borderColor: '#990606',
-                            borderWidth: 4,
-                            pointBackgroundColor: '#007bff',
-                            datalabels:{
-                              display:false
-                            }
-                          }],
+                            },
+                            {
+                              data: datos.map(e => 0.045),
+                              label:'Objetivo',
+                              type:'line',
+                              
+                              datalabels:{
+                                display:false
+                                }
+                            }],
                           
                           
                         }
-                    chart.update();
-                  let golp=0;
-                  let is=0;
-                  let rxs=0;
-                  
-                  datos.forEach(e => {
-                    golp += Number(e.Golpes);
-                    is += Number(e.Isla);
-                    rxs += Number(e.Rx);
-                    });
-                  let oks=golp-(is+rxs);
-                  let scraps=Number(((1-(oks/golp))*100).toFixed(2));
+                
+                chart.update();
+                
                   
                   //Colocar los inners para mostrar los totales
 
-                  tabla.innerHTML ="";
+                  tabla.innerHTML = "";
+                  let totalGolpes = 0, totalIsla = 0, totalRx = 0, totalOk = 0, totalScrap = 0;
+
+
+                  for(let i = 0; i < datos.length; i++) {
+                    totalGolpes += Number(datos[i].golpes);
+                    totalIsla += Number(datos[i].isla);
+                    totalRx += Number(datos[i].rx);
+                    totalOk += Number(datos[i].ok);
+                    totalScrap += datos[i].Scrap; // Scrap es un porcentaje, así que se suma directo
+                                    
+                    tabla.innerHTML += `
+                      <tr>
+                        <td>${datos[i].modelo}</td>
+                        <td>${datos[i].golpes}</td>
+                        <td>${datos[i].isla}</td>
+                        <td>${datos[i].rx}</td>
+                        <td>${datos[i].ok}</td>
+                        <td>${(datos[i].Scrap * 100).toFixed(2)}%</td>
+                      </tr>`;
+                  }
+
+                  // Añadir una fila de totales
+                  tabla.innerHTML += `
+                    <tr>
+                      <td><strong>Total</strong></td>
+                      <td><strong>${totalGolpes}</strong></td>
+                      <td><strong>${totalIsla}</strong></td>
+                      <td><strong>${totalRx}</strong></td>
+                      <td><strong>${totalOk}</strong></td>
+                      <td><strong>${(((totalIsla+totalRx)/totalGolpes)*100).toFixed(2)}%</strong></td>
+                    </tr>`;
+                    document.getElementById('golpes').innerHTML = totalGolpes
+                    document.getElementById('isla').innerHTML = totalIsla
+                    document.getElementById('rx').innerHTML = totalRx
+                    document.getElementById('ok').innerHTML = totalOk
+                    document.getElementById('scrap').innerHTML = (((totalIsla+totalRx)/totalGolpes)*100).toFixed(2)+"%"
+                  })
+
+          fetch(`prod_dia_maquina?fecha=${fini}`)
+            .then(response => response.json())
+            .then(datos =>{
+                
+                let chart1 = Chart.instances[1];
+                chart1.data = {
+                          labels: datos.map(e => e.gima),
+                          
+                          datasets: [{
+                            data: datos.map(e => e.Scrap),
+                            label:'Scrap',
+                            type:'bar',
+                            
+                            datalabels:{
+                              align:'top',
+                              font:{
+                                weight:'bold'
+                              },
+                              formatter: function(value, context) {
+                                  return Number(value*100).toFixed(2) + '%';
+                                }
+                            }
+                            },
+                            {
+                              data: datos.map(e => 0.045),
+                              label:'Objetivo',
+                              type:'line',
+                              
+                              datalabels:{
+                                display:false
+                                }
+                            }],
+                          
+                          
+                        }
+                chart1.update();
+                     tabla1.innerHTML ="";
                   for(let i=0; i<datos.length;i++){
                     
-                      tabla.innerHTML += `
+                      tabla1.innerHTML += `
                     <tr>
-                      <td>${datos[i].modelo)}</td>
-                      <td>${datos[i].Golpes}</td>
+                      <td>${datos[i].gima}</td>
+                      <td>${datos[i].golpes}</td>
                       <td>${datos[i].isla}</td>
                       <td>${datos[i].rx}</td>
                       <td>${datos[i].ok}</td>
                       <td>${(datos[i].Scrap*100).toFixed(2)}%</td>
                     </tr>`
                   }
-                  
-                    
             })
+          
+        }
           
                   
 
