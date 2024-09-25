@@ -404,9 +404,9 @@
                   let rxs=0;
                   
                   datos.map(e => {
-                    golp += e.Golpes;
-                    is += e.Isla;
-                    rxs += e.Rx;
+                    golp += Number(e.Golpes);
+                    is += Number(e.Isla);
+                    rxs += Number(e.Rx);
                     });
                   let oks=golp-(is+rxs);
                   let scraps=Number(((1-(oks/golp))*100).toFixed(2));
