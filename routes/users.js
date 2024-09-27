@@ -1385,4 +1385,62 @@ router.get('/produccion/inyeccion/produccionDia', function(req, res, next) {
   }
  
 });
+router.get('/produccion/inyeccion/datosUp', (req,res)=>{
+  if (req.session.loggedin && req.session.rol=="users") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          logError('Error de conexión a la base de datos'+error.message);
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+        let sql = "SELECT * FROM datos_UP"
+        conexion.query(sql,(error, result)=>{
+          conexion.release();
+          if (!error) {
+            res.json(result)
+          }else{
+            logError('Error en consulta '+error.message);
+            res.send(error)
+          }
+        })
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+})
+router.get('/produccion/inyeccion/up',(req, res)=>{
+  if (req.session.loggedin && req.session.rol=="users") {
+    res.render('users/produccion/inyeccion/up_register')
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+})
+router.get('/produccion/inyeccion/tecnicosInyeccion',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="users") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          logError('Error de conexión a la base de datos ' +error.message)
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+        let fini=req.query.fini;
+        let ffin = req.query.ffin;
+        let sql = `CALL tecnicoEntreFecha('${fini}','${ffin}')`;
+        conexion.query(sql,(error,result)=>{
+          conexion.release();
+          if (!error) {
+            res.send(result[0]);
+          }else{
+            res.send(error)
+          }
+        })
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+});
+router.get('/produccion/inyeccion/tecnicos',(req,res)=>{
+  res.render('users/produccion/inyeccion/tecnicosEntreFecha')
+})
 module.exports = router;
