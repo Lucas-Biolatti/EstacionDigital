@@ -154,6 +154,9 @@
                   <th scope="col">GOLPES</th>
                   <th scope="col">ISLA</th>
                   <th scope="col">RX</th>
+                  <th scope="col">OK</th>
+                  <th scope="col">MAQUINAS</th>
+                  <th scope="col">PROMEDIO</th>
                   <th scope="col">SCRAP</th>
                 </tr>
               </thead>
@@ -195,7 +198,7 @@
                 data: {
                     labels: [],
                     datasets: [{
-                        label: 'Scrap dia a dia',
+                        label: 'Scrap por Tecnico',
                         data: [], // Los datos se actualizarán más tarde
                         borderWidth: 1
                     },
@@ -225,18 +228,13 @@
             let chart2 = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                    labels: [],
                     datasets: [{
-                        label: 'Promedio de vida util',
+                        label: 'Ruedas Ok Por Tecnico',
                         data: [], // Los datos se actualizarán más tarde
                         borderWidth: 1
                     },
-                    {
-                        type: 'line',
-                        label: 'Objetivo',
-                        data: [400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400],
-                        borderWidth: 1
-                    }]
+                    ]
                 },
                 options: {
                     maintainAspectRatio: false,
@@ -276,6 +274,21 @@
             .then(datos =>{
                 console.log(datos)
                 let chart = Chart.instances[0];
+                chart.options.onClick = function(evt, elements) {
+                  if (elements.length) {
+                    // Obtén el índice del elemento clickeado
+                    const index = elements[0].index;
+
+                    // Elimina la etiqueta y los datos correspondientes
+                    chart.data.labels.splice(index, 1);
+                    chart.data.datasets.forEach((dataset) => {
+                      dataset.data.splice(index, 1);
+                    });
+
+                    // Actualiza el gráfico
+                    chart.update();
+                  }
+                };
                 chart.data = {
                           labels: datos.map(e => e.Tecnico),
                           
@@ -308,13 +321,28 @@
                         }
                     chart.update();
                     let ordenado=[...datos].sort((a, b) => b.ok - a.ok);
+                    let ordProm=[...datos].sort((a, b)=> b.promedio - a.promedio);
                     let chart2 = Chart.instances[1];
                     chart2.data = {
-                          labels: ordenado.map(e => e.Tecnico),
+                          labels: ordProm.map(e => e.Tecnico),
                           
                           datasets: [{
-                            data: ordenado.map(e => e.Golpes),
-                            label:'Golpes dia a dia',
+                            data: ordProm.map(e => e.ok),
+                            label:'Ruedas ok totales',
+                            type:'bar',
+                            
+                            datalabels:{
+                              offset:'top',
+                              anchor:'end',
+                              font:{
+                                weight:'bold',
+                                
+                              }
+                            }
+                           
+                          },{
+                            data: ordProm.map(e => e.promedio),
+                            label:'Promedio ruedas maquina',
                             type:'bar',
                             
                             datalabels:{
@@ -339,15 +367,18 @@
                   
 
                   tabla.innerHTML ="";
-                  for(let i=0; i<datos.length;i++){
+                  for(let i=0; i<ordProm.length;i++){
                                           
                       tabla.innerHTML += `
                     <tr>
-                      <td>${datos[i].Tecnico}</td>
-                      <td>${datos[i].Golpes}</td>
-                      <td>${datos[i].Isla}</td>
-                      <td>${datos[i].RX}</td>
-                      <td>${(datos[i].Scrap*100).toFixed(2)}%</td>
+                      <td>${ordProm[i].Tecnico}</td>
+                      <td>${ordProm[i].Golpes}</td>
+                      <td>${ordProm[i].Isla}</td>
+                      <td>${ordProm[i].RX}</td>
+                      <td>${ordProm[i].ok}</td>
+                      <td>${ordProm[i].maquinas}</td>
+                      <td>${ordProm[i].promedio}</td>
+                      <td>${(ordProm[i].Scrap*100).toFixed(2)}%</td>
                     </tr>`
                     
                     
