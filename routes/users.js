@@ -1182,6 +1182,9 @@ router.get('/produccion',(req,res)=>{
   const sector = req.session.sector;
   res.render(`./users/produccion/${sector}/index`)
 });
+router.get('/produccion/inyeccion/moldes', function(req, res, next) {
+  res.render('users/produccion/inyeccion/moldes');
+});
 router.get('/produccion/inyeccion/modelos', function(req, res, next) {
   res.render('users/produccion/inyeccion/modelos', { title: 'Express' });
 });

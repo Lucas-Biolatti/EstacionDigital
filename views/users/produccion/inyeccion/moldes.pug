@@ -45,7 +45,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="produccion/inyeccion/rp21">
+                <a class="nav-link" href="#">
                   <span data-feather="file"></span>
                    |Registros de Produccion
                 </a>
@@ -112,7 +112,74 @@
         </nav>
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h2 class="h2">Inyección - Moldes</h2>
+            <div class="btn-toolbar mb-2 mb-md-0">
+              <div class="btn-group me-2">
+                label(class="form-label" for="fini") Desde
+                input(type="date", name="fini", class="form-control", id="fini")
+              
+                label(class="form-label") Hasta
+                input(type="date", name="ffin", class="form-control", id="ffin")
+                input(type="text", name="molde", placeholder="molde", id="molde")
+                <button type="button" class="btn btn-sm btn-outline-secondary" id="consultar">
+                  <span data-feather="search"></span>
+                    |Consultar
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="limpiar()">
+                  <span data-feather="refresh-cw"></span>
+                    |Limpiar
+                </button>
+              </div>
+              
+            </div>
+          </div>
+          <h2>Scrap - Dia a Dia</h2>
+          <div style="width: 100%; height: 450px;">
+            
+            <canvas id="myChart"></canvas>
+          </div>
+          <h2>Golpes vs OK RX - Dia a Dia</h2>
+          <div style="width: 100%; height: 450px;">
+              
+              <canvas id="myChart2"></canvas>
+          </div>
           
+         
+
+          <h2>Resumen Entre Fechas</h2>
+          div(class="table-responsive")
+            table(class="table table-striped table-sm")
+              thead 
+                th GOLPES
+                th ISLA
+                th RX 
+                th Ok 
+                th % SCRAP
+              tbody
+                td(id="golpes")
+                td(id="isla")
+                td(id="rx")
+                td(id="ok")
+                td(id="scrap") 
+
+          <h2>Tabla Dia a Dia</h2>
+          <div class="table-responsive">
+            <table class="table table-striped table-sm" >
+              <thead>
+                <tr>
+                  <th scope="col">FECHA</th>
+                  <th scope="col">GOLPES</th>
+                  <th scope="col">ISLA</th>
+                  <th scope="col">RX</th>
+                  <th scope="col">SCRAP</th>
+                </tr>
+              </thead>
+              <tbody id="tabla">
+
+              </tbody>
+            </table>
+          </div>
         </main>
       </div>
     </div>
@@ -132,6 +199,7 @@
         let cons = document.getElementById('consultar');
         cons.addEventListener('click', (e) => {
           e.preventDefault();
+          
           updateChart();
         });
         function initChart() {
