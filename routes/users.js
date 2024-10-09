@@ -1318,6 +1318,44 @@ router.post('/produccion/inyeccion/editarTornillo',(req,res)=>{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 });
+router.get('/produccion/inyeccion/contadores',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="users") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          logError('Error de conexión a la base de datos'+message);
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+        let fecha = req.query.fecha;
+        const sql = `SELECT 
+                      id,
+                      fecha,
+                      turno,
+                      supervisor,
+                      gima,
+                      Control_1,
+                      Control_2,
+                      Control_3,
+                      Control_4,
+                      (Golpes1+Golpes2+Golpes3+Golpes4) AS golpes,
+                      (Scrap_isla1+Scrap_isla2+Scrap_isla3+Scrap_isla4) AS isla,
+                      (Scrap_RX1+Scrap_RX2+Scrap_RX3+Scrap_RX4) AS rx,
+                      (Cantidad_Ok1+Cantidad_Ok2+Cantidad_Ok3+Cantidad_Ok4) AS ok,
+                      scrap
+                    FROM contadoresInyeccion 
+                    WHERE FECHA = '${fecha}'`
+        conexion.query(sql,(error,result)=>{
+          conexion.release();
+          if(!error){
+            res.send(result);
+            console.log(result);
+          }else{res.send(error)}
+        })
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+})
 //Registros de produccion Inyeccion
 
 router.get('/produccion/inyeccion/rp21',(req,res)=>{
