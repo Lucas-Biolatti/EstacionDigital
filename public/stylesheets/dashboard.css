@@ -111,3 +111,11 @@ body {
     font-size: 3.5rem;
   }
 }
+.hidden {
+  display: none;
+}
+
+/* Estilo normal del sidebar */
+#sidebarMenu {
+  transition: all 0.3s ease; /* Animación suave */
+}

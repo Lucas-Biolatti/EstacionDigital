@@ -1340,14 +1340,15 @@ router.get('/produccion/inyeccion/contadores',(req,res)=>{
                       (Scrap_isla1+Scrap_isla2+Scrap_isla3+Scrap_isla4) AS isla,
                       (Scrap_RX1+Scrap_RX2+Scrap_RX3+Scrap_RX4) AS rx,
                       (Cantidad_Ok1+Cantidad_Ok2+Cantidad_Ok3+Cantidad_Ok4) AS ok,
-                      scrap
+                      scrap,
+                      obs
                     FROM contadoresInyeccion 
                     WHERE FECHA = '${fecha}'`
         conexion.query(sql,(error,result)=>{
           conexion.release();
           if(!error){
             res.send(result);
-            console.log(result);
+            
           }else{res.send(error)}
         })
       })
