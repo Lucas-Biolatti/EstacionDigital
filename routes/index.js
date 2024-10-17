@@ -61,6 +61,7 @@ router.post('/auth', function(request, response) {
                 conexion.release();
                 // Si hay un problema con la consulta, mostrar el error
                 if (error) {
+                    logError('Error de consulta: '+error);
                     console.error("Error en la consulta a la base de datos: " + error);
                     return response.status(500).send('Error en la consulta a la base de datos');
                 }

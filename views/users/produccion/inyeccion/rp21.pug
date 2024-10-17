@@ -210,6 +210,17 @@
                           th Observaciones
                           th Accion
                       tbody(id="table3")
+          div(id="tableContainer4")
+            table(class="table table-sm table-striped table-hover" )
+                      thead 
+                        th MAQUINA 
+                        th GOLPES 
+                        th ISLA 
+                        th RX
+                        th OK
+                        th SCRAP 
+                        th PONDERADO 
+                      tbody(id="table4")
 
          
         </main>
@@ -288,10 +299,12 @@
             let t1 = document.getElementById('table1');
             let t2 = document.getElementById('table2');
             let t3 = document.getElementById('table3');
+            let t4 = document.getElementById('table4');
             //Vaciar Tablas
             t1.innerHTML = "";
             t2.innerHTML = "";
             t3.innerHTML = "";
+            t4.innerHTML = "";
 
             datos.forEach(dato => {
               if (dato.turno === 'MAÑANA') {
@@ -435,6 +448,107 @@
             document.getElementById('st').innerHTML = `Scrap: 4,5% | <strong>${((1-(ot/gt))*100).toFixed(2)}%</strong>`;
             document.getElementById('sn').innerHTML = `Scrap: 4,5% | <strong>${((1-(on/gn))*100).toFixed(2)}%</strong>`;
 
+            
+           // Paso 1: Calcular la suma total de todos los golpes en el arreglo completo
+            const sumaTotalGolpes = datos.reduce((acc, item) => acc + item.golpes, 0);
+
+            // Paso 2: Agrupar por 'gima' y calcular 'scrap' y 'ponderado'
+            const agrupadoPorGima = datos.reduce((acc, item) => {
+              const { gima, golpes, rx, isla, ok } = item;
+
+              if (!acc[gima]) {
+                acc[gima] = {
+                  gima,
+                  golpes: 0,
+                  rx: 0,
+                  isla: 0,
+                  ok: 0,
+                  scrap: 0
+                };
+              }
+
+              // Sumar valores
+              acc[gima].golpes += golpes;
+              acc[gima].rx += rx;
+              acc[gima].isla += isla;
+              acc[gima].ok += ok;
+              acc[gima].scrap = ((acc[gima].rx + acc[gima].isla) / acc[gima].golpes) * 100;
+
+              return acc;
+            }, {});
+
+            // Paso 3: Convertir a un arreglo y calcular 'ponderado'
+            const resultado = Object.values(agrupadoPorGima).map(item => {
+              const { gima, golpes, rx, isla,ok, scrap } = item;
+              // Ponderado calculado con la suma total de golpes de todas las filas
+              const ponderado = ((rx + isla) / sumaTotalGolpes) * 100;
+
+              return {
+                gima,
+                golpes,
+                rx,
+                isla,
+                ok,
+                scrap: `${scrap.toFixed(2)}%`,
+                ponderado // Mantener ponderado como número para el ordenamiento
+              };
+            });
+
+            // Paso 4: Ordenar por 'ponderado' de mayor a menor
+            const resultadoOrdenado = resultado.sort((a, b) => b.ponderado - a.ponderado);
+
+            // Paso 5: Formatear 'ponderado' a cadena con '%'
+            const resultadoFinal = resultadoOrdenado.map(item => ({
+              ...item,
+              ponderado: `${item.ponderado.toFixed(2)}%` // Convertir ponderado a cadena con '%'
+            }));
+
+
+            console.log(resultadoFinal);
+            // Armado de tabla
+            resultadoFinal.forEach(e =>{
+              t4.innerHTML += `
+              <tr>
+                  <td>${e.gima}</td>
+                  <td>${e.golpes}</td>
+                  <td>${e.isla}</td>
+                  <td>${e.rx}</td>
+                  <td>${e.ok}</td>
+                  <td>${e.scrap}</td>
+                  <td>${e.ponderado}</td>
+                  
+                </tr>
+              `
+            } )
+            // Paso 2: Tomar las 3 primeras gimas
+            const top3Gimas = resultadoOrdenado.slice(0, 3).map(item => item.gima);
+
+            // Paso 3: Obtener las observaciones separadas por turno y ordenadas por ponderado
+            const observacionesPorTurno = top3Gimas.map(gima => {
+              // Filtrar las observaciones correspondientes a la gima y agruparlas por turno
+              const observaciones = datos
+                .filter(item => item.gima === gima)
+                .reduce((acc, item) => {
+                  const { turno, obs } = item;
+
+                  // Si no existe el turno, inicializar el arreglo
+                  if (!acc[turno]) {
+                    acc[turno] = [];
+                  }
+
+                  // Agregar la observación
+                  acc[turno].push(obs);
+
+                  return acc;
+                }, {});
+
+              return {
+                gima,
+                turnos: observaciones
+              };
+            });
+
+            console.log(observacionesPorTurno);
 
           })
       })
