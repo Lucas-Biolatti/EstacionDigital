@@ -122,8 +122,10 @@
                   </button>
               </div>
           </div>
-
+          h4 SEGUIMIENTO DE MAQUINAS
+          hr
           <div class="d-flex bg-dark text-light justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            
             <div class="d-flex align-items-center" id="toggleTableButton" style="cursor: pointer;">
               <span data-feather="chevron-down" id="toggleIcon"></span>
               <h6 class="ms-2 mb-0">MAÑANA</h6>
@@ -210,6 +212,11 @@
                           th Observaciones
                           th Accion
                       tbody(id="table3")
+          br
+          <div class="d-flex align-items-center" id="toggleTableButton4" style="cursor: pointer;">
+              <span data-feather="chevron-down" id="toggleIcon4"></span>
+              <h6 class="ms-2 mb-0">PROMEDIO PONDERADO</h6>
+          </div>
           div(id="tableContainer4")
             table(class="table table-sm table-striped table-hover" )
                       thead 
@@ -221,6 +228,20 @@
                         th SCRAP 
                         th PONDERADO 
                       tbody(id="table4")
+          br
+          <div class="d-flex align-items-center" id="toggleTableButton5" style="cursor: pointer;">
+              <span data-feather="chevron-down" id="toggleIcon5"></span>
+              <h6 class="ms-2 mb-0">OBSERVACIONES</h6>
+          </div>
+          div(id="tableContainer5")
+            table(class="table table-sm table-striped table-hover" )
+                      thead 
+                        th MAQUINA 
+                        th MAÑANA 
+                        th TARDE
+                        th NOCHE
+                         
+                      tbody(id="table5")
 
          
         </main>
@@ -275,6 +296,32 @@
           }
           feather.replace(); // Refrescar los íconos
       });
+      document.getElementById("toggleTableButton4").addEventListener("click", function() {
+          var tableContainer = document.getElementById("tableContainer4");
+          var icon = document.getElementById("toggleIcon4");
+
+          if (tableContainer.style.display === "none") {
+              tableContainer.style.display = "block"; // Mostrar el container
+              icon.setAttribute("data-feather", "chevron-down"); // Cambiar icono
+          } else {
+              tableContainer.style.display = "none"; // Ocultar el container
+              icon.setAttribute("data-feather", "chevron-right"); // Cambiar icono
+          }
+          feather.replace(); // Refrescar los íconos
+      });
+      document.getElementById("toggleTableButton5").addEventListener("click", function() {
+          var tableContainer = document.getElementById("tableContainer5");
+          var icon = document.getElementById("toggleIcon5");
+
+          if (tableContainer.style.display === "none") {
+              tableContainer.style.display = "block"; // Mostrar el container
+              icon.setAttribute("data-feather", "chevron-down"); // Cambiar icono
+          } else {
+              tableContainer.style.display = "none"; // Ocultar el container
+              icon.setAttribute("data-feather", "chevron-right"); // Cambiar icono
+          }
+          feather.replace(); // Refrescar los íconos
+      });
       
       let cons = document.getElementById('consultar')
       cons.addEventListener('click',(e)=>{
@@ -300,11 +347,13 @@
             let t2 = document.getElementById('table2');
             let t3 = document.getElementById('table3');
             let t4 = document.getElementById('table4');
+            let t5 = document.getElementById('table5');
             //Vaciar Tablas
             t1.innerHTML = "";
             t2.innerHTML = "";
             t3.innerHTML = "";
             t4.innerHTML = "";
+            t5.innerHTML = "";
 
             datos.forEach(dato => {
               if (dato.turno === 'MAÑANA') {
@@ -504,7 +553,7 @@
             }));
 
 
-            console.log(resultadoFinal);
+            
             // Armado de tabla
             resultadoFinal.forEach(e =>{
               t4.innerHTML += `
@@ -547,8 +596,19 @@
                 turnos: observaciones
               };
             });
-
-            console.log(observacionesPorTurno);
+            observacionesPorTurno.forEach(e =>{
+              t5.innerHTML += `
+              <tr>
+                  <td>${e.gima}</td>
+                  <td>${e.turnos.MAÑANA}</td>
+                  <td>${e.turnos.TARDE}</td>
+                  <td>${e.turnos.NOCHE}</td>
+                  
+                  
+                </tr>
+              `
+            })
+            
 
           })
       })
