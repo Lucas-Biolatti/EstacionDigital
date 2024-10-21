@@ -39,13 +39,13 @@
           <div class="position-sticky pt-3">
             <ul class="nav flex-column">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">
+                <a class="nav-link " aria-current="page" href="/users/produccion">
                   <span data-feather="home"></span>
                     | Inicio
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="rp21">
                   <span data-feather="file"></span>
                    |Registros de Produccion
                 </a>
@@ -84,25 +84,25 @@
             </h6>
             <ul class="nav flex-column mb-2">
               <li class="nav-item">
-                <a class="nav-link" href="produccion/">
+                <a class="nav-link active" href="#">
                   <span data-feather="file-text"></span>
                    |Moldes entre fechas
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="produccion/inyeccion/modelos">
+                <a class="nav-link" href="modelos">
                   <span data-feather="file-text"></span>
                    |Modelos entre fechas
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="produccion/inyeccion/tornillos">
+                <a class="nav-link" href="tornillos">
                   <span data-feather="file-text"></span>
                    |Tornillos
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="produccionDia">
                   <span data-feather="file-text"></span>
                    |Produccion del Dia
                 </a>
@@ -290,7 +290,7 @@
             var ok = document.getElementById('ok');
             var scrap = document.getElementById('scrap');
             
-          fetch(`produccion/inyeccion/moldesEntreFecha?fini=${fini}&ffin=${ffin}&molde=${molde}`)
+          fetch(`moldesEntreFecha?fini=${fini}&ffin=${ffin}&molde=${molde}`)
             .then(response => response.json())
             .then(datos =>{
 
