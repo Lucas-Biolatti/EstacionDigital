@@ -127,6 +127,12 @@
               
                 label(class="form-label") Hasta
                 input(type="date", name="ffin", class="form-control", id="ffin")
+
+                label(class="form-label") Opcion
+                select(name="" id="opcion" class="form-select")
+                  option(value="supervisor") Supervisor
+                  option(value="tecnico") Tecnico
+                  option(value="operador") Operador
                
                 <button type="button" class="btn btn-sm btn-outline-secondary" id="consultar">
                   <span data-feather="search"></span>
@@ -271,14 +277,15 @@
           }
             var fini = document.getElementById('fini').value;
             var ffin = document.getElementById('ffin').value;
-        
+            var op = document.getElementById('opcion').value;
             var tabla = document.getElementById('tabla');
             
             
-          fetch(`tecnicosInyeccion?fini=${fini}&ffin=${ffin}`)
+            
+          fetch(`${op}Inyeccion?fini=${fini}&ffin=${ffin}`)
             .then(response => response.json())
             .then(datos =>{
-                console.log(datos)
+                
                 let chart = Chart.instances[0];
                 chart.options.onClick = function(evt, elements) {
                   if (elements.length) {
@@ -329,6 +336,21 @@
                     let ordenado=[...datos].sort((a, b) => b.ok - a.ok);
                     let ordProm=[...datos].sort((a, b)=> b.promedio - a.promedio);
                     let chart2 = Chart.instances[1];
+                     chart2.options.onClick = function(evt, elements) {
+                        if (elements.length) {
+                          // Obtén el índice del elemento clickeado
+                          const index = elements[0].index;
+
+                          // Elimina la etiqueta y los datos correspondientes
+                          chart2.data.labels.splice(index, 1);
+                          chart2.data.datasets.forEach((dataset) => {
+                            dataset.data.splice(index, 1);
+                          });
+
+                          // Actualiza el gráfico
+                          chart2.update();
+                        }
+                      };
                     chart2.data = {
                           labels: ordProm.map(e => e.Tecnico),
                           

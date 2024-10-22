@@ -1458,7 +1458,7 @@ router.get('/produccion/inyeccion/up',(req, res)=>{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 })
-router.get('/produccion/inyeccion/tecnicosInyeccion',(req,res)=>{
+router.get('/produccion/inyeccion/tecnicoInyeccion',(req,res)=>{
   if (req.session.loggedin && req.session.rol=="users") {
     connectToDatabase((error, conexion) => {
       if (error) {
@@ -1468,6 +1468,54 @@ router.get('/produccion/inyeccion/tecnicosInyeccion',(req,res)=>{
         let fini=req.query.fini;
         let ffin = req.query.ffin;
         let sql = `CALL tecnicoEntreFecha('${fini}','${ffin}')`;
+        conexion.query(sql,(error,result)=>{
+          conexion.release();
+          if (!error) {
+            res.send(result[0]);
+          }else{
+            res.send(error)
+          }
+        })
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+});
+router.get('/produccion/inyeccion/supervisorInyeccion',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="users") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          logError('Error de conexión a la base de datos ' +error.message)
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+        let fini=req.query.fini;
+        let ffin = req.query.ffin;
+        let sql = `CALL supervisorEntreFecha('${fini}','${ffin}')`;
+        conexion.query(sql,(error,result)=>{
+          conexion.release();
+          if (!error) {
+            res.send(result[0]);
+          }else{
+            res.send(error)
+          }
+        })
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+});
+router.get('/produccion/inyeccion/operadorInyeccion',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="users") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          logError('Error de conexión a la base de datos ' +error.message)
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+        let fini=req.query.fini;
+        let ffin = req.query.ffin;
+        let sql = `CALL operadorEntreFecha('${fini}','${ffin}')`;
         conexion.query(sql,(error,result)=>{
           conexion.release();
           if (!error) {
