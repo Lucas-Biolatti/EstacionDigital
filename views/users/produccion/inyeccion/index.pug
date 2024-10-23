@@ -10,7 +10,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
-    <link href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    link(rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css")
+    script(src="https://code.jquery.com/jquery-3.6.0.min.js")
+    script(src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js")
 
     
 
@@ -118,7 +120,14 @@
         </nav>
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-          
+          h3 Recordatorios 
+          table(class="table" id="t1") 
+            thead 
+              th Id 
+              th Fecha
+              th Generado por 
+              th Descripcion 
+            
         </main>
       </div>
     </div>
@@ -132,262 +141,46 @@
     
     script.
       feather.replace({ 'aria-hidden': 'true' })
-      document.addEventListener('DOMContentLoaded',function(){
-        initChart();
-        initChart2();
-        let cons = document.getElementById('consultar');
-        cons.addEventListener('click', (e) => {
-          e.preventDefault();
-          updateChart();
-        });
-        function initChart() {
-            // Crea el gráfico en la carga de la página
-            let ctx = document.getElementById('myChart').getContext("2d");
-            let chart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: [],
-                    datasets: [{
-                        label: 'Scrap dia a dia',
-                        data: [], // Los datos se actualizarán más tarde
-                        borderWidth: 1
-                    },
-                    {
-                        type: 'line',
-                        label: 'Objetivo',
-                        data: [],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                },
-                plugins:[ChartDataLabels]
-            });
-
-            return chart;
-        }
-        function initChart2() {
-            // Crea el gráfico en la carga de la página
-            let ctx = document.getElementById('myChart2').getContext("2d");
-            let chart2 = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-                    datasets: [{
-                        label: 'Promedio de vida util',
-                        data: [], // Los datos se actualizarán más tarde
-                        borderWidth: 1
-                    },
-                    {
-                        type: 'line',
-                        label: 'Objetivo',
-                        data: [400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400, 400],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            
-                        },
-                        x:{
-                          beginAtZero: true,
-                          stacked:true
-                        }
-                    }
-                },
-                plugins:[ChartDataLabels]
-            });
-
-            return chart2;
-        }
-        function updateChart(){
+      fetch('/users/avisos')
+        .then(response => response.json())
+        .then(data => {
           function fecha(x){
-            let f = new Date(x);
-            let dia=f.getDate();
-            let mes = f.getMonth()+1;
-            let año = f.getUTCFullYear();
-            let fecha = dia+"/"+mes+"/"+año;
-            return fecha
-          }
-            var fini = document.getElementById('fini').value;
-            var ffin = document.getElementById('ffin').value;
-            var molde = document.getElementById('molde').value;
-            var tabla = document.getElementById('tabla');
-            var golpes = document.getElementById('golpes');
-            var isla = document.getElementById('isla');
-            var rx = document.getElementById('rx');
-            var ok = document.getElementById('ok');
-            var scrap = document.getElementById('scrap');
+                let f = new Date(x);
+                let dia=f.getDate();
+                let mes = f.getMonth()+1;
+                let año = f.getUTCFullYear();
+                let fecha = dia+"/"+mes+"/"+año;
+                return fecha
+            }
+          let dataset = [];
+          data.forEach(e =>{
+            let d = [
+              e.id,
+              fecha(e.fecha),
+              e.generado_por,
+              e.descripcion
+            ]
+            dataset.push(d);
+          })
+            $(document).ready(function() {
+              // Inicializar DataTables sin datos por ahora
+              var table = $('#t1').DataTable({
+                paging: true,
+                searching: true,
+                ordering: true,
+                data: dataset,
+                order: [[0, 'desc']],
+              });
+          })
             
-          fetch(`produccion/inyeccion/moldesEntreFecha?fini=${fini}&ffin=${ffin}&molde=${molde}`)
-            .then(response => response.json())
-            .then(datos =>{
+        });
 
-                let chart = Chart.instances[0];
-                chart.data = {
-                          labels: datos.map(e => fecha(e.FECHA)),
-                          
-                          datasets: [{
-                            data: datos.map(e => e.Scrap),
-                            label:'Scrap',
-                            type:'line',
-                            lineTension: 0,
-                            backgroundColor: 'transparent',
-                            borderColor: '#007bff',
-                            borderWidth: 4,
-                            pointBackgroundColor: '#007bff',
-                            datalabels:{
-                              align:'top',
-                              font:{
-                                weight:'bold'
-                              },
-                              formatter: function(value, context) {
-                                  return Number(value*100).toFixed(2) + '%';
-                                }
-                            }
-                          },
-                          {
-                            data: datos.map(e => 0.055),
-                            label:'Objetivo',
-                            type:'line',
-                            lineTension: 0,
-                            backgroundColor: 'transparent',
-                            borderColor: '#990606',
-                            borderWidth: 4,
-                            pointBackgroundColor: '#007bff',
-                            datalabels:{
-                              display:false
-                            }
-                          }],
-                          
-                          
-                        }
-                    chart.update();
+        
+      
 
-                    let chart2 = Chart.instances[1];
-                    chart2.data = {
-                          labels: datos.map(e => fecha(e.FECHA)),
-                          
-                          datasets: [{
-                            data: datos.map(e => e.Golpes),
-                            label:'Golpes dia a dia',
-                            type:'bar',
-                            lineTension: 0,
-                            backgroundColor: 'transparent',
-                            borderColor: '##007bff',
-                            borderWidth: 1,
-                            borderRadius:5,
-                            pointBackgroundColor: '#007bff',
-                            datalabels:{
-                              offset:'top',
-                              anchor:'end',
-                              font:{
-                                weight:'bold',
-                                
-                              }
-                            }
-                           
-                          },
-                          {
-                            data: datos.map(e => e.ok),
-                            label:'ok dia a dia',
-                            type:'bar',
-                            lineTension: 0,
-                            backgroundColor: '#1E82CB',
-                            borderColor: '#1E82CB',
-                            borderWidth: 1,
-                            borderRadius:5,
-                            datalabels:{
-                              color:'white',
-                              anchor:'center',
-                              font:{
-                                weight:'bold',
-                                
-                              }
-                            }
-                           
-                          },
-                          {
-                            data: datos.map(e => 230),
-                            label:'Objetivo',
-                            type:'line',
-                            lineTension: 0,
-                            backgroundColor: 'transparent',
-                            borderColor: '#990606',
-                            borderWidth: 2,
-                            
-                            pointBackgroundColor: '#007bff',
-                            datalabels:{
-                             display:false
-                            }
-                          }],
-                          
-                          
-                        }  
-                    chart2.update(); 
-                        
-                       
-
-                  let golp=0;
-                  let is=0;
-                  let rxs=0;
-                  
-                  datos.forEach(e => {
-                    golp += Number(e.Golpes);
-                    is += Number(e.Isla);
-                    rxs += Number(e.Rx);
-                    });
-                  let oks=golp-(is+rxs);
-                  let scraps=Number(((1-(oks/golp))*100).toFixed(2));
-                  
-                  golpes.innerHTML = golp;
-                  isla.innerHTML = is;
-                  rx.innerHTML = rxs;
-                  ok.innerHTML = oks;
-                  scrap.innerHTML = scraps;
-
-                  tabla.innerHTML ="";
-                  for(let i=0; i<datos.length;i++){
-                    if((datos[i].Scrap*100).toFixed(2)>5){
-                      
-                      tabla.innerHTML += `
-                    <tr>
-                      <td>${fecha(datos[i].FECHA)}</td>
-                      <td>${datos[i].Golpes}</td>
-                      <td>${datos[i].Isla}</td>
-                      <td>${datos[i].Rx}</td>
-                      <td>${(datos[i].Scrap*100).toFixed(2)}% ❌</td>
-                    </tr>`
-                    }else{
-                      tabla.innerHTML += `
-                    <tr>
-                      <td>${fecha(datos[i].FECHA)}</td>
-                      <td>${datos[i].Golpes}</td>
-                      <td>${datos[i].Isla}</td>
-                      <td>${datos[i].Rx}</td>
-                      <td>${(datos[i].Scrap*100).toFixed(2)}%</td>
-                    </tr>`
-                    }
-                    
-                  }
-                  
-                    
-            })
-          
-                  
-
-        }
-      })
-
+        
+       
+      
         
       
 

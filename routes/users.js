@@ -1533,4 +1533,25 @@ router.get('/produccion/inyeccion/operadorInyeccion',(req,res)=>{
 router.get('/produccion/inyeccion/tecnicos',(req,res)=>{
   res.render('users/produccion/inyeccion/tecnicosEntreFecha')
 })
+router.get('/avisos',(req,res)=>{
+  if (req.session.loggedin) {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+        let sql = 'SELECT * FROM Avisos'
+        conexion.query(sql,(error,result)=>{
+          conexion.release();
+          if (!error) {
+            res.send(result);
+          }else{
+            res.send(error)
+          }
+        })
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+})
 module.exports = router;
