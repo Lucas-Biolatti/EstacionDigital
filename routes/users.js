@@ -311,9 +311,10 @@ router.put('/editarOrden',(req,res)=>{
         logError('Error de conexión a la base de datos: ' + error.message);
         return res.status(500).send('Error de conexión a la base de datos');
       }
-      let sqlupdate = "UPDATE `ordentrabajo` SET `detecto`=?,`equipo`=?,`fecha`=?,`turno`=?,`paradaProceso`=?,`prioridad`=?,`tipoParada`=?,`horaInicio`=?,`horaFin`=?,`descripcion`=? WHERE `idOrden`=?";
+      let sqlupdate = "UPDATE `ordentrabajo` SET `detecto`=?,`avisar`=?, `equipo`=?,`fecha`=?,`turno`=?,`paradaProceso`=?,`prioridad`=?,`tipoParada`=?,`horaInicio`=?,`horaFin`=?,`descripcion`=? WHERE `idOrden`=?";
       let resultados = [
           req.body.detecto,
+          req.body.avisar,
           req.body.equipo,
           req.body.fecha,
           req.body.turno,
@@ -1554,7 +1555,7 @@ router.get('/avisos',(req,res)=>{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 })
-app.post('/iniciar-turno', (req, res) => {
+router.post('/iniciar-turno', (req, res) => {
   if (req.session.loggedin && req.session.rol=="Qsb") {
     connectToDatabase((error, conexion) => {
       if (error) {

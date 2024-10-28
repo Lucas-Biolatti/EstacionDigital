@@ -30,10 +30,15 @@ const pool = mysql.createPool({
 const connectToDatabase = (callback) => {
     pool.getConnection((error, connection) => {
         if (error) {
-            console.error("Error al obtener la conexión de la base de datos: " + error);
-            return callback(error);
+            console.error("Error al obtener la conexión de la base de datos: ", error);
+            if (error.code === 'PROTOCOL_CONNECTION_LOST' || error.code === 'ECONNRESET') {
+                setTimeout(() => connectToDatabase(callback), 2000); // Reintenta la conexión después de 2 segundos
+            } else {
+                callback(error); // Devuelve el error si no es recuperable
+            }
+        } else {
+            callback(null, connection);
         }
-        callback(null, connection);
     });
 };
 
