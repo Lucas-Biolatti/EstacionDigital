@@ -1554,4 +1554,36 @@ router.get('/avisos',(req,res)=>{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 })
+app.post('/iniciar-turno', (req, res) => {
+  if (req.session.loggedin && req.session.rol=="Qsb") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+        //......Datos de la consulta
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+  const { fecha, turno, supervisor, machines } = req.body;
+
+  machines.forEach(async (machine) => {
+    const { status, output } = machine;
+
+    await conexion.query(      
+      'INSERT INTO turnos (fecha, turno, supervisor, machine_id, machine_status, machine_output) VALUES (?, ?, ?, ?, ?, ?)',
+      [fecha, turno, supervisor, machine.machine_id, status, output],
+      (error, results) => {
+        conexion.release()
+        if (error) {
+          console.error('Error al insertar en la base de datos:', error);
+          return res.status(500).json({ message: 'Error en la inserción de datos' });
+        }
+      }
+    );
+  });
+
+  res.status(200).json({ message: 'Turno iniciado con éxito para las máquinas seleccionadas' });
+});
 module.exports = router;
