@@ -1343,11 +1343,12 @@ router.get('/produccion/inyeccion/contadores',(req,res)=>{
                       (Cantidad_Ok1+Cantidad_Ok2+Cantidad_Ok3+Cantidad_Ok4) AS ok,
                       scrap,
                       obs
-                    FROM contadoresInyeccion 
+                    FROM contadoresInyeccion_p 
                     WHERE FECHA = '${fecha}'`
         conexion.query(sql,(error,result)=>{
           conexion.release();
           if(!error){
+            
             res.send(result);
             
           }else{res.send(error)}
@@ -1367,6 +1368,28 @@ router.get('/produccion/inyeccion/rp21',(req,res)=>{
     res.render('login',{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
+  
+})
+router.get('/produccion/inyeccion/editrp21',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="Qsb") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      let maquina = req.query.maquina;
+      let id = req.query.id;
+      let ci = req.query.ci;
+      //traer los valores del ultimo contador
+      const sql = `SELECT id,contador_final4, Modelo4, Kit4, TMat4, TNI4, TNS4 FROM contadoresInyeccion_p WHERE GIMA = '${maquina}' ORDER BY FECHA DESC, ID DESC LIMIT 1 OFFSET 1;`
+      const
+      conexion.query()
+      res.render('users/produccion/inyeccion/editrp21')
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+  
   
 })
 router.get('/produccion/inyeccion/prod_dia', function(req, res, next) {
@@ -1555,36 +1578,41 @@ router.get('/avisos',(req,res)=>{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 })
-router.post('/iniciar-turno', (req, res) => {
-  if (req.session.loggedin && req.session.rol=="Qsb") {
+router.post('/produccion/inyeccion/iniciar-turno', (req, res) => {
+  if (req.session.loggedin && req.session.rol=="users") {
     connectToDatabase((error, conexion) => {
       if (error) {
           return res.status(500).send('Error de conexión a la base de datos');
       }
-        //......Datos de la consulta
+      const { fecha, turno, supervisor, machines } = req.body;
+
+      machines.forEach(async (machine) => {
+        const { status, output } = machine;
+
+    
+        await conexion.query(   
+           
+          'INSERT INTO contadoresInyeccion_p (fecha, turno, supervisor, gima) VALUES (?, ?, ?, ?)',
+          [fecha, turno, supervisor, machine],
+          (error, results) => {
+            conexion.release();
+            if (error) {
+              console.error('Error al insertar en la base de datos:', error);
+              return res.status(500).json({ message: 'Error en la inserción de datos' });
+            }
+              
+            
+          }
+        );
+        
+      });
+    
+      res.render('users/produccion/inyeccion/rp21',{nombre:`${req.session.apellido}, ${req.session.nombre}`,fecha:fecha})
       })
   } else {
     res.render('login',{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
-  const { fecha, turno, supervisor, machines } = req.body;
-
-  machines.forEach(async (machine) => {
-    const { status, output } = machine;
-
-    await conexion.query(      
-      'INSERT INTO turnos (fecha, turno, supervisor, machine_id, machine_status, machine_output) VALUES (?, ?, ?, ?, ?, ?)',
-      [fecha, turno, supervisor, machine.machine_id, status, output],
-      (error, results) => {
-        conexion.release()
-        if (error) {
-          console.error('Error al insertar en la base de datos:', error);
-          return res.status(500).json({ message: 'Error en la inserción de datos' });
-        }
-      }
-    );
-  });
-
-  res.status(200).json({ message: 'Turno iniciado con éxito para las máquinas seleccionadas' });
+  
 });
 module.exports = router;

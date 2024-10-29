@@ -261,9 +261,9 @@
             <h5 class="modal-title" id="addDataModalLabel">Agregar Datos</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <form id="turnoForm">
+          <form id="turnoForm" method="POST" action="iniciar-turno">
             <div class="common-section">
-              <h3>Información General</h3>
+              <h3>INICIO DE TURNO</h3>
               <div class="mb-3">
                 <label for="fecha" class="form-label">Fecha</label>
                 <input type="date" class="form-control" id="fecha" name="fecha" required>
@@ -271,9 +271,9 @@
               <div class="mb-3">
                 <label for="turno" class="form-label">Turno</label>
                 <select class="form-select" id="turno" name="turno" required>
-                  <option value="mañana">Mañana</option>
-                  <option value="tarde">Tarde</option>
-                  <option value="noche">Noche</option>
+                  <option value="MAÑANA">Mañana</option>
+                  <option value="TARDE">Tarde</option>
+                  <option value="NOCHE">Noche</option>
                 </select>
               </div>
               <div class="mb-3">
@@ -289,25 +289,25 @@
             <div class="mb-3">
               <label for="machineSelect" class="form-label">Seleccionar Máquinas</label>
               <select id="machineSelect" name="machines" class="form-select" multiple required>
-                <!-- Opciones de máquinas (15 máquinas) -->
-                <option value="gima 01">Gima 01</option>
-                <option value="gima 02">Gima 02</option>
-                <option value="gima 03">Gima 03</option>
-                <option value="gima 04">Gima 04</option>
-                <option value="gima 05">Gima 05</option>
-                <option value="gima 06">Gima 06</option>
-                <option value="gima 07">Gima 07</option>
-                <option value="gima 08">Gima 08</option>
-                <option value="gima 09">Gima 09</option>
-                <option value="gima 10">Gima 10</option>
-                <option value="gima 11">Gima 11</option>
-                <option value="gima 22">Gima 22</option>
-                <option value="gima 13">Gima 13</option>
-                <option value="gima 14">Gima 14</option>
-                <option value="gima 15">Gima 15</option>
-                <option value="gima 16">Gima 16</option>
-                <option value="gima 17">Gima 17</option>
-                <option value="gima 18">Gima 18</option>
+                
+                <option value="Gima 01">Gima 01</option>
+                <option value="Gima 02">Gima 02</option>
+                <option value="Gima 03">Gima 03</option>
+                <option value="Gima 04">Gima 04</option>
+                <option value="Gima 05">Gima 05</option>
+                <option value="Gima 06">Gima 06</option>
+                <option value="Gima 07">Gima 07</option>
+                <option value="Gima 08">Gima 08</option>
+                <option value="Gima 09">Gima 09</option>
+                <option value="Gima 10">Gima 10</option>
+                <option value="Gima 11">Gima 11</option>
+                <option value="Gima 22">Gima 22</option>
+                <option value="Gima 13">Gima 13</option>
+                <option value="Gima 14">Gima 14</option>
+                <option value="Gima 15">Gima 15</option>
+                <option value="Gima 16">Gima 16</option>
+                <option value="Gima 17">Gima 17</option>
+                <option value="Gima 18">Gima 18</option>
               </select>
             </div>
 
@@ -399,11 +399,13 @@
       
       let cons = document.getElementById('consultar')
       cons.addEventListener('click',(e)=>{
+        
         e.preventDefault();
         let fecha = document.getElementById('fini').value;
         fetch(`contadores?fecha=${fecha}`)
           .then(response => response.json())
           .then(datos =>{
+            console.log(datos)
             //Maquinas
             let mañana = 0;
             let tarde = 0;
@@ -430,6 +432,7 @@
             t5.innerHTML = "";
 
             datos.forEach(dato => {
+              feather.replace({ 'aria-hidden': 'true' });
               if (dato.turno === 'MAÑANA') {
                 mañana++;
                 gm+=Number(dato.golpes);
@@ -449,6 +452,15 @@
                   <td>${dato.rx}</td>
                   <td>${dato.scrap}</td>
                   <td>${dato.obs}</td>
+                  <td>                  
+                  <a href="editarDato?id=${dato.id}&maquina=${dato.gima}" class="btn btn-sm btn-primary">
+                      <i data-feather="edit"></i>
+                  </a>
+
+                  <a href="eliminarDato?id=${dato.id}" class="btn btn-sm btn-danger">
+                      <i data-feather="trash-2"></i>
+                  </a>
+                  </td>
                 </tr>
                 `
                 }else{
@@ -466,6 +478,15 @@
                   <td>${dato.rx}</td>
                   <td>${dato.scrap}</td>
                   <td>${dato.obs}</td>
+                  <td>                  
+                  <a href="editrp21?id=${dato.id}&maquina=${dato.gima}" class="btn btn-sm btn-primary">
+                      <i data-feather="edit"></i>
+                  </a>
+
+                  <a href="eliminarDato?id=${dato.id}" class="btn btn-sm btn-danger">
+                      <i data-feather="trash-2"></i>
+                  </a>
+                  </td>
                 </tr>
                 `
                 }
@@ -686,39 +707,7 @@
 
           })
       })
-      let currentPage = 1;
-      const totalPages = 3;
-
-      function showPage(page) {
-        // Ocultar todas las páginas
-        document.querySelectorAll('.form-page').forEach((formPage) => {
-          formPage.classList.add('d-none');
-        });
-        // Mostrar la página actual
-        document.getElementById(`formPage${page}`).classList.remove('d-none');
-
-        // Ajustar los botones de navegación
-        document.getElementById('prevBtn').style.display = page === 1 ? 'none' : 'inline-block';
-        document.getElementById('nextBtn').style.display = page === totalPages ? 'none' : 'inline-block';
-        document.getElementById('submitBtn').classList.toggle('d-none', page !== totalPages);
-      }
-
-      function nextPage() {
-        if (currentPage < totalPages) {
-          currentPage++;
-          showPage(currentPage);
-        }
-      }
-
-      function prevPage() {
-        if (currentPage > 1) {
-          currentPage--;
-          showPage(currentPage);
-        }
-      }
-
-      // Inicializar mostrando la primera página
-      showPage(currentPage);
+      
 
       // Agregar evento para el envío del formulario
       document.getElementById('multiStepForm').addEventListener('submit', function(event) {
