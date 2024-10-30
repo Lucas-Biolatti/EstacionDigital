@@ -156,19 +156,55 @@
 
                     <!-- Página 2: Control 1 -->
                     <div class="form-page active">
+
                         <h5>Control 1</h5>
-                        <div class="mb-3">
-                            <label for="modelo1" class="form-label">Modelo1</label>
-                            input(type="text" class="form-control" id="modelo1" name="Modelo1" required value=result2[0].Modelo4)
-                        </div>
-                        <div class="mb-3">
-                            <label for="kit1" class="form-label">Kit1</label>
-                            input(type="text" class="form-control" id="kit1" name="Kit1" required value=result2[0].Kit4)
-                        </div>
-                        <div class="mb-3">
-                            <label for="ciclo1" class="form-label">Ciclo1</label>
-                            <input type="number" class="form-control" id="ciclo1" name="Ciclo1" required>
-                        </div>
+                        .row
+                          .col-md-3.col-12
+                            <div class="mb-3">
+                                <label for="modelo1" class="form-label">Contador Inicial 1</label>
+                                input(type="text" class="form-control" id="Contador_inicial1" name="Contador_inicial1" required value=result2[0].contador_final4)
+                            </div>
+                          .col-md-3.col-12
+                            <div class="mb-3">
+                                <label for="modelo1" class="form-label">Modelo1</label>
+                                input(type="text" class="form-control" id="modelo1" name="Modelo1" required value=result2[0].Modelo4)
+                            </div>
+                          .col-md-3.col-12
+                            <div class="mb-3">
+                                <label for="kit1" class="form-label">Kit1</label>
+                                input(type="text" class="form-control" id="kit1" name="Kit1" required value=result2[0].Kit4)
+                            </div>
+                          .col-md-3.col-12
+                            <div class="mb-3">
+                                <label for="ciclo1" class="form-label">Ciclo1</label>
+                                <input type="number" class="form-control" id="ciclo1" name="Ciclo1" required>
+                            </div>
+                        .row 
+                          .col-md-2.col-12
+                            <div class="mb-3">
+                                <label for="contador_final1" class="form-label">Contador Final</label>
+                                input(type="text" class="form-control" id="contador_final1" name="contador_final1" required value=result2[0].contador_final1)
+                            </div>
+                          .col-md-2.col-12
+                            <div class="mb-3">
+                                <label for="Golpes1" class="form-label">Golpes</label>
+                                input(type="text" class="form-control" id="Golpes1" name="Golpes1" required value=result2[0].Golpes1)
+                            </div>
+                          .col-md-2.col-12  
+                            <div class="mb-3">
+                                <label for="Scarp_Isla1" class="form-label">Scrap isla</label>
+                                input(type="text" class="form-control" id="Scarp_Isla1" name="Scarp_Isla1" required value=result2[0].Scarp_Isla1)
+                            </div>
+                          .col-md-2.col-12  
+                            <div class="mb-3">
+                                <label for="Scrap_RX1" class="form-label">Scrap Rx</label>
+                                input(type="text" class="form-control" id="Scrap_RX1" name="Scrap_RX1" required value=result2[0].Scrap_RX1)
+                            </div>
+                          .col-md-2.col-12  
+                            <div class="mb-3">
+                                <label for="Cantidad_Ok1" class="form-label">Ok</label>
+                                input(type="text" class="form-control" id="Cantidad_Ok1" name="Cantidad_Ok1" required value=result2[0].Cantidad_Ok1)
+                            </div>
                         <button type="button" class="btn btn-secondary" onclick="prevPage()">Anterior</button>
                         <button type="button" class="btn btn-primary" onclick="nextPage()">Siguiente</button>
                     </div>
@@ -176,7 +212,53 @@
                     <!-- Página 3: Control 2 -->
                     <div class="form-page">
                         <h5>Control 2</h5>
-                        <!-- Campos de Control 2 aquí -->
+                        .row
+                          .col-md-3.col-12
+                            <div class="mb-3">
+                                <label for="modelo1" class="form-label">Contador Inicial 1</label>
+                                input(type="text" class="form-control" id="Contador_inicial1" name="Contador_inicial1" required value=result2[0].contador_final4)
+                            </div>
+                          .col-md-3.col-12
+                            <div class="mb-3">
+                                <label for="modelo1" class="form-label">Modelo1</label>
+                                input(type="text" class="form-control" id="modelo1" name="Modelo1" required value=result2[0].Modelo4)
+                            </div>
+                          .col-md-3.col-12
+                            <div class="mb-3">
+                                <label for="kit1" class="form-label">Kit1</label>
+                                input(type="text" class="form-control" id="kit1" name="Kit1" required value=result2[0].Kit4)
+                            </div>
+                          .col-md-3.col-12
+                            <div class="mb-3">
+                                <label for="ciclo1" class="form-label">Ciclo1</label>
+                                <input type="number" class="form-control" id="ciclo1" name="Ciclo1" required>
+                            </div>
+                        .row 
+                          .col-md-2.col-12
+                            <div class="mb-3">
+                                <label for="contador_final1" class="form-label">Contador Final</label>
+                                input(type="text" class="form-control" id="contador_final1" name="contador_final1" required value=result2[0].contador_final1)
+                            </div>
+                          .col-md-2.col-12
+                            <div class="mb-3">
+                                <label for="Golpes1" class="form-label">Golpes</label>
+                                input(type="text" class="form-control" id="Golpes1" name="Golpes1" required value=result2[0].Golpes1)
+                            </div>
+                          .col-md-2.col-12  
+                            <div class="mb-3">
+                                <label for="Scarp_Isla1" class="form-label">Scrap isla</label>
+                                input(type="text" class="form-control" id="Scarp_Isla1" name="Scarp_Isla1" required value=result2[0].Scarp_Isla1)
+                            </div>
+                          .col-md-2.col-12  
+                            <div class="mb-3">
+                                <label for="Scrap_RX1" class="form-label">Scrap Rx</label>
+                                input(type="text" class="form-control" id="Scrap_RX1" name="Scrap_RX1" required value=result2[0].Scrap_RX1)
+                            </div>
+                          .col-md-2.col-12  
+                            <div class="mb-3">
+                                <label for="Cantidad_Ok1" class="form-label">Ok</label>
+                                input(type="text" class="form-control" id="Cantidad_Ok1" name="Cantidad_Ok1" required value=result2[0].Cantidad_Ok1)
+                            </div>
                         <button type="button" class="btn btn-secondary" onclick="prevPage()">Anterior</button>
                         <button type="button" class="btn btn-primary" onclick="nextPage()">Siguiente</button>
                     </div>
