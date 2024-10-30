@@ -1371,7 +1371,7 @@ router.get('/produccion/inyeccion/rp21',(req,res)=>{
   
 })
 router.get('/produccion/inyeccion/editrp21',(req,res)=>{
-  if (req.session.loggedin && req.session.rol=="Qsb") {
+  if (req.session.loggedin && req.session.rol=="users") {
     connectToDatabase((error, conexion) => {
       if (error) {
           return res.status(500).send('Error de conexión a la base de datos');
@@ -1379,11 +1379,38 @@ router.get('/produccion/inyeccion/editrp21',(req,res)=>{
       let maquina = req.query.maquina;
       let id = req.query.id;
       let ci = req.query.ci;
+      
       //traer los valores del ultimo contador
-      const sql = `SELECT id,contador_final4, Modelo4, Kit4, TMat4, TNI4, TNS4 FROM contadoresInyeccion_p WHERE GIMA = '${maquina}' ORDER BY FECHA DESC, ID DESC LIMIT 1 OFFSET 1;`
-      const
-      conexion.query()
-      res.render('users/produccion/inyeccion/editrp21')
+      const sql = `SELECT id,contador_final4, Modelo4, Kit4, TMat4, TNI4, TNS4 FROM contadoresInyeccion_p WHERE GIMA = '${maquina}' ORDER BY FECHA DESC, ID DESC LIMIT 1 OFFSET 1;`;
+      const sql2 = `SELECT * FROM contadoresInyeccion_p WHERE id=${id}`;
+
+      conexion.query(sql2, (error, result1) => {
+        if (error) {
+          conexion.release();
+          console.error(error);
+          return res.status(500).send("Error en la consulta");
+        }
+
+        console.log(result1[0].contador_inicial1);
+        
+        if (result1[0].contador_inicial1 === null) {
+          conexion.query(sql, (error, result2) => {
+            conexion.release();
+            if (error) {
+              console.error(error);
+              return res.status(500).send("Error en la consulta");
+            }
+            
+            console.log(result2);
+            res.render('users/produccion/inyeccion/editrp21', { result2:result2 });
+          });
+        } else {
+          conexion.release();
+          console.log(result1);
+          res.render('users/produccion/inyeccion/editrp21', { result2: result1 });
+        }
+      });
+      
       })
   } else {
     res.render('login',{

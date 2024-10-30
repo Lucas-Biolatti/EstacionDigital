@@ -123,44 +123,47 @@
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <div class="container mt-4">
-                <h2>Formulario de Carga con Paginación</h2>
+                <h2>Registro de produccion - INYECCION</h2>
                 <form id="formulario" action="/ruta_de_procesamiento" method="POST">
                     <!-- Página 1: Información General -->
-                    <div class="form-page active">
-                        <h5>Información General</h5>
-                        <div class="mb-3">
-                            <label for="id" class="form-label">ID</label>
-                            <input type="text" class="form-control" id="id" name="ID" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="fecha" class="form-label">Fecha</label>
-                            <input type="date" class="form-control" id="fecha" name="FECHA" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="turno" class="form-label">Turno</label>
-                            <input type="text" class="form-control" id="turno" name="TURNO" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="supervisor" class="form-label">Supervisor</label>
-                            <input type="text" class="form-control" id="supervisor" name="SUPERVISOR" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="gima" class="form-label">GIMA</label>
-                            <input type="text" class="form-control" id="gima" name="GIMA" required>
-                        </div>
-                        <button type="button" class="btn btn-primary" onclick="nextPage()">Siguiente</button>
-                    </div>
+                    if result2[0].TURNO
+                      <div class="form-page active">
+                          <h5>Información General</h5>
+                          <div class="mb-3">
+                              <label for="id" class="form-label">ID</label>
+                              input(type="text" class="form-control" id="id" name="ID" required value=result2[0].ID)
+                          </div>
+                          <div class="mb-3">
+                              <label for="fecha" class="form-label">Fecha</label>
+                              input(type="date" class="form-control" id="fecha" name="FECHA" required value=result2[0].FECHA)
+                          </div>
+                          <div class="mb-3">
+                              <label for="turno" class="form-label">Turno</label>
+                              input(type="text" class="form-control" id="turno" name="TURNO" required value=result2[0].TURNO)
+                          </div>
+                          <div class="mb-3">
+                              <label for="supervisor" class="form-label">Supervisor</label>
+                              input(type="text" class="form-control" id="supervisor" name="SUPERVISOR" required value=result2[0].SUPERVISOR)
+                          </div>
+                          <div class="mb-3">
+                              <label for="gima" class="form-label">GIMA</label>
+                              input(type="text" class="form-control" id="gima" name="GIMA" required value=result2[0].GIMA)
+                          </div>
+                          <button type="button" class="btn btn-primary" onclick="nextPage()">Siguiente</button>
+                      </div>
+                       
+                    else
 
                     <!-- Página 2: Control 1 -->
-                    <div class="form-page">
+                    <div class="form-page active">
                         <h5>Control 1</h5>
                         <div class="mb-3">
                             <label for="modelo1" class="form-label">Modelo1</label>
-                            <input type="text" class="form-control" id="modelo1" name="Modelo1" required>
+                            input(type="text" class="form-control" id="modelo1" name="Modelo1" required value=result2[0].Modelo4)
                         </div>
                         <div class="mb-3">
                             <label for="kit1" class="form-label">Kit1</label>
-                            <input type="text" class="form-control" id="kit1" name="Kit1" required>
+                            input(type="text" class="form-control" id="kit1" name="Kit1" required value=result2[0].Kit4)
                         </div>
                         <div class="mb-3">
                             <label for="ciclo1" class="form-label">Ciclo1</label>
