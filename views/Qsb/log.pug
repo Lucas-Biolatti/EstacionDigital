@@ -195,28 +195,14 @@ html(lang="es")
                                 
                                 <form class="d-flex" method="POST" action="agregaraccion">
                                             input(type="hidden", name="path" value="/Qsb/log")                               
-                                            input(type="hidden" name="retrabajo" value="NULL")
-                                            input(type="hidden" name="ret_laca" value="NULL")
-                                            input(type="hidden" name="sc_laca" value="NULL")
-                                            
+                                                                                        
                                             <label class="form-label"> Fecha
                                             <input type="date" name="fecha" class="form-control" required>
                                             <label class="form-label"> Sector
                                             select(name="sector", class="form-select" required)
-                                                
-                                                option(value="Logistica") Logistica 
-                                                
-                                            
-                                            <input type="hidden", name="accidentes" class="form-control" id="accidentes" value="NULL">
+                                                option(value="Logistica") Logistica
                                             label(class="form-label") Terminado
                                             <input type="number" step="0.01" name="entregas" class="form-control" id="entregas" required>
-                                            <input type="hidden" step="0.01" name="scrap" class="form-control" id="scrap" value="NULL">
-                                            
-                                            <input type="hidden" step="0.01" name="c_programa" class="form-control" id="c_programa" value="NULL">
-                                            
-                                            <input type="hidden" step="0.01" name="disponibilidad" class="form-control" id="disponibilidad" value="NULL">
-                                            
-                                            <input type="hidden" step="0.01" name="disp_molde" class="form-control" id="disp_molde" value="NULL">
                                             <label class="form-label"> Observaciones 
                                             textarea(name="observaciones", cols="30", rows="5" class="form-control") 
                                            

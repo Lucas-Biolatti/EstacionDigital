@@ -266,7 +266,7 @@ router.post('/ordenMtto',(req,res)=>{
       req.body.prioridad,
       req.body.tipoParada,
       req.body.horaInicio,
-      req.body.horaFin,
+      req.body.horaFin ? req.body.horaFin : '0000-00-00 00:00',
       req.body.descripcion],(error,fields)=>{
         conexion.release();
         if(!error){
