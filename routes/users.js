@@ -1642,4 +1642,7 @@ router.post('/produccion/inyeccion/iniciar-turno', (req, res) => {
   }
   
 });
+router.get('/produccion/inyeccion/montaje',(req,res)=>{
+  res.render('users/produccion/inyeccion/ordenMontaje')
+})
 module.exports = router;
