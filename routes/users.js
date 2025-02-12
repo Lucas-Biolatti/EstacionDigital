@@ -1169,6 +1169,24 @@ router.get('/tarjetas',(req,res)=>{
       }
   })
 });
+router.get('/montadores',(req,res)=>{
+  connectToDatabase((error, conexion) => {
+    if (error) {
+        return res.status(500).send('Error de conexión a la base de datos');
+    }
+    const sql="select * from montadores where 1"
+    conexion.query(sql,(error,fields)=>{
+      conexion.release();
+        if (!error) {
+            res.send(fields);
+        }else{
+          res.send(error)
+        }
+    })
+
+    })
+  
+});
 
 // MODULOS DE PRODUCCION
 

@@ -140,61 +140,61 @@
                     <div class="modal-body">
                         
                         <form class="d-flex" method="POST" action="agregaraccion">
-                                    input(type="hidden", name="cel" id="cel")
-                                    input(type="hidden", name="grupo" id="grupo")                               
-                                    
+                              input(type="hidden", name="cel" id="cel")
+                              input(type="hidden", name="grupo" id="grupo")                               
+                              
 
-                                    <label class="form-label"> Fecha
-                                    <input type="date" name="fecha" class="form-control" required>
-                                    <label class="form-label"> Supervisor
-                                    select(name="supervisor", class="form-select")
-                                        
-                                        option(value="Rodriguez, Gaston") Rodriguez, Gaston
-                                        option(value="Sosa, Gustavo") Sosa, Gustavo
-                                        option(value="Olmos, Kevin") Olmos, Kevin
-                                    
-                                    <label class="form-label"> Montador
-                                    select(name="montador", class="form-select" id="montador" required)
-                                        
-                                        
-                                    <label class="form-label"> Tarea 
-                                    select(name="tarea", class="form-select" required)
-                                        
-                                        option(value="Cambio de molde") Cambio de molde
-                                        option(value="Caño intermedio") Caño intermedio
-                                        option(value="Caño de Pesca") Caño de Pesca
-                                        option(value="Mangueras") Mangueras
-                                        option(value="Correccion de Molde") Correccion de Molde
-                                    
-                                    <label class="form-label"> Tarea 
-                                    select(name="tarea", class="form-select" required)
-                                        option(value="Gima 01") Gima 01
-                                        option(value="Gima 02") Gima 02
-                                        option(value="Gima 03") Gima 03
-                                        option(value="Gima 04") Gima 04
-                                        option(value="Gima 05") Gima 05
-                                        option(value="Gima 06") Gima 06
-                                        option(value="Gima 07") Gima 07
-                                        option(value="Gima 08") Gima 08
-                                        option(value="Gima 09") Gima 09
-                                        option(value="Gima 10") Gima 10
-                                        option(value="Gima 11") Gima 11
-                                        option(value="Gima 22") Gima 22
-                                        option(value="Gima 13") Gima 13
-                                        option(value="Gima 14") Gima 14
-                                        option(value="Gima 15") Gima 15
-                                        option(value="Gima 16") Gima 16
-                                        option(value="Gima 17") Gima 17
-                                        option(value="Gima 18") Gima 18
+                              <label class="form-label"> Fecha
+                              <input type="date" name="fecha" class="form-control" required>
+                              <label class="form-label"> Supervisor
+                              select(name="supervisor", class="form-select")
+                                  
+                                  option(value="Rodriguez, Gaston") Rodriguez, Gaston
+                                  option(value="Sosa, Gustavo") Sosa, Gustavo
+                                  option(value="Olmos, Kevin") Olmos, Kevin
+                              
+                              <label class="form-label"> Montador
+                              select(name="montador", class="form-select" id="montador" required)
+                                  
+                                  
+                              <label class="form-label"> Tarea 
+                              select(name="tarea", class="form-select" required)
+                                  
+                                  option(value="Cambio de molde") Cambio de molde
+                                  option(value="Caño intermedio") Caño intermedio
+                                  option(value="Caño de Pesca") Caño de Pesca
+                                  option(value="Mangueras") Mangueras
+                                  option(value="Correccion de Molde") Correccion de Molde
+                              
+                              <label class="form-label"> Tarea 
+                              select(name="tarea", class="form-select" required)
+                                  option(value="Gima 01") Gima 01
+                                  option(value="Gima 02") Gima 02
+                                  option(value="Gima 03") Gima 03
+                                  option(value="Gima 04") Gima 04
+                                  option(value="Gima 05") Gima 05
+                                  option(value="Gima 06") Gima 06
+                                  option(value="Gima 07") Gima 07
+                                  option(value="Gima 08") Gima 08
+                                  option(value="Gima 09") Gima 09
+                                  option(value="Gima 10") Gima 10
+                                  option(value="Gima 11") Gima 11
+                                  option(value="Gima 22") Gima 22
+                                  option(value="Gima 13") Gima 13
+                                  option(value="Gima 14") Gima 14
+                                  option(value="Gima 15") Gima 15
+                                  option(value="Gima 16") Gima 16
+                                  option(value="Gima 17") Gima 17
+                                  option(value="Gima 18") Gima 18
 
-                                    label(for="horaInicio" class="form-label") Hora de Inicio
-                                    input(type="datetime-local" class="form-control" id="horaInicio" name="horaInicio" required)
-                                    label(for="horaFin" class="form-label") Hora de Finalizacion
-                                    input(type="datetime-local" class="form-control" id="horaFin" name="horaFin")
-                                    label(for="tiempoTotal" class="form-label") Tiempo total
-                                    input(type="number", name="tiempo" id="tiempo" class="form-control")
-                                    <label class="form-label"> Observaciones 
-                                    textarea(name="observaciones", cols="30", rows="5" class="form-control") 
+                              label(for="horaInicio" class="form-label") Hora de Inicio
+                              input(type="datetime-local" class="form-control" id="horaInicio" name="horaInicio" required)
+                              label(for="horaFin" class="form-label") Hora de Finalizacion
+                              input(type="datetime-local" class="form-control" id="horaFin" name="horaFin")
+                              label(for="tiempoTotal" class="form-label") Tiempo total
+                              input(type="number", name="tiempo" id="tiempo" class="form-control")
+                              <label class="form-label"> Observaciones 
+                              textarea(name="observaciones", cols="30", rows="5" class="form-control") 
                                     
                                     
                                                     
@@ -221,7 +221,24 @@
     
     script.
       feather.replace({ 'aria-hidden': 'true' })
-      
+      fetch('/users/montadores')
+        .then(response => response.json())
+        .then(datos => {
+            const selectMontador = document.getElementById('montador'); // Seleccionamos el select
+            
+            datos.forEach(montador => {
+                // Creamos un elemento <option>
+                const option = document.createElement('option');
+                option.value = montador.id; // Asignamos el ID como valor
+                option.textContent = montador.nombre; // Mostramos el nombre en el select
+
+                // Agregamos el <option> al <select>
+                selectMontador.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error al cargar los montadores:', error);
+        });
 
         
       

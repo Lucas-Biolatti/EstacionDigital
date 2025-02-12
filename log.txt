@@ -4,3 +4,5 @@
 2024-10-29T15:43:43.570Z - Error de consulta: Error: Can't add new command when connection is in closed state
 2024-10-29T15:44:15.173Z - Error de consulta: Error: Can't add new command when connection is in closed state
 2024-10-30T01:09:16.583Z - Error de conexión a la base de datos: Error: connect ETIMEDOUT
+2025-01-07T20:16:08.309Z - Error de conexión a la base de datos: connect ETIMEDOUT
+2025-01-07T20:29:44.116Z - Error de conexión a la base de datos: Error: connect ETIMEDOUT
