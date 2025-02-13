@@ -230,21 +230,27 @@ router.post("/agregaraccion", upload.single('sc_laca'), (req, res) => {
               return res.status(500).send('Error de conexión a la base de datos');
           }
 
+          // Función auxiliar para validar números
+          const parseNumber = (value) => {
+              let num = parseFloat(value);
+              return isNaN(num) ? null : num;
+          };
+
           let fecha = req.body.fecha;
           let sector = req.body.sector;
-          let scrap = req.body.scrap ? parseFloat(req.body.scrap) : null;
-          let accidentes = req.body.accidentes ? req.body.accidentes : null;
-          let c_programa = req.body.c_programa ? parseFloat(req.body.c_programa) : null;
-          let disponibilidad = req.body.disponibilidad ? parseFloat(req.body.disponibilidad) : null;
-          let disp_molde = req.body.disp_molde ? parseFloat(req.body.disp_molde) : null;
-          let observaciones = req.body.observaciones;
-          let retrabajo = req.body.retrabajo ? parseFloat(req.body.retrabajo) : null;
-          let ret_laca = req.body.ret_laca ? req.body.ret_laca : null;
-          let sc_laca = req.file ? req.file.filename : null;  // El nombre del archivo se guarda
-          let entregas = req.body.entregas ? parseFloat(req.body.entregas) : null;
-          let hsReal = req.body.hsReal ? req.body.hsReal : null;
-          let hs_rd = req.body.hs_rd ? req.body.hs_rd : null;
-          let rds_real = req.body.rds_real ? req.body.rds_real : null;
+          let accidentes = parseNumber(req.body.accidentes);
+          let c_programa = parseNumber(req.body.c_programa);
+          let retrabajo = parseNumber(req.body.retrabajo);
+          let scrap = parseNumber(req.body.scrap);
+          let disponibilidad = parseNumber(req.body.disponibilidad);
+          let disp_molde = parseNumber(req.body.disp_molde);
+          let ret_laca = parseNumber(req.body.ret_laca);
+          let entregas = parseNumber(req.body.entregas);
+          let hsReal = parseNumber(req.body.hsReal);
+          let hs_rd = parseNumber(req.body.hs_rd);
+          let rds_real = parseNumber(req.body.rds_real);
+          let observaciones = req.body.observaciones || null; // Si no hay texto, guardar como null
+          let sc_laca = req.file ? req.file.filename : null;  // Archivo opcional
           let path = req.body.path;
 
           const sql = `INSERT INTO indicadores (fecha,sector,accidentes,c_programa,retrabajo,scrap,disponibilidad,disp_molde,ret_laca,sc_laca,entregas,observaciones,hsReal,hs_rd,rds_real)
@@ -261,7 +267,7 @@ router.post("/agregaraccion", upload.single('sc_laca'), (req, res) => {
       });
   } else {
       res.render('login', {
-          mensaje: `No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`
+          mensaje: `No está logeado o no tiene autorización para este sitio. Verifique sus credenciales.`
       });
   }
 });
