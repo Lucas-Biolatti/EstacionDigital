@@ -1199,7 +1199,7 @@ function fechabd(x){
 }
 router.get('/produccion',(req,res)=>{
   const sector = req.session.sector;
-  res.render(`./users/produccion/${sector}/index`)
+  res.render(`./users/produccion/${sector}/index`,{nombre:`${req.session.apellido}, ${req.session.nombre}`})
 });
 router.get('/produccion/inyeccion/moldes', function(req, res, next) {
   res.render('users/produccion/inyeccion/moldes');
@@ -1662,5 +1662,16 @@ router.post('/produccion/inyeccion/iniciar-turno', (req, res) => {
 });
 router.get('/produccion/inyeccion/montaje',(req,res)=>{
   res.render('users/produccion/inyeccion/ordenMontaje')
+})
+
+//MECANIZADO
+router.get('/produccion/mecanizado/regProd',(req,res)=>{
+  if (req.session.loggedin && req.session.rol === "users" && req.session.sector==="mecanizado") {
+    res.render('users/produccion/mecanizado/regProd',{nombre:`${req.session.apellido}, ${req.session.nombre}`})
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+  
 })
 module.exports = router;

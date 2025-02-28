@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Polimetal SA - Inyeccion</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
+    <link href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link href="/assets/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/stylesheets/dashboard.css" rel="stylesheet">
+    
+
+  </head>
+  <body>
+    
+    <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+      <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">POLIMETAL S.A</a>
+      <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class="navbar-nav">
+        <div class="nav-item text-nowrap">
+          <a class="nav-link px-3" href="#">Sign out</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="container-fluid">
+      <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+          <div class="position-sticky pt-3">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="/users/produccion">
+                  <span data-feather="home"></span>
+                    | Inicio
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="#">
+                  <span data-feather="file"></span>
+                   |Registros de Produccion
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="bar-chart-2"></span>
+                   |Registro de paradas
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="users"></span>
+                   |Customers
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="bar-chart-2"></span>
+                   |Reports
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="layers"></span>
+                   |Integrations
+                </a>
+              </li>
+            </ul>
+
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+              <span>Saved reports</span>
+              <a class="link-secondary" href="#" aria-label="Add a new report">
+                <span data-feather="plus-circle"></span>
+              </a>
+            </h6>
+            <ul class="nav flex-column mb-2">
+              <li class="nav-item">
+                <a class="nav-link" href="moldes">
+                  <span data-feather="file-text"></span>
+                   |Moldes entre fechas
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="modelos">
+                  <span data-feather="file-text"></span>
+                   |Modelos entre fechas
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="tornillos">
+                  <span data-feather="file-text"></span>
+                   |Tornillos
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="produccionDia">
+                  <span data-feather="file-text"></span>
+                   |Produccion del Dia
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="tecnicos">
+                  <span data-feather="file-text"></span>
+                   |Seguimiento de Tecnicos
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+          <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group me-2">
+                  <label class="form-label me-2" for="fini">Fecha</label>
+                  <input type="date" name="fini" class="form-control" id="fini">
+                  <button type="button" class="btn btn-sm btn-outline-secondary me-2" id="consultar">
+                      <span data-feather="search"></span>  Consultar
+                  </button>
+                  
+              </div>
+              
+              <div>
+                  
+                  <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addDataModal">
+                      <span data-feather="plus"></span>  Agregar
+                  </button>
+              </div>
+          </div>
+          h4 SEGUIMIENTO DE MAQUINAS
+          hr
+          <div class="d-flex bg-dark text-light justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            
+            <div class="d-flex align-items-center" id="toggleTableButton" style="cursor: pointer;">
+              <span data-feather="chevron-down" id="toggleIcon"></span>
+              <h6 class="ms-2 mb-0">MAÑANA</h6>
+            </div>
+            
+            p(id="m")
+            p(id="gm") 
+            p(id="om")
+            p(id="sm")
+          </div>
+          div(id="tableContainer")
+            table(class="table table-sm table-striped table-hover" )
+                      thead 
+                          th id 
+                          th isla 
+                          th 06 a 08
+                          th 08 a 10
+                          th 10 a 12
+                          th 12 a 14
+                          th Aprobadas
+                          th Intermedias 
+                          th Scrap 
+                          th % de Scrap 
+                          th Tiempo de parada 
+                          th Observaciones
+                          th Accion
+                      tbody(id="table1")
+
+
+          <div class="d-flex bg-dark text-light justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <div class="d-flex align-items-center" id="toggleTableButton2" style="cursor: pointer;">
+              <span data-feather="chevron-down" id="toggleIcon2"></span>
+              <h6 class="ms-2 mb-0">TARDE</h6>
+            </div>
+            
+            p(id="t")
+            p(id="gt")
+            p(id="ot")
+            p(id="st")
+          </div>
+          div(id="tableContainer2")
+            table(class="table table-sm table-striped table-hover" )
+                      thead 
+                          th id 
+                          th isla 
+                          th 14 a 16
+                          th 16 a 18
+                          th 18 a 20
+                          th 20 a 22
+                          th Aprobadas
+                          th Intermedias 
+                          th Scrap 
+                          th % de Scrap 
+                          th Tiempo de parada 
+                          th Observaciones
+                          th Accion
+                      tbody(id="table2")
+
+          <div class="d-flex bg-dark text-light justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <div class="d-flex align-items-center" id="toggleTableButton3" style="cursor: pointer;">
+              <span data-feather="chevron-down" id="toggleIcon3"></span>
+              <h6 class="ms-2 mb-0">NOCHE</h6>
+            </div>
+            
+            p(id="n")
+            p(id="gn")
+            p(id="on")
+            p(id="sn")
+          </div>
+          div(id="tableContainer3")
+            table(class="table table-sm table-striped table-hover" )
+                      thead 
+                          th id 
+                          th isla 
+                          th 22 a 00
+                          th 00 a 02
+                          th 02 a 04
+                          th 04 a 06
+                          th Aprobadas
+                          th Intermedias 
+                          th Scrap 
+                          th % de Scrap 
+                          th Tiempo de parada 
+                          th Observaciones
+                          th Accion
+                      tbody(id="table3")
+          br
+          <div class="d-flex align-items-center" id="toggleTableButton4" style="cursor: pointer;">
+              <span data-feather="chevron-down" id="toggleIcon4"></span>
+              <h6 class="ms-2 mb-0">PROMEDIO PONDERADO</h6>
+          </div>
+          div(id="tableContainer4")
+            table(class="table table-sm table-striped table-hover" )
+                      thead 
+                        th MAQUINA 
+                        th APROBADAS 
+                        th INTERMEDIA 
+                        th SCRAP
+                        th OK
+                        th SCRAP 
+                        th PONDERADO 
+                      tbody(id="table4")
+          br
+          <div class="d-flex align-items-center" id="toggleTableButton5" style="cursor: pointer;">
+              <span data-feather="chevron-down" id="toggleIcon5"></span>
+              <h6 class="ms-2 mb-0">OBSERVACIONES</h6>
+          </div>
+          div(id="tableContainer5")
+            table(class="table table-sm table-striped table-hover" )
+                      thead 
+                        th MAQUINA 
+                        th MAÑANA 
+                        th TARDE
+                        th NOCHE
+                         
+                      tbody(id="table5")
+
+         
+        </main>
+      </div>
+    </div>
+    <div class="modal fade" id="addDataModal" tabindex="-1" aria-labelledby="addDataModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addDataModalLabel">Agregar Datos</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form id="turnoForm" method="POST" action="iniciar-turno">
+            <div class="common-section">
+              <h3>INICIO DE TURNO</h3>
+              <div class="mb-3">
+                <label for="fecha" class="form-label">Fecha</label>
+                <input type="date" class="form-control" id="fecha" name="fecha" required>
+              </div>
+              <div class="mb-3">
+                <label for="turno" class="form-label">Turno</label>
+                <select class="form-select" id="turno" name="turno" required>
+                  <option value="MAÑANA">Mañana</option>
+                  <option value="TARDE">Tarde</option>
+                  <option value="NOCHE">Noche</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="supervisor" class="form-label">Supervisor</label>
+                <select class="form-select" id="supervisor" name="supervisor" required>
+                  <option value="Sosa, Gustavo">Sosa, Gustavo</option>
+                  <option value="Rodriguez, Gaston">Rodriguez, Gaston</option>
+                  <option value="Olmos, Kevin">Olmos, Kevin</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="machineSelect" class="form-label">Seleccionar Máquinas</label>
+              <select id="machineSelect" name="machines" class="form-select" multiple required>
+                
+                <option value="Gima 01">Isla 01</option>
+                <option value="Gima 02">Isla 02</option>
+                <option value="Gima 03">Isla 03</option>
+                <option value="Gima 04">Isla 04</option>
+                <option value="Gima 05">Isla 05</option>
+                <option value="Gima 06">Isla 06</option>
+                <option value="Gima 07">Isla 07</option>
+                <option value="Gima 08">Isla 08</option>
+                <option value="Gima 09">Isla 09</option>
+                <option value="Gima 10">Isla 10</option>
+                <option value="Gima 11">Isla 11</option>
+                
+              </select>
+            </div>
+
+            <div id="machinesSection">
+              <!-- Los campos para cada máquina seleccionada se generarán aquí -->
+            </div>
+
+            <button type="submit" class="btn btn-primary">Iniciar Turno</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <script src="/assets/dist/js/bootstrap.bundle.min.js"></script>
+    
+    
+    script.
+      feather.replace({ 'aria-hidden': 'true' });
+      //Esconder o mostrar Secciones.
+      document.getElementById("toggleTableButton").addEventListener("click", function() {
+          var tableContainer = document.getElementById("tableContainer");
+          var icon = document.getElementById("toggleIcon");
+
+          if (tableContainer.style.display === "none") {
+              tableContainer.style.display = "block"; // Mostrar el container
+              icon.setAttribute("data-feather", "chevron-down"); // Cambiar icono
+          } else {
+              tableContainer.style.display = "none"; // Ocultar el container
+              icon.setAttribute("data-feather", "chevron-right"); // Cambiar icono
+          }
+          feather.replace(); // Refrescar los íconos
+      });
+      document.getElementById("toggleTableButton2").addEventListener("click", function() {
+          var tableContainer = document.getElementById("tableContainer2");
+          var icon = document.getElementById("toggleIcon2");
+
+          if (tableContainer.style.display === "none") {
+              tableContainer.style.display = "block"; // Mostrar el container
+              icon.setAttribute("data-feather", "chevron-down"); // Cambiar icono
+          } else {
+              tableContainer.style.display = "none"; // Ocultar el container
+              icon.setAttribute("data-feather", "chevron-right"); // Cambiar icono
+          }
+          feather.replace(); // Refrescar los íconos
+      });
+      document.getElementById("toggleTableButton3").addEventListener("click", function() {
+          var tableContainer = document.getElementById("tableContainer3");
+          var icon = document.getElementById("toggleIcon3");
+
+          if (tableContainer.style.display === "none") {
+              tableContainer.style.display = "block"; // Mostrar el container
+              icon.setAttribute("data-feather", "chevron-down"); // Cambiar icono
+          } else {
+              tableContainer.style.display = "none"; // Ocultar el container
+              icon.setAttribute("data-feather", "chevron-right"); // Cambiar icono
+          }
+          feather.replace(); // Refrescar los íconos
+      });
+      document.getElementById("toggleTableButton4").addEventListener("click", function() {
+          var tableContainer = document.getElementById("tableContainer4");
+          var icon = document.getElementById("toggleIcon4");
+
+          if (tableContainer.style.display === "none") {
+              tableContainer.style.display = "block"; // Mostrar el container
+              icon.setAttribute("data-feather", "chevron-down"); // Cambiar icono
+          } else {
+              tableContainer.style.display = "none"; // Ocultar el container
+              icon.setAttribute("data-feather", "chevron-right"); // Cambiar icono
+          }
+          feather.replace(); // Refrescar los íconos
+      });
+      document.getElementById("toggleTableButton5").addEventListener("click", function() {
+          var tableContainer = document.getElementById("tableContainer5");
+          var icon = document.getElementById("toggleIcon5");
+
+          if (tableContainer.style.display === "none") {
+              tableContainer.style.display = "block"; // Mostrar el container
+              icon.setAttribute("data-feather", "chevron-down"); // Cambiar icono
+          } else {
+              tableContainer.style.display = "none"; // Ocultar el container
+              icon.setAttribute("data-feather", "chevron-right"); // Cambiar icono
+          }
+          feather.replace(); // Refrescar los íconos
+      });
+      
+      let cons = document.getElementById('consultar')
+      cons.addEventListener('click',(e)=>{
+        
+        e.preventDefault();
+        let fecha = document.getElementById('fini').value;
+        fetch(`contadores?fecha=${fecha}`)
+          .then(response => response.json())
+          .then(datos =>{
+            console.log(datos)
+            //Maquinas
+            let mañana = 0;
+            let tarde = 0;
+            let noche = 0;
+            //Golpes
+            let gm = 0;
+            let gt = 0;
+            let gn = 0;
+            //Ruedas ok
+            let om = 0;
+            let ot = 0;
+            let on = 0;
+            //Tablas
+            let t1 = document.getElementById('table1');
+            let t2 = document.getElementById('table2');
+            let t3 = document.getElementById('table3');
+            let t4 = document.getElementById('table4');
+            let t5 = document.getElementById('table5');
+            //Vaciar Tablas
+            t1.innerHTML = "";
+            t2.innerHTML = "";
+            t3.innerHTML = "";
+            t4.innerHTML = "";
+            t5.innerHTML = "";
+
+            datos.forEach(dato => {
+              feather.replace({ 'aria-hidden': 'true' });
+              if (dato.turno === 'MAÑANA') {
+                mañana++;
+                gm+=Number(dato.golpes);
+                om+=Number(dato.ok);
+                if(dato.ok>68){
+                  t1.innerHTML+=`
+                <tr>
+                  <td>${dato.id}</td>
+                  <td>${dato.gima}</td>
+                  <td>${dato.Control_1}</td>
+                  <td>${dato.Control_2}</td>
+                  <td>${dato.Control_3}</td>
+                  <td>${dato.Control_4}</td>
+                  <td>${dato.golpes}</td>
+                  <td class="text-success"><strong>${dato.ok}</strong></td>
+                  <td>${dato.isla}</td>
+                  <td>${dato.rx}</td>
+                  <td>${dato.scrap}</td>
+                  <td>${dato.obs}</td>
+                  <td>                  
+                  <a href="editrp21?id=${dato.id}&maquina=${dato.gima}" class="btn btn-sm btn-primary">
+                      <i data-feather="edit"></i>
+                  </a>
+
+                  <a href="eliminarDato?id=${dato.id}" class="btn btn-sm btn-danger">
+                      <i data-feather="trash-2"></i>
+                  </a>
+                  </td>
+                </tr>
+                `
+                }else{
+                  t1.innerHTML+=`
+                <tr>
+                  <td>${dato.id}</td>
+                  <td>${dato.gima}</td>
+                  <td>${dato.Control_1}</td>
+                  <td>${dato.Control_2}</td>
+                  <td>${dato.Control_3}</td>
+                  <td>${dato.Control_4}</td>
+                  <td>${dato.golpes}</td>
+                  <td class="text-danger"><strong>${dato.ok}</strong></td>
+                  <td>${dato.isla}</td>
+                  <td>${dato.rx}</td>
+                  <td>${dato.scrap}</td>
+                  <td>${dato.obs}</td>
+                  <td>                  
+                  <a href="editrp21?id=${dato.id}&maquina=${dato.gima}" class="btn btn-sm btn-primary">
+                      <i data-feather="edit"></i>
+                  </a>
+
+                  <a href="eliminarDato?id=${dato.id}" class="btn btn-sm btn-danger">
+                      <i data-feather="trash-2"></i>
+                  </a>
+                  </td>
+                </tr>
+                `
+                }
+                
+                
+              } else if (dato.turno === 'TARDE') {
+                tarde++;
+                gt+=Number(dato.golpes);
+                ot+=Number(dato.ok);
+                if(dato.ok>68){
+                  t2.innerHTML+=`
+                <tr>
+                  <td>${dato.id}</td>
+                  <td>${dato.gima}</td>
+                  <td>${dato.Control_1}</td>
+                  <td>${dato.Control_2}</td>
+                  <td>${dato.Control_3}</td>
+                  <td>${dato.Control_4}</td>
+                  <td>${dato.golpes}</td>
+                  <td class="text-success"><strong>${dato.ok}</strong></td>
+                  <td>${dato.isla}</td>
+                  <td>${dato.rx}</td>
+                  <td>${dato.scrap}</td>
+                  <td>${dato.obs}</td>
+                </tr>
+                `
+                }else{
+                  t2.innerHTML+=`
+                <tr>
+                  <td>${dato.id}</td>
+                  <td>${dato.gima}</td>
+                  <td>${dato.Control_1}</td>
+                  <td>${dato.Control_2}</td>
+                  <td>${dato.Control_3}</td>
+                  <td>${dato.Control_4}</td>
+                  <td>${dato.golpes}</td>
+                  <td class="text-danger"><strong>${dato.ok}</strong></td>
+                  <td>${dato.isla}</td>
+                  <td>${dato.rx}</td>
+                  <td>${dato.scrap}</td>
+                  <td>${dato.obs}</td>
+                </tr>
+                `
+                }
+              } else if (dato.turno === 'NOCHE') {
+                noche++;
+                gn+=Number(dato.golpes);
+                on+=Number(dato.ok);
+                if(dato.ok>68){
+                  t3.innerHTML+=`
+                <tr>
+                  <td>${dato.id}</td>
+                  <td>${dato.gima}</td>
+                  <td>${dato.Control_1}</td>
+                  <td>${dato.Control_2}</td>
+                  <td>${dato.Control_3}</td>
+                  <td>${dato.Control_4}</td>
+                  <td>${dato.golpes}</td>
+                  <td class="text-success"><strong>${dato.ok}</strong></td>
+                  <td>${dato.isla}</td>
+                  <td>${dato.rx}</td>
+                  <td>${dato.scrap}</td>
+                  <td>${dato.obs}</td>
+                </tr>
+                `
+                }else{
+                  t3.innerHTML+=`
+                <tr>
+                  <td>${dato.id}</td>
+                  <td>${dato.gima}</td>
+                  <td>${dato.Control_1}</td>
+                  <td>${dato.Control_2}</td>
+                  <td>${dato.Control_3}</td>
+                  <td>${dato.Control_4}</td>
+                  <td>${dato.golpes}</td>
+                  <td class="text-danger"><strong>${dato.ok}</strong></td>
+                  <td>${dato.isla}</td>
+                  <td>${dato.rx}</td>
+                  <td>${dato.scrap}</td>
+                  <td>${dato.obs}</td>
+                </tr>
+                `
+                }
+              }
+            });
+            //Maquinas
+            let m = document.getElementById('m')
+            let t = document.getElementById('t')
+            let n = document.getElementById('n')
+            m.innerHTML = `Maquinas: <strong>${mañana}</strong>`;
+            t.innerHTML = `Maquinas: <strong>${tarde}</strong>`;
+            n.innerHTML = `Maquinas: <strong>${noche}</strong>`;
+            //Golpes
+            document.getElementById('gm').innerHTML = `Total Golpes:${mañana*75} | <strong>${gm}</strong>`;
+            document.getElementById('gt').innerHTML = `Total Golpes:${tarde*75} | <strong>${gt}</strong>`;
+            document.getElementById('gn').innerHTML = `Total Golpes:${noche*75} | <strong>${gn}</strong>`
+            //OK
+            document.getElementById('om').innerHTML = `Total OK:${mañana*68} | <strong>${om}</strong>`;
+            document.getElementById('ot').innerHTML = `Total OK:${mañana*68} | <strong>${ot}</strong>`;
+            document.getElementById('on').innerHTML = `Total OK:${mañana*68} | <strong>${on}</strong>`;
+            //Scrap
+            document.getElementById('sm').innerHTML = `Scrap: 4,5% | <strong>${((1-(om/gm))*100).toFixed(2)}%</strong>`;
+            document.getElementById('st').innerHTML = `Scrap: 4,5% | <strong>${((1-(ot/gt))*100).toFixed(2)}%</strong>`;
+            document.getElementById('sn').innerHTML = `Scrap: 4,5% | <strong>${((1-(on/gn))*100).toFixed(2)}%</strong>`;
+
+            
+           // Paso 1: Calcular la suma total de todos los golpes en el arreglo completo
+            const sumaTotalGolpes = datos.reduce((acc, item) => acc + item.golpes, 0);
+
+            // Paso 2: Agrupar por 'gima' y calcular 'scrap' y 'ponderado'
+            const agrupadoPorGima = datos.reduce((acc, item) => {
+              const { gima, golpes, rx, isla, ok } = item;
+
+              if (!acc[gima]) {
+                acc[gima] = {
+                  gima,
+                  golpes: 0,
+                  rx: 0,
+                  isla: 0,
+                  ok: 0,
+                  scrap: 0
+                };
+              }
+
+              // Sumar valores
+              acc[gima].golpes += golpes;
+              acc[gima].rx += rx;
+              acc[gima].isla += isla;
+              acc[gima].ok += ok;
+              acc[gima].scrap = ((acc[gima].rx + acc[gima].isla) / acc[gima].golpes) * 100;
+
+              return acc;
+            }, {});
+
+            // Paso 3: Convertir a un arreglo y calcular 'ponderado'
+            const resultado = Object.values(agrupadoPorGima).map(item => {
+              const { gima, golpes, rx, isla,ok, scrap } = item;
+              // Ponderado calculado con la suma total de golpes de todas las filas
+              const ponderado = ((rx + isla) / sumaTotalGolpes) * 100;
+
+              return {
+                gima,
+                golpes,
+                rx,
+                isla,
+                ok,
+                scrap: `${scrap.toFixed(2)}%`,
+                ponderado // Mantener ponderado como número para el ordenamiento
+              };
+            });
+
+            // Paso 4: Ordenar por 'ponderado' de mayor a menor
+            const resultadoOrdenado = resultado.sort((a, b) => b.ponderado - a.ponderado);
+
+            // Paso 5: Formatear 'ponderado' a cadena con '%'
+            const resultadoFinal = resultadoOrdenado.map(item => ({
+              ...item,
+              ponderado: `${item.ponderado.toFixed(2)}%` // Convertir ponderado a cadena con '%'
+            }));
+
+
+            
+            // Armado de tabla
+            resultadoFinal.forEach(e =>{
+              t4.innerHTML += `
+              <tr>
+                  <td>${e.gima}</td>
+                  <td>${e.golpes}</td>
+                  <td>${e.isla}</td>
+                  <td>${e.rx}</td>
+                  <td>${e.ok}</td>
+                  <td>${e.scrap}</td>
+                  <td>${e.ponderado}</td>
+                  
+                </tr>
+              `
+            } )
+            // Paso 2: Tomar las 3 primeras gimas
+            const top3Gimas = resultadoOrdenado.slice(0, 3).map(item => item.gima);
+
+            // Paso 3: Obtener las observaciones separadas por turno y ordenadas por ponderado
+            const observacionesPorTurno = top3Gimas.map(gima => {
+              // Filtrar las observaciones correspondientes a la gima y agruparlas por turno
+              const observaciones = datos
+                .filter(item => item.gima === gima)
+                .reduce((acc, item) => {
+                  const { turno, obs } = item;
+
+                  // Si no existe el turno, inicializar el arreglo
+                  if (!acc[turno]) {
+                    acc[turno] = [];
+                  }
+
+                  // Agregar la observación
+                  acc[turno].push(obs);
+
+                  return acc;
+                }, {});
+
+              return {
+                gima,
+                turnos: observaciones
+              };
+            });
+            observacionesPorTurno.forEach(e =>{
+              t5.innerHTML += `
+              <tr>
+                  <td>${e.gima}</td>
+                  <td>${e.turnos.MAÑANA}</td>
+                  <td>${e.turnos.TARDE}</td>
+                  <td>${e.turnos.NOCHE}</td>
+                  
+                  
+                </tr>
+              `
+            })
+            
+
+          })
+      })
+      
+
+   
+
+
+  
+    
+
+  </body>
+</html>
