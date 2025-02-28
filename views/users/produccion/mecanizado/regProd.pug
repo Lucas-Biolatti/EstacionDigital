@@ -261,7 +261,7 @@
             <h5 class="modal-title" id="addDataModalLabel">Agregar Datos</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <form id="turnoForm" method="POST" action="iniciar-turno">
+          <form id="turnoForm" method="POST" action="iniciarTurno">
             <div class="common-section">
               <h3>INICIO DE TURNO</h3>
               <div class="mb-3">
@@ -278,36 +278,78 @@
               </div>
               <div class="mb-3">
                 <label for="supervisor" class="form-label">Supervisor</label>
-                <select class="form-select" id="supervisor" name="supervisor" required>
-                  <option value="Sosa, Gustavo">Sosa, Gustavo</option>
-                  <option value="Rodriguez, Gaston">Rodriguez, Gaston</option>
-                  <option value="Olmos, Kevin">Olmos, Kevin</option>
-                </select>
+                input(type="text", name="supervisor" class="form-control" value= nombre required)
               </div>
             </div>
 
             <div class="mb-3">
-              <label for="machineSelect" class="form-label">Seleccionar Máquinas</label>
-              <select id="machineSelect" name="machines" class="form-select" multiple required>
-                
-                <option value="Gima 01">Isla 01</option>
-                <option value="Gima 02">Isla 02</option>
-                <option value="Gima 03">Isla 03</option>
-                <option value="Gima 04">Isla 04</option>
-                <option value="Gima 05">Isla 05</option>
-                <option value="Gima 06">Isla 06</option>
-                <option value="Gima 07">Isla 07</option>
-                <option value="Gima 08">Isla 08</option>
-                <option value="Gima 09">Isla 09</option>
-                <option value="Gima 10">Isla 10</option>
-                <option value="Gima 11">Isla 11</option>
+              <label for="maquina" class="form-label">Seleccionar Máquinas</label>
+              select#maquina(name="maquina" class="form-select")
+                option(value="") -
+                option(value="isla 1") Isla 1
+                option(value="isla 3") Isla 3
+                option(value="isla 6") Isla 6
+                option(value="isla 7") Isla 7
+                option(value="isla 8") Isla 8
+                option(value="isla 9") Isla 9
+                option(value="isla 10") Isla 10
+                option(value="isla 11") Isla 11
+              
+            </div>
+
+            <div class="mb-3">
+                <label for="operador" class="form-label">Operador</label>
+                input(type="text", name="operador" class="form-control" required)
+            </div>
+
+            <div class="mb-3">
+              <label for="modelo" class="form-label">Seleccionar Modelo</label>
+              <select id="modelo" name="modelo" class="form-select" required>
                 
               </select>
             </div>
 
-            <div id="machinesSection">
-              <!-- Los campos para cada máquina seleccionada se generarán aquí -->
+            <div class="mb-3">
+              <label for="kit" class="form-label">Seleccionar Kit</label>
+              <select id="kit" name="kit" class="form-select" required>
+                <option value="K1">K1</option>
+                <option value="K1">K2</option>
+                <option value="K1">K3</option>
+                <option value="K1">K4</option>
+                <option value="K1">K5</option>
+                <option value="K1">K6</option>
+                <option value="K1">K7</option>
+                <option value="K1">K8</option>
+                <option value="K1">K9</option>
+                <option value="K1">K10</option>
+                <option value="K1">K11</option>
+              </select>
             </div>
+            input(type="hidden", name="molde" id="molde")
+            h4 Detalles de produccion 1er control
+            <div class="mb-3">
+                <label for="tiempo_prog" class="form-label">Tiempo Programado</label>
+                input(type="number", name="tiempo_prog" class="form-control" required value="120")
+            </div>
+            <div class="mb-3">
+                <label for="programadas" class="form-label">Ruedas Programadas</label>
+                input(type="number", name="programadas" id="programadas" class="form-control" required)
+            </div>
+            <div class="mb-3">
+                <label for="aprobadas" class="form-label">Aprobadas</label>
+                input(type="number", name="aprobadas" class="form-control" value="0")
+            </div>
+            <div class="mb-3">
+                <label for="op_int" class="form-label">Operacion intermedia</label>
+                input(type="number", name="op_int" class="form-control" value="0")
+            </div>
+            <div class="mb-3">
+                <label for="scrap" class="form-label">Scrap</label>
+                input(type="number", name="scrap" class="form-control" value="0")
+            </div>
+
+
+            
 
             <button type="submit" class="btn btn-primary">Iniciar Turno</button>
           </form>
@@ -391,12 +433,69 @@
           feather.replace(); // Refrescar los íconos
       });
       
+      let programadasInput = document.getElementById('programadas');
+      let prog = document.getElementById('maquina');
+      prog.addEventListener('change', (e) => {
+          const valorSeleccionado = e.target.value;
+
+          // Mapeo de valores
+          const valores = {
+              'isla 1': 14,
+              'isla 3': 21,
+              'isla 6': 21,
+              'isla 7': 15,
+              'isla 8': 21,
+              'isla 9': 21,
+              'isla 10': 15,
+              'isla 11': 21,
+          };
+
+          // Asignar valor al input si existe en el mapeo
+          programadasInput.value = valores[valorSeleccionado] || '';
+      });
+      //Carga de modelos
+      fetch('/users/modelos')
+      .then(response => response.json())
+      .then(datos => {
+          const selectModelo = document.getElementById('modelo'); // Referencia al select con id "modelo"
+          
+          // Limpiar el select antes de llenarlo (opcional si no tiene contenido inicial)
+          selectModelo.innerHTML = '';
+
+          // Iterar sobre los datos y agregar opciones al select
+          datos.forEach(dato => {
+              if (dato.modelo) { // Verificar que el dato tenga la clave "modelo"
+                  const option = document.createElement('option');
+                  option.value = dato.modelo; // Valor de la opción
+                  option.textContent = dato.modelo; // Texto visible de la opción
+                  selectModelo.appendChild(option);
+              }
+          });
+      })
+      .catch(error => console.error('Error al obtener los modelos:', error));
+      //Carga de molde
+      const modeloSelect = document.getElementById('modelo');
+      const kitSelect = document.getElementById('kit');
+      const moldeInput = document.getElementById('molde');
+
+      // Función para actualizar el valor del input "molde"
+      function actualizarMolde() {
+          const modelo = modeloSelect.value;
+          const kit = kitSelect.value;
+          moldeInput.value = `${modelo} ${kit}`; // Concatenar los valores
+      }
+
+      // Escuchar el evento "change" en ambos selects
+      modeloSelect.addEventListener('change', actualizarMolde);
+      kitSelect.addEventListener('change', actualizarMolde);
+
+
       let cons = document.getElementById('consultar')
       cons.addEventListener('click',(e)=>{
         
         e.preventDefault();
         let fecha = document.getElementById('fini').value;
-        fetch(`contadores?fecha=${fecha}`)
+        fetch(`reg_prod_fecha?fecha=${fecha}`)
           .then(response => response.json())
           .then(datos =>{
             console.log(datos)
@@ -429,25 +528,25 @@
               feather.replace({ 'aria-hidden': 'true' });
               if (dato.turno === 'MAÑANA') {
                 mañana++;
-                gm+=Number(dato.golpes);
-                om+=Number(dato.ok);
-                if(dato.ok>68){
+                gm+=Number(dato.ap);
+                
+                
                   t1.innerHTML+=`
                 <tr>
                   <td>${dato.id}</td>
-                  <td>${dato.gima}</td>
-                  <td>${dato.Control_1}</td>
-                  <td>${dato.Control_2}</td>
-                  <td>${dato.Control_3}</td>
-                  <td>${dato.Control_4}</td>
-                  <td>${dato.golpes}</td>
-                  <td class="text-success"><strong>${dato.ok}</strong></td>
-                  <td>${dato.isla}</td>
-                  <td>${dato.rx}</td>
+                  <td>${dato.maquina}</td>
+                  <td>${dato.molde}</td>
+                  <td>${dato.molde2}</td>
+                  <td>${dato.molde3}</td>
+                  <td>${dato.molde4}</td>
+                  <td>${dato.ap}</td>
+                  <td>${dato.intermedia}</td>
                   <td>${dato.scrap}</td>
-                  <td>${dato.obs}</td>
+                  <td>${dato.tp}</td>
+                  <td>${dato.prog}</td>
+                  <td>${dato.observaciones}</td>
                   <td>                  
-                  <a href="editrp21?id=${dato.id}&maquina=${dato.gima}" class="btn btn-sm btn-primary">
+                  <a href="editrp21?id=${dato.id}&maquina=${dato.maquina}" class="btn btn-sm btn-primary">
                       <i data-feather="edit"></i>
                   </a>
 
@@ -457,33 +556,7 @@
                   </td>
                 </tr>
                 `
-                }else{
-                  t1.innerHTML+=`
-                <tr>
-                  <td>${dato.id}</td>
-                  <td>${dato.gima}</td>
-                  <td>${dato.Control_1}</td>
-                  <td>${dato.Control_2}</td>
-                  <td>${dato.Control_3}</td>
-                  <td>${dato.Control_4}</td>
-                  <td>${dato.golpes}</td>
-                  <td class="text-danger"><strong>${dato.ok}</strong></td>
-                  <td>${dato.isla}</td>
-                  <td>${dato.rx}</td>
-                  <td>${dato.scrap}</td>
-                  <td>${dato.obs}</td>
-                  <td>                  
-                  <a href="editrp21?id=${dato.id}&maquina=${dato.gima}" class="btn btn-sm btn-primary">
-                      <i data-feather="edit"></i>
-                  </a>
-
-                  <a href="eliminarDato?id=${dato.id}" class="btn btn-sm btn-danger">
-                      <i data-feather="trash-2"></i>
-                  </a>
-                  </td>
-                </tr>
-                `
-                }
+                
                 
                 
               } else if (dato.turno === 'TARDE') {

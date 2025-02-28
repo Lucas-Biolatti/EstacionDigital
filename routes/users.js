@@ -1187,6 +1187,23 @@ router.get('/montadores',(req,res)=>{
     })
   
 });
+router.get('/modelos',(req,res)=>{
+  connectToDatabase((error, conexion) => {
+    if (error) {
+        return res.status(500).send('Error de conexión a la base de datos');
+    }
+    let sql1 = "SELECT * FROM modelos";
+    conexion.query(sql1,(error,result,files)=>{
+      conexion.release();
+        if(!error){
+           res.send(result);
+        }else{
+            alert("No se pudo obtener los modelos");
+        }
+    })
+    })
+  
+});
 
 // MODULOS DE PRODUCCION
 
@@ -1673,5 +1690,65 @@ router.get('/produccion/mecanizado/regProd',(req,res)=>{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
   
+});
+router.post('/produccion/mecanizado/iniciarTurno',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="users" && req.session.sector=="mecanizado") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+
+      let fecha = req.body.fecha;
+      let turno = req.body.turno;
+      let supervisor = req.body.supervisor;
+      let operador = req.body.operador;
+      let maquina = req.body.maquina;
+      let modelo = req.body.modelo ? req.body.modelo : null;
+      let kit = req.body.kit ? req.body.kit : null;
+      let molde = req.body.molde ? req.body.molde : null;
+      let tiempo_prog = req.body.tiempo_prog ? req.body.tiempo_prog : null;
+      let programadas = req.body.programadas ? req.body.programadas : null;
+
+      let aprobadas = req.body.aprobadas ? req.body.aprobadas : null;
+      let op_int = req.body.op_int ? req.body.op_int : null;
+      let scrap = req.body.scrap ? req.body.scrap : null
+      const sql = `INSERT INTO regProd_mecanizado (fecha,turno,maquina,operador,supervisor,modelo1,kit1,molde,tiempo_prog,programadas,aprobadas,op_int,scrap) VALUES('${fecha}','${turno}','${maquina}','${operador}','${supervisor}','${modelo}','${kit}','${molde}',${tiempo_prog},${programadas},${aprobadas},${op_int},${scrap})`
+      conexion.query(sql,(error)=>{
+        conexion.release();
+        if (!error) {
+          res.render('users/produccion/mecanizado/regProd',{nombre:`${req.session.apellido}, ${req.session.nombre}`})
+        } else{
+          res.send(error)
+        }
+      }) 
+
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
 })
+router.get('/produccion/mecanizado/reg_prod_fecha',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="users" && req.session.sector=="mecanizado") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+        let fecha = req.query.fecha
+        let sql = `call regProd_mec('${fecha}')`;
+        conexion.query(sql,(error,result)=>{
+          conexion.release();
+          if (!error) {
+            res.send(result[0]);
+          }else{
+            res.send(error)
+          }
+        })
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+})
+
 module.exports = router;
