@@ -1750,5 +1750,29 @@ router.get('/produccion/mecanizado/reg_prod_fecha',(req,res)=>{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 })
+router.get('/produccion/mecanizado/editRegistro',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="users" && req.session.sector=="mecanizado") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+        let id = req.query.id;
+        let sql = `select * from regProd_mecanizado where id=${id}`;
+        conexion.query(sql,(error,result)=>{
+          conexion.release();
+          let f = fechaEdit(result[0].fecha);
+          if (!error) {
+            res.render('users/produccion/mecanizado/editRegistro',{nombre:`${req.session.apellido}, ${req.session.nombre}`,result:result,fecha:f})
+          }else{
+            res.send(error)
+          }
+          
+        })
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+})
 
 module.exports = router;
