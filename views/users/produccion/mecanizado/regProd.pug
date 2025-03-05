@@ -112,6 +112,11 @@
         </nav>
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+          if mensaje
+            .alert.alert-success(role="alert")
+              | #{mensaje}
+          else
+            | <!-- No se muestra nada si no hay mensaje -->
           <div class="d-flex justify-content-between align-items-center">
               <div class="btn-group me-2">
                   <label class="form-label me-2" for="fini">Fecha</label>
@@ -148,15 +153,16 @@
                       thead 
                           th id 
                           th isla 
-                          th 06 a 08
-                          th 08 a 10
-                          th 10 a 12
-                          th 12 a 14
-                          th Aprobadas
-                          th Intermedias 
+                          th 22 a 00
+                          th 00 a 02
+                          th 02 a 04
+                          th 04 a 06
+                          th Aprob
+                          th Prog
+                          th Interm 
                           th Scrap 
                           th % de Scrap 
-                          th Tiempo de parada 
+                          th Tiempo Prog
                           th Observaciones
                           th Accion
                       tbody(id="table1")
@@ -178,15 +184,16 @@
                       thead 
                           th id 
                           th isla 
-                          th 14 a 16
-                          th 16 a 18
-                          th 18 a 20
-                          th 20 a 22
-                          th Aprobadas
-                          th Intermedias 
+                          th 22 a 00
+                          th 00 a 02
+                          th 02 a 04
+                          th 04 a 06
+                          th Aprob
+                          th Prog
+                          th Interm 
                           th Scrap 
                           th % de Scrap 
-                          th Tiempo de parada 
+                          th Tiempo Prog
                           th Observaciones
                           th Accion
                       tbody(id="table2")
@@ -211,46 +218,15 @@
                           th 00 a 02
                           th 02 a 04
                           th 04 a 06
-                          th Aprobadas
-                          th Intermedias 
+                          th Aprob
+                          th Prog
+                          th Interm 
                           th Scrap 
                           th % de Scrap 
-                          th Tiempo de parada 
+                          th Tiempo Prog
                           th Observaciones
                           th Accion
                       tbody(id="table3")
-          br
-          <div class="d-flex align-items-center" id="toggleTableButton4" style="cursor: pointer;">
-              <span data-feather="chevron-down" id="toggleIcon4"></span>
-              <h6 class="ms-2 mb-0">PROMEDIO PONDERADO</h6>
-          </div>
-          div(id="tableContainer4")
-            table(class="table table-sm table-striped table-hover" )
-                      thead 
-                        th MAQUINA 
-                        th APROBADAS 
-                        th INTERMEDIA 
-                        th SCRAP
-                        th OK
-                        th SCRAP 
-                        th PONDERADO 
-                      tbody(id="table4")
-          br
-          <div class="d-flex align-items-center" id="toggleTableButton5" style="cursor: pointer;">
-              <span data-feather="chevron-down" id="toggleIcon5"></span>
-              <h6 class="ms-2 mb-0">OBSERVACIONES</h6>
-          </div>
-          div(id="tableContainer5")
-            table(class="table table-sm table-striped table-hover" )
-                      thead 
-                        th MAQUINA 
-                        th MAÑANA 
-                        th TARDE
-                        th NOCHE
-                         
-                      tbody(id="table5")
-
-         
         </main>
       </div>
     </div>
@@ -286,14 +262,14 @@
               <label for="maquina" class="form-label">Seleccionar Máquinas</label>
               select#maquina(name="maquina" class="form-select")
                 option(value="") -
-                option(value="isla 1") Isla 1
-                option(value="isla 3") Isla 3
-                option(value="isla 6") Isla 6
-                option(value="isla 7") Isla 7
-                option(value="isla 8") Isla 8
-                option(value="isla 9") Isla 9
-                option(value="isla 10") Isla 10
-                option(value="isla 11") Isla 11
+                option(value="Isla 1") Isla 1
+                option(value="Isla 3") Isla 3
+                option(value="Isla 6") Isla 6
+                option(value="Isla 7") Isla 7
+                option(value="Isla 8") Isla 8
+                option(value="Isla 9") Isla 9
+                option(value="Isla 10") Isla 10
+                option(value="Isla 11") Isla 11
               
             </div>
 
@@ -360,10 +336,9 @@
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" ></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    
     <script src="/assets/dist/js/bootstrap.bundle.min.js"></script>
-    
-    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     script.
       feather.replace({ 'aria-hidden': 'true' });
       //Esconder o mostrar Secciones.
@@ -406,31 +381,21 @@
           }
           feather.replace(); // Refrescar los íconos
       });
-      document.getElementById("toggleTableButton4").addEventListener("click", function() {
-          var tableContainer = document.getElementById("tableContainer4");
-          var icon = document.getElementById("toggleIcon4");
+      document.addEventListener('DOMContentLoaded', () => {
+          const dateInput = document.getElementById('fini');
+          const now = new Date();
 
-          if (tableContainer.style.display === "none") {
-              tableContainer.style.display = "block"; // Mostrar el container
-              icon.setAttribute("data-feather", "chevron-down"); // Cambiar icono
-          } else {
-              tableContainer.style.display = "none"; // Ocultar el container
-              icon.setAttribute("data-feather", "chevron-right"); // Cambiar icono
+          // Verifica si la hora actual está entre las 00:00 y las 06:00
+          if (now.getHours() < 6) {
+              // Resta un día para mostrar la fecha anterior
+              now.setDate(now.getDate() - 1);
           }
-          feather.replace(); // Refrescar los íconos
-      });
-      document.getElementById("toggleTableButton5").addEventListener("click", function() {
-          var tableContainer = document.getElementById("tableContainer5");
-          var icon = document.getElementById("toggleIcon5");
 
-          if (tableContainer.style.display === "none") {
-              tableContainer.style.display = "block"; // Mostrar el container
-              icon.setAttribute("data-feather", "chevron-down"); // Cambiar icono
-          } else {
-              tableContainer.style.display = "none"; // Ocultar el container
-              icon.setAttribute("data-feather", "chevron-right"); // Cambiar icono
-          }
-          feather.replace(); // Refrescar los íconos
+          // Formatea la fecha en formato YYYY-MM-DD
+          const formattedDate = now.toISOString().split('T')[0];
+
+          // Establece la fecha en el input
+          dateInput.value = formattedDate;
       });
       
       let programadasInput = document.getElementById('programadas');
@@ -440,14 +405,14 @@
 
           // Mapeo de valores
           const valores = {
-              'isla 1': 14,
-              'isla 3': 21,
-              'isla 6': 21,
-              'isla 7': 15,
-              'isla 8': 21,
-              'isla 9': 21,
-              'isla 10': 15,
-              'isla 11': 21,
+              'Isla 1': 28,
+              'Isla 3': 42,
+              'Isla 6': 42,
+              'Isla 7': 30,
+              'Isla 8': 42,
+              'Isla 9': 42,
+              'Isla 10': 30,
+              'Isla 11': 42,
           };
 
           // Asignar valor al input si existe en el mapeo
@@ -490,297 +455,149 @@
       kitSelect.addEventListener('change', actualizarMolde);
 
 
-      let cons = document.getElementById('consultar')
-      cons.addEventListener('click',(e)=>{
-        
-        e.preventDefault();
-        let fecha = document.getElementById('fini').value;
-        fetch(`reg_prod_fecha?fecha=${fecha}`)
-          .then(response => response.json())
-          .then(datos =>{
-            console.log(datos)
-            //Maquinas
-            let mañana = 0;
-            let tarde = 0;
-            let noche = 0;
-            //Golpes
-            let gm = 0;
-            let gt = 0;
-            let gn = 0;
-            //Ruedas ok
-            let om = 0;
-            let ot = 0;
-            let on = 0;
-            //Tablas
-            let t1 = document.getElementById('table1');
-            let t2 = document.getElementById('table2');
-            let t3 = document.getElementById('table3');
-            let t4 = document.getElementById('table4');
-            let t5 = document.getElementById('table5');
-            //Vaciar Tablas
-            t1.innerHTML = "";
-            t2.innerHTML = "";
-            t3.innerHTML = "";
-            t4.innerHTML = "";
-            t5.innerHTML = "";
+      document.addEventListener('DOMContentLoaded', () => {
+        const dateInput = document.getElementById('fini');
+        const cons = document.getElementById('consultar');
+        const now = new Date();
 
-            datos.forEach(dato => {
-              feather.replace({ 'aria-hidden': 'true' });
-              if (dato.turno === 'MAÑANA') {
-                mañana++;
-                gm+=Number(dato.ap);
-                
-                
-                  t1.innerHTML+=`
-                <tr>
-                  <td>${dato.id}</td>
-                  <td>${dato.maquina}</td>
-                  <td>${dato.molde}</td>
-                  <td>${dato.molde2}</td>
-                  <td>${dato.molde3}</td>
-                  <td>${dato.molde4}</td>
-                  <td>${dato.ap}</td>
-                  <td>${dato.intermedia}</td>
-                  <td>${dato.scrap}</td>
-                  <td>${dato.tp}</td>
-                  <td>${dato.prog}</td>
-                  <td>${dato.observaciones}</td>
-                  <td>                  
-                  <a href="editRegistro?id=${dato.id}&maquina=${dato.maquina}" class="btn btn-sm btn-primary">
-                      <i data-feather="edit"></i>
-                  </a>
+        if (now.getHours() < 6) {
+            now.setDate(now.getDate() - 1);
+        }
 
-                  <a href="eliminarDato?id=${dato.id}" class="btn btn-sm btn-danger">
-                      <i data-feather="trash-2"></i>
-                  </a>
-                  </td>
-                </tr>
-                `
-                
-                
-                
-              } else if (dato.turno === 'TARDE') {
-                tarde++;
-                gt+=Number(dato.golpes);
-                ot+=Number(dato.ok);
-                if(dato.ok>68){
-                  t2.innerHTML+=`
-                <tr>
-                  <td>${dato.id}</td>
-                  <td>${dato.gima}</td>
-                  <td>${dato.Control_1}</td>
-                  <td>${dato.Control_2}</td>
-                  <td>${dato.Control_3}</td>
-                  <td>${dato.Control_4}</td>
-                  <td>${dato.golpes}</td>
-                  <td class="text-success"><strong>${dato.ok}</strong></td>
-                  <td>${dato.isla}</td>
-                  <td>${dato.rx}</td>
-                  <td>${dato.scrap}</td>
-                  <td>${dato.obs}</td>
-                </tr>
-                `
-                }else{
-                  t2.innerHTML+=`
-                <tr>
-                  <td>${dato.id}</td>
-                  <td>${dato.gima}</td>
-                  <td>${dato.Control_1}</td>
-                  <td>${dato.Control_2}</td>
-                  <td>${dato.Control_3}</td>
-                  <td>${dato.Control_4}</td>
-                  <td>${dato.golpes}</td>
-                  <td class="text-danger"><strong>${dato.ok}</strong></td>
-                  <td>${dato.isla}</td>
-                  <td>${dato.rx}</td>
-                  <td>${dato.scrap}</td>
-                  <td>${dato.obs}</td>
-                </tr>
-                `
-                }
-              } else if (dato.turno === 'NOCHE') {
-                noche++;
-                gn+=Number(dato.golpes);
-                on+=Number(dato.ok);
-                if(dato.ok>68){
-                  t3.innerHTML+=`
-                <tr>
-                  <td>${dato.id}</td>
-                  <td>${dato.gima}</td>
-                  <td>${dato.Control_1}</td>
-                  <td>${dato.Control_2}</td>
-                  <td>${dato.Control_3}</td>
-                  <td>${dato.Control_4}</td>
-                  <td>${dato.golpes}</td>
-                  <td class="text-success"><strong>${dato.ok}</strong></td>
-                  <td>${dato.isla}</td>
-                  <td>${dato.rx}</td>
-                  <td>${dato.scrap}</td>
-                  <td>${dato.obs}</td>
-                </tr>
-                `
-                }else{
-                  t3.innerHTML+=`
-                <tr>
-                  <td>${dato.id}</td>
-                  <td>${dato.gima}</td>
-                  <td>${dato.Control_1}</td>
-                  <td>${dato.Control_2}</td>
-                  <td>${dato.Control_3}</td>
-                  <td>${dato.Control_4}</td>
-                  <td>${dato.golpes}</td>
-                  <td class="text-danger"><strong>${dato.ok}</strong></td>
-                  <td>${dato.isla}</td>
-                  <td>${dato.rx}</td>
-                  <td>${dato.scrap}</td>
-                  <td>${dato.obs}</td>
-                </tr>
-                `
-                }
-              }
-            });
-            //Maquinas
-            let m = document.getElementById('m')
-            let t = document.getElementById('t')
-            let n = document.getElementById('n')
-            m.innerHTML = `Maquinas: <strong>${mañana}</strong>`;
-            t.innerHTML = `Maquinas: <strong>${tarde}</strong>`;
-            n.innerHTML = `Maquinas: <strong>${noche}</strong>`;
-            //Golpes
-            document.getElementById('gm').innerHTML = `Total Golpes:${mañana*75} | <strong>${gm}</strong>`;
-            document.getElementById('gt').innerHTML = `Total Golpes:${tarde*75} | <strong>${gt}</strong>`;
-            document.getElementById('gn').innerHTML = `Total Golpes:${noche*75} | <strong>${gn}</strong>`
-            //OK
-            document.getElementById('om').innerHTML = `Total OK:${mañana*68} | <strong>${om}</strong>`;
-            document.getElementById('ot').innerHTML = `Total OK:${mañana*68} | <strong>${ot}</strong>`;
-            document.getElementById('on').innerHTML = `Total OK:${mañana*68} | <strong>${on}</strong>`;
-            //Scrap
-            document.getElementById('sm').innerHTML = `Scrap: 4,5% | <strong>${((1-(om/gm))*100).toFixed(2)}%</strong>`;
-            document.getElementById('st').innerHTML = `Scrap: 4,5% | <strong>${((1-(ot/gt))*100).toFixed(2)}%</strong>`;
-            document.getElementById('sn').innerHTML = `Scrap: 4,5% | <strong>${((1-(on/gn))*100).toFixed(2)}%</strong>`;
+        const formattedDate = now.toISOString().split('T')[0];
+        dateInput.value = formattedDate;
 
-            
-           // Paso 1: Calcular la suma total de todos los golpes en el arreglo completo
-            const sumaTotalGolpes = datos.reduce((acc, item) => acc + item.golpes, 0);
+        const fetchData = () => {
+            const fecha = dateInput.value;
+            fetch(`reg_prod_fecha?fecha=${fecha}`)
+                .then(response => response.json())
+                .then(datos => {
+                    console.log(datos);
+                    let mañana = 0;
+                    let tarde = 0;
+                    let noche = 0;
+                    //aprobadas
+                    let gm = 0;
+                    let gt = 0;
+                    let gn = 0;
+                    //programadas
+                    let om = 0;
+                    let ot = 0;
+                    let on = 0;
+                    //Scrap
+                    let sm = 0;
+                    let st = 0;
+                    let sn = 0;
+                    const t1 = document.getElementById('table1');
+                    const t2 = document.getElementById('table2');
+                    const t3 = document.getElementById('table3');
 
-            // Paso 2: Agrupar por 'gima' y calcular 'scrap' y 'ponderado'
-            const agrupadoPorGima = datos.reduce((acc, item) => {
-              const { gima, golpes, rx, isla, ok } = item;
+                    t1.innerHTML = "";
+                    t2.innerHTML = "";
+                    t3.innerHTML = "";
 
-              if (!acc[gima]) {
-                acc[gima] = {
-                  gima,
-                  golpes: 0,
-                  rx: 0,
-                  isla: 0,
-                  ok: 0,
-                  scrap: 0
+                    datos.forEach(dato => {
+                        feather.replace({ 'aria-hidden': 'true' });
+                        let targetTable = null;
+
+                        if (dato.turno === 'MAÑANA') {
+                            mañana++;
+                            gm+=Number(dato.ap);
+                            om+=Number(dato.prog);
+                            sm+=Number(dato.scrap);
+                            targetTable = t1;
+                        } else if (dato.turno === 'TARDE') {
+                            tarde++;
+                            gt+=Number(dato.ap);
+                            ot+=Number(dato.prog);
+                            st+=Number(dato.scrap);
+                            targetTable = t2;
+                        } else if (dato.turno === 'NOCHE') {
+                            noche++;
+                            gn+=Number(dato.ap);
+                            on+=Number(dato.prog);
+                            sn+=Number(dato.scrap);
+                            targetTable = t3;
+                        }
+
+                        if (targetTable) {
+                            targetTable.innerHTML += `
+                                <tr>
+                                    <td>${dato.id}</td>
+                                    <td>${dato.maquina}</td>
+                                    <td>${dato.molde}</td>
+                                    <td>${dato.molde2}</td>
+                                    <td>${dato.molde3}</td>
+                                    <td>${dato.molde4}</td>
+                                    <td>${dato.ap}</td>
+                                    <td>${dato.prog}</td>
+                                    <td>${dato.intermedia}</td>
+                                    <td>${dato.scrap}</td>
+                                    <td>${((dato.scrap/(dato.scrap+dato.ap))*100).toFixed(2)}%</td>
+                                    <td>${dato.tp}</td>
+                                    <td>${dato.observaciones}</td>
+                                    <td>
+                                        <a href="editRegistro?id=${dato.id}&maquina=${dato.maquina}" class="btn btn-sm btn-primary">
+                                            <i data-feather="edit"></i>
+                                        </a>
+                                        <a href="eliminarDato?id=${dato.id}" class="btn btn-sm btn-danger eliminar-dato" data-id="${dato.id}">
+                                            <i data-feather="trash-2"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            `;
+                        }
+                        //Maquinas
+                        let m = document.getElementById('m')
+                        let t = document.getElementById('t')
+                        let n = document.getElementById('n')
+
+                        m.innerHTML = `Maquinas: <strong>${mañana}</strong>`;
+                        t.innerHTML = `Maquinas: <strong>${tarde}</strong>`;
+                        n.innerHTML = `Maquinas: <strong>${noche}</strong>`;
+                        //Golpes
+                        document.getElementById('gm').innerHTML = `Total Aprobadas: <strong>${gm}</strong>`;
+                        document.getElementById('gt').innerHTML = `Total Aprobadas: <strong>${gt}</strong>`;
+                        document.getElementById('gn').innerHTML = `Total Aprobadas: <strong>${gn}</strong>`
+                        //OK
+                        document.getElementById('om').innerHTML = `Total Programado: <strong>${om}</strong>`;
+                        document.getElementById('ot').innerHTML = `Total Programado: <strong>${ot}</strong>`;
+                        document.getElementById('on').innerHTML = `Total Programado:| <strong>${on}</strong>`;
+                        //Scrap
+
+                        document.getElementById('sm').innerHTML = `Scrap: 1,5% | <strong>${((sm/(gm+sm))*100).toFixed(2)}%</strong>`;
+                        document.getElementById('st').innerHTML = `Scrap: 1,5% | <strong>${((st/(gt+st))*100).toFixed(2)}%</strong>`;
+                        document.getElementById('sn').innerHTML = `Scrap: 1,5% | <strong>${((sn/(gn+sn))*100).toFixed(2)}%</strong>`;
+                    });
+                      
+
+                    addDeleteEvent(); // Llamar al evento después de generar las filas
+                });
+        };
+
+        const addDeleteEvent = () => {
+            // Delegación de eventos para los enlaces "eliminar-dato"
+            document.querySelectorAll('.eliminar-dato').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+
+
+                const confirmacion = confirm("¿Estás seguro de que deseas eliminar este registro?");
+                if (confirmacion) {
+                    window.location.href = link.getAttribute('href');
+                } else {
+                                console.log("Eliminación cancelada");
+                            }
+                        });
+                    });
                 };
-              }
 
-              // Sumar valores
-              acc[gima].golpes += golpes;
-              acc[gima].rx += rx;
-              acc[gima].isla += isla;
-              acc[gima].ok += ok;
-              acc[gima].scrap = ((acc[gima].rx + acc[gima].isla) / acc[gima].golpes) * 100;
+                cons.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    fetchData();
+                });
 
-              return acc;
-            }, {});
-
-            // Paso 3: Convertir a un arreglo y calcular 'ponderado'
-            const resultado = Object.values(agrupadoPorGima).map(item => {
-              const { gima, golpes, rx, isla,ok, scrap } = item;
-              // Ponderado calculado con la suma total de golpes de todas las filas
-              const ponderado = ((rx + isla) / sumaTotalGolpes) * 100;
-
-              return {
-                gima,
-                golpes,
-                rx,
-                isla,
-                ok,
-                scrap: `${scrap.toFixed(2)}%`,
-                ponderado // Mantener ponderado como número para el ordenamiento
-              };
+                fetchData();
             });
-
-            // Paso 4: Ordenar por 'ponderado' de mayor a menor
-            const resultadoOrdenado = resultado.sort((a, b) => b.ponderado - a.ponderado);
-
-            // Paso 5: Formatear 'ponderado' a cadena con '%'
-            const resultadoFinal = resultadoOrdenado.map(item => ({
-              ...item,
-              ponderado: `${item.ponderado.toFixed(2)}%` // Convertir ponderado a cadena con '%'
-            }));
-
-
-            
-            // Armado de tabla
-            resultadoFinal.forEach(e =>{
-              t4.innerHTML += `
-              <tr>
-                  <td>${e.gima}</td>
-                  <td>${e.golpes}</td>
-                  <td>${e.isla}</td>
-                  <td>${e.rx}</td>
-                  <td>${e.ok}</td>
-                  <td>${e.scrap}</td>
-                  <td>${e.ponderado}</td>
-                  
-                </tr>
-              `
-            } )
-            // Paso 2: Tomar las 3 primeras gimas
-            const top3Gimas = resultadoOrdenado.slice(0, 3).map(item => item.gima);
-
-            // Paso 3: Obtener las observaciones separadas por turno y ordenadas por ponderado
-            const observacionesPorTurno = top3Gimas.map(gima => {
-              // Filtrar las observaciones correspondientes a la gima y agruparlas por turno
-              const observaciones = datos
-                .filter(item => item.gima === gima)
-                .reduce((acc, item) => {
-                  const { turno, obs } = item;
-
-                  // Si no existe el turno, inicializar el arreglo
-                  if (!acc[turno]) {
-                    acc[turno] = [];
-                  }
-
-                  // Agregar la observación
-                  acc[turno].push(obs);
-
-                  return acc;
-                }, {});
-
-              return {
-                gima,
-                turnos: observaciones
-              };
-            });
-            observacionesPorTurno.forEach(e =>{
-              t5.innerHTML += `
-              <tr>
-                  <td>${e.gima}</td>
-                  <td>${e.turnos.MAÑANA}</td>
-                  <td>${e.turnos.TARDE}</td>
-                  <td>${e.turnos.NOCHE}</td>
-                  
-                  
-                </tr>
-              `
-            })
-            
-
-          })
-      })
-      
-
-   
-
-
-  
-    
-
   </body>
 </html>

@@ -1204,6 +1204,23 @@ router.get('/modelos',(req,res)=>{
     })
   
 });
+router.get('/codigos_mecanizado',(req,res)=>{
+  connectToDatabase((error, conexion) => {
+    if (error) {
+        return res.status(500).send('Error de conexión a la base de datos');
+    }
+    let sql1 = "SELECT * FROM codigoParada_mecanizado";
+    conexion.query(sql1,(error,result,files)=>{
+      conexion.release();
+        if(!error){
+           res.send(result);
+        }else{
+            alert("No se pudo obtener los codigos");
+        }
+    })
+    })
+  
+});
 
 // MODULOS DE PRODUCCION
 
@@ -1774,5 +1791,189 @@ router.get('/produccion/mecanizado/editRegistro',(req,res)=>{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 })
+router.post('/produccion/mecanizado/editRegistro',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="users" && req.session.sector=="mecanizado") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+        //Variables
+        let id = req.body.id;
+let fecha = req.body.fecha;
+let turno = req.body.turno;
+let supervisor = req.body.supervisor;
+let maquina = req.body.maquina;
+let operador = req.body.operador;
+let observaciones = req.body.observaciones ? req.body.observaciones : null;
 
+// Página 2: Control 1
+let modelo = req.body.modelo ? req.body.modelo : null;
+let kit = req.body.kit ? req.body.kit : null;
+let tiempo_prog = req.body.tiempo_prog ? req.body.tiempo_prog : 0;
+let programadas = req.body.programadas ? req.body.programadas : 0;
+let aprobadas = req.body.aprobadas ? req.body.aprobadas : 0;
+let op_int = req.body.op_int ? req.body.op_int : 0;
+let scrap = req.body.scrap ? req.body.scrap : 0;
+
+// Página 3: Control 2
+let modelo2 = req.body.modelo2 ? req.body.modelo2 : null;
+let kit2 = req.body.kit2 ? req.body.kit2 : null;
+let tiempo_prog2 = req.body.tiempo_prog2 ? req.body.tiempo_prog2 : 0;
+let programadas2 = req.body.programadas2 ? req.body.programadas2 : 0;
+let aprobadas2 = req.body.aprobadas2 ? req.body.aprobadas2 : 0;
+let op_int2 = req.body.op_int2 ? req.body.op_int2 : 0;
+let scrap2 = req.body.scrap2 ? req.body.scrap2 : 0;
+
+// Página 4: Control 3
+let modelo3 = req.body.modelo3 ? req.body.modelo3 : null;
+let kit3 = req.body.kit3 ? req.body.kit3 : null;
+let tiempo_prog3 = req.body.tiempo_prog3 ? req.body.tiempo_prog3 : 0;
+let programadas3 = req.body.programadas3 ? req.body.programadas3 : 0;
+let aprobadas3 = req.body.aprobadas3 ? req.body.aprobadas3 : 0;
+let op_int3 = req.body.op_int3 ? req.body.op_int3 : 0;
+let scrap3 = req.body.scrap3 ? req.body.scrap3 : 0;
+
+// Página 5: Control 4
+let modelo4 = req.body.modelo4 ? req.body.modelo4 : null;
+let kit4 = req.body.kit4 ? req.body.kit4 : null;
+let tiempo_prog4 = req.body.tiempo_prog4 ? req.body.tiempo_prog4 : 0;
+let programadas4 = req.body.programadas4 ? req.body.programadas4 : 0;
+let aprobadas4 = req.body.aprobadas4 ? req.body.aprobadas4 : 0;
+let op_int4 = req.body.op_int4 ? req.body.op_int4 : 0;
+let scrap4 = req.body.scrap4 ? req.body.scrap4 : 0;
+
+//Moldes concatenados
+let molde = req.body.molde ? req.body.molde : null;
+let molde2 = req.body.molde2 ? req.body.molde2 : null;
+let molde3 = req.body.molde3 ? req.body.molde3 : null;
+let molde4 = req.body.molde4 ? req.body.molde4 : null;
+
+const sql = ` UPDATE regProd_mecanizado SET fecha = ?,turno = ?,supervisor = ?,maquina = ?,operador = ?,observaciones = ?,modelo1 = ?,kit1 = ?,tiempo_prog = ?,programadas = ?,
+    aprobadas = ?,op_int = ?,scrap = ?,modelo2 = ?,kit2 = ?,tiempo_prog2 = ?,programadas2 = ?,aprobadas2 = ?,op_int2 = ?,scrap2 = ?,modelo3 = ?,kit3 = ?,
+    tiempo_prog3 = ?,programadas3 = ?,aprobadas3 = ?,op_int3 = ?,scrap3 = ?,modelo4 = ?,kit4 = ?,tiempo_prog4 = ?,programadas4 = ?,aprobadas4 = ?,op_int4 = ?,
+    scrap4 = ?, molde = ?, molde2 = ?, molde3 = ?, molde4 = ? WHERE id = ?;`;
+    const values = [
+      fecha, turno, supervisor, maquina, operador, observaciones,
+      modelo, kit, tiempo_prog, programadas, aprobadas, op_int, scrap,
+      modelo2, kit2, tiempo_prog2, programadas2, aprobadas2, op_int2, scrap2,
+      modelo3, kit3, tiempo_prog3, programadas3, aprobadas3, op_int3, scrap3,
+      modelo4, kit4, tiempo_prog4, programadas4, aprobadas4, op_int4, scrap4, molde, molde2, molde3, molde4,
+      id 
+    ];
+    conexion.query(sql,values,(error)=>{
+      conexion.release();
+      if (!error) {
+        res.render('users/produccion/mecanizado/regProd',{nombre:`${req.session.apellido}, ${req.session.nombre}`,mensaje:`se actualizo correctamente el registro de la maquina ${maquina}`})
+      } else{
+        res.send(error)
+      }
+    })
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+})
+router.get('/produccion/mecanizado/eliminarDato',(req,res)=>{
+  
+if (req.session.loggedin && req.session.rol=="users" && req.session.sector=="mecanizado") {
+  connectToDatabase((error, conexion) => {
+    if (error) {
+        return res.status(500).send('Error de conexión a la base de datos');
+    }
+      let sql = `DELETE FROM regProd_mecanizado WHERE id=${req.query.id}`
+      conexion.query(sql,(error)=>{
+        conexion.release();
+        res.render('users/produccion/mecanizado/regProd',{nombre:`${req.session.apellido}, ${req.session.nombre}`,mensaje:`se Elimino correctamente el registro N° ${req.query.id}`})
+      })
+    })
+} else {
+  res.render('login',{
+    mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+}
+})
+router.post('/produccion/mecanizado/parada_mecanizado',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="users" && req.session.sector=="mecanizado") {
+    connectToDatabase((error, conexion) => {
+      let fecha = req.body.fecha_p;
+  let turno = req.body.turno_p;
+  let maquina = req.body.maquina_p;
+  let desde = req.body.desde;
+  let hasta = req.body.hasta ?  req.body.hasta : null;
+  let descripcion = req.body.descripcion;
+  let tiempo = req.body.tiempo ? req.body.tiempo : 0; // Esto podría ser calculado si no se incluye en el formulario
+  let idRegProd = req.body.id_regProd;
+  let obs = req.body.obs ? req.body.obs : null;
+
+  // Consulta SQL para insertar los datos
+  const query = `
+    INSERT INTO paradas_mecanizado (
+      fecha, turno, maquina, desde, hasta, descripcion, tiempo, id_regProd, obs
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  // Ejecución de la consulta
+  conexion.query(query, [fecha, turno, maquina, desde, hasta, descripcion, tiempo, idRegProd, obs], (err, result) => {
+    conexion.release();
+    if (err) {
+      res.send(err);
+    }else{
+      res.redirect(`/users/produccion/mecanizado/editRegistro?id=${idRegProd}`)
+    }
+    
+  });
+
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+})
+router.get('/produccion/mecanizado/paradaMaquina', (req, res) => {
+  if (req.session.loggedin && req.session.rol === "users" && req.session.sector === "mecanizado") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+        return res.status(500).send('Error de conexión a la base de datos');
+      }
+
+      let idReg = req.query.idReg;
+
+      // Validar si idReg está presente
+      if (!idReg) {
+        return res.status(400).send('Falta el parámetro idReg en la consulta');
+      }
+
+      let sql = `SELECT * FROM paradas_mecanizado WHERE id_regProd = ${conexion.escape(idReg)}`;
+
+      conexion.query(sql, (error, results) => {
+        if (error) {
+          return res.status(500).send('Error en la consulta a la base de datos');
+        }
+
+        // Formatear resultados
+        const formattedResults = results.map(row => {
+          const tiempoCalculado = Math.floor((new Date(row.hasta) - new Date(row.desde)) / (1000 * 60)); // Tiempo en minutos
+          return {
+            id: row.id,
+            id_regProd: row.id_regProd,
+            fecha: new Date(row.fecha).toLocaleDateString('es-AR'), // Formatear la fecha
+            maquina: row.maquina,
+            desde: new Date(row.desde).toLocaleString('es-AR'), // Formatear la hora
+            hasta: new Date(row.hasta).toLocaleString('es-AR'),
+            turno: row.turno,
+            obs: row.obs,
+            tiempo: row.tiempo || tiempoCalculado, // Usar el tiempo calculado si está en 0
+            descripcion: row.descripcion,
+          };
+        });
+
+        res.json(formattedResults);
+      });
+    });
+  } else {
+    res.render('login', {
+      mensaje: `No está logeado o no tiene autorización para este sitio. Verifique sus credenciales.`,
+    });
+  }
+});
 module.exports = router;

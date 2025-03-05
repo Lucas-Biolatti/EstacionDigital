@@ -117,7 +117,11 @@
           hr
           <div class="container mt-4">
             h2(class="text-center mb-4")="Regitro N°"+result[0].id+" - "+result[0].maquina 
+            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addDataModal">
+                <span data-feather="plus"></span>  Agregar parada de maquina 
+            </button>
             <form id="turnoForm" method="POST" action="editRegistro">
+                input(type="hidden", name="id",id="id" value=result[0].id)
                 <!-- Pestañas -->
                 <ul class="nav nav-tabs" id="formTabs" role="tablist">
                     <li class="nav-item" role="presentation">
@@ -179,9 +183,9 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="operador" class="form-label">Observaciones</label>
-                                textarea(name="observaciones" class="form-control") 
-
+                                textarea(name="observaciones" class="form-control")=result[0].observaciones 
                             </div>
+                           
                             
                         </div>
                     </div>
@@ -189,6 +193,10 @@
                     <!-- Página 2: Control 1 -->
                     <div class="tab-pane fade" id="page2" role="tabpanel" aria-labelledby="tab2">
                         <div class="row g-3">
+                            input(type="hidden", name="molde" id="molde" value= result[0].molde)
+                            input(type="hidden", name="molde2" id="molde2" value= result[0].molde2)
+                            input(type="hidden", name="molde3" id="molde3" value= result[0].molde3)
+                            input(type="hidden", name="molde4" id="molde4" value= result[0].molde4)
                             <div class="col-md-6">
                                 <label for="modelo" class="form-label">Seleccionar Modelo</label>
                                 <select id="modelo" name="modelo" class="form-select" required>
@@ -240,13 +248,15 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="modelo2" class="form-label">Seleccionar Modelo</label>
-                                <select id="modelo2" name="modelo2" class="form-select" required>
-                                    <option value="">-</option>
+                                <select id="modelo2" name="modelo2" class="form-select" >
+                                  option(value=result[0].modelo2)=value=result[0].modelo2
+                                  <option value="">-</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
                                 <label for="kit2" class="form-label">Seleccionar Kit</label>
-                                <select id="kit2" name="kit2" class="form-select" required>
+                                <select id="kit2" name="kit2" class="form-select" >
+                                    option(value=result[0].kit2)=result[0].kit2
                                     <option value="">-</option>
                                     <option value="K1">K1</option>
                                     <option value="K2">K2</option>
@@ -263,23 +273,23 @@
                             </div>
                             <div class="col-md-4">
                                 <label for="tiempo_prog2" class="form-label">Tiempo Programado</label>
-                                <input type="number" name="tiempo_prog2" class="form-control" required value="120">
+                                input(type="number" name="tiempo_prog2" class="form-control"  value=result[0].tiempo_prog2)
                             </div>
                             <div class="col-md-4">
                                 <label for="programadas2" class="form-label">Ruedas Programadas</label>
-                                <input type="number" name="programadas2" id="programadas2" class="form-control" required>
+                                input(type="number" name="programadas2" id="programadas2" class="form-control"  value=result[0].programadas2)
                             </div>
                             <div class="col-md-4">
                                 <label for="aprobadas2" class="form-label">Aprobadas</label>
-                                <input type="number" name="aprobadas2" class="form-control" value="0">
+                                input(type="number" name="aprobadas2" class="form-control" value=result[0].aprobadas2)
                             </div>
                             <div class="col-md-4">
                                 <label for="op_int2" class="form-label">Operación Intermedia</label>
-                                <input type="number" name="op_int2" class="form-control" value="0">
+                                input(type="number" name="op_int2" class="form-control" value=result[0].op_int2)
                             </div>
                             <div class="col-md-4">
                                 <label for="scrap2" class="form-label">Scrap</label>
-                                <input type="number" name="scrap2" class="form-control" value="0">
+                                input(type="number" name="scrap2" class="form-control" value=result[0].scrap2)
                             </div>
                         </div>
                     </div>
@@ -288,13 +298,15 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="modelo3" class="form-label">Seleccionar Modelo</label>
-                                <select id="modelo3" name="modelo3" class="form-select" required>
+                                <select id="modelo3" name="modelo3" class="form-select">
+                                    option(value=result[0].modelo3)=value=result[0].modelo3
                                     <option value="">-</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
                                 <label for="kit3" class="form-label">Seleccionar Kit</label>
-                                <select id="kit3" name="kit3" class="form-select" required>
+                                <select id="kit3" name="kit3" class="form-select" >
+                                    option(value=result[0].kit3)=result[0].kit3
                                     <option value="">-</option>
                                     <option value="K1">K1</option>
                                     <option value="K2">K2</option>
@@ -311,23 +323,23 @@
                             </div>
                             <div class="col-md-4">
                                 <label for="tiempo_prog3" class="form-label">Tiempo Programado</label>
-                                <input type="number" name="tiempo_prog3" class="form-control" required value="120">
+                                input(type="number" name="tiempo_prog3" class="form-control"  value=result[0].tiempo_prog3)
                             </div>
                             <div class="col-md-4">
                                 <label for="programadas3" class="form-label">Ruedas Programadas</label>
-                                <input type="number" name="programadas3" id="programadas3" class="form-control" required>
+                                input(type="number" name="programadas3" id="programadas3" class="form-control" value=result[0].programadas3)
                             </div>
                             <div class="col-md-4">
                                 <label for="aprobadas3" class="form-label">Aprobadas</label>
-                                <input type="number" name="aprobadas3" class="form-control" value="0">
+                                input(type="number" name="aprobadas3" class="form-control" value=result[0].aprobadas3)
                             </div>
                             <div class="col-md-4">
                                 <label for="op_int3" class="form-label">Operación Intermedia</label>
-                                <input type="number" name="op_int3" class="form-control" value="0">
+                                input(type="number" name="op_int3" class="form-control" value=result[0].op_int3)
                             </div>
                             <div class="col-md-4">
                                 <label for="scrap3" class="form-label">Scrap</label>
-                                <input type="number" name="scrap3" class="form-control" value="0">
+                                input(type="number" name="scrap3" class="form-control" value=result[0].scrap3)
                             </div>
                         </div>
                     </div>
@@ -336,13 +348,15 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="modelo4" class="form-label">Seleccionar Modelo</label>
-                                <select id="modelo4" name="modelo4" class="form-select" required>
+                                <select id="modelo4" name="modelo4" class="form-select" >
+                                    option(value=result[0].modelo4)=value=result[0].modelo4
                                     <option value="">-</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
                                 <label for="kit4" class="form-label">Seleccionar Kit</label>
-                                <select id="kit4" name="kit4" class="form-select" required>
+                                <select id="kit4" name="kit4" class="form-select" >
+                                    option(value=result[0].kit4)=result[0].kit4
                                     <option value="">-</option>
                                     <option value="K1">K1</option>
                                     <option value="K2">K2</option>
@@ -359,23 +373,23 @@
                             </div>
                             <div class="col-md-4">
                                 <label for="tiempo_prog4" class="form-label">Tiempo Programado</label>
-                                <input type="number" name="tiempo_prog4" class="form-control" required value="120">
+                                input(type="number" name="tiempo_prog4" class="form-control"  value=result[0].tiempo_prog4)
                             </div>
                             <div class="col-md-4">
                                 <label for="programadas4" class="form-label">Ruedas Programadas</label>
-                                <input type="number" name="programadas4" id="programadas4" class="form-control" required>
+                                input(type="number" name="programadas4" id="programadas4" class="form-control"  value=result[0].programadas4)
                             </div>
                             <div class="col-md-4">
                                 <label for="aprobadas4" class="form-label">Aprobadas</label>
-                                <input type="number" name="aprobadas4" class="form-control" value="0">
+                                input(type="number" name="aprobadas4" class="form-control" value=result[0].aprobadas4)
                             </div>
                             <div class="col-md-4">
                                 <label for="op_int4" class="form-label">Operación Intermedia</label>
-                                <input type="number" name="op_int4" class="form-control" value="0">
+                                input(type="number" name="op_int4" class="form-control" value=result[0].op_int4)
                             </div>
                             <div class="col-md-4">
                                 <label for="scrap4" class="form-label">Scrap</label>
-                                <input type="number" name="scrap4" class="form-control" value="0">
+                                input(type="number" name="scrap4" class="form-control" value=result[0].scrap4)
                             </div>
                         </div>
                     </div>
@@ -390,7 +404,87 @@
 
                 
             </form>
+            br
+            h4 Registro de paradas 
+            table(class="table table-sm table-striped table-hover" )
+              thead 
+                th id
+                th Descripcion 
+                th Desde 
+                th hasta 
+                th tiempo 
+                th Observaciones
+              tbody(id="tableParadas")
         </div>
+          <div class="modal fade" id="addDataModal" tabindex="-1" aria-labelledby="addDataModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="addDataModalLabel">Agregar Datos</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="turnoForm" method="POST" action="parada_mecanizado">
+                  <div class="common-section">
+                    <h3>Nueva parada de maquina</h3>
+                    <div class="mb-3">
+                      <label for="fecha_p" class="form-label">Fecha</label>
+                      input(type="date" class="form-control" id="fecha_p" name="fecha_p" required value=fecha)
+                    </div>
+                    <div class="mb-3">
+                      <label for="turno_p" class="form-label">Turno</label>
+                      <select class="form-select" id="turno_p" name="turno_p" required>
+                        option(value=result[0].turno)=result[0].turno
+                        <option value="MAÑANA">Mañana</option>
+                        <option value="TARDE">Tarde</option>
+                        <option value="NOCHE">Noche</option>
+                      </select>
+                    
+                  <div class="mb-3">
+                    <label for="maquina_p" class="form-label">Seleccionar Máquinas</label>
+                    select#maquina_p(name="maquina_p" class="form-select")
+                      option(value=result[0].maquina)=result[0].maquina
+                      option(value="") -
+                      option(value="Isla 1") Isla 1
+                      option(value="Isla 3") Isla 3
+                      option(value="Isla 6") Isla 6
+                      option(value="Isla 7") Isla 7
+                      option(value="Isla 8") Isla 8
+                      option(value="Isla 9") Isla 9
+                      option(value="Isla 10") Isla 10
+                      option(value="Isla 11") Isla 11
+                    
+                  </div>
+                  h5 Detalles de la parada
+                  <div class="mb-3">
+                    <label for="desde" class="form-label">Desde</label>
+                    input(type="datetime-local", name="desde", id="desde" class="form-control")
+                  </div>
+                  <div class="mb-3">
+                    <label for="hasta" class="form-label">Hasta</label>
+                    input(type="datetime-local", name="hasta", id="hasta" class="form-control")
+                  </div>
+                  <div class="mb-3">
+                    <label for="" class="form-label">Descripcion</label>
+                    select(name="descripcion" class="form-select" id="descripcion")
+                  </div>
+                  <div class="mb-3">
+                    <label for="tiempo" class="form-label">Tiempo</label>
+                    input(type="number", name="tiempo", id="tiempo" class="form-control" )
+                  </div>
+                  input(type="hidden", name="id_regProd" value=result[0].id)
+                  <div class="mb-3">
+                    <label for="obs" class="form-label">Observaciones</label>
+                    textarea(name="obs" class="form-control" id="obs") 
+                  </div>
+
+                  <button type="submit" class="btn btn-primary">Guardar</button>
+                </form>
+                
+                    
+              </div>
+            </div>
+          </div>
+
          
         </main>
       </div>
@@ -418,14 +512,14 @@
 
             // Mapeo de valores
             const valores = {
-                'isla 1': 28,
-                'isla 3': 42,
-                'isla 6': 42,
-                'isla 7': 30,
-                'isla 8': 42,
-                'isla 9': 42,
-                'isla 10': 30,
-                'isla 11': 42,
+                'Isla 1': 28,
+                'Isla 3': 42,
+                'Isla 6': 42,
+                'Isla 7': 30,
+                'Isla 8': 42,
+                'Isla 9': 42,
+                'Isla 10': 30,
+                'Isla 11': 42,
             };
 
             // Función para actualizar los valores
@@ -548,298 +642,110 @@
       modelo4Select.addEventListener('change', actualizarMolde4);
       kit4Select.addEventListener('change', actualizarMolde4);
 
+      const inputDesde = document.getElementById('desde');
+      const inputHasta = document.getElementById('hasta');
+      const inputTiempo = document.getElementById('tiempo');
 
-      let cons = document.getElementById('consultar')
-      cons.addEventListener('click',(e)=>{
-        
-        e.preventDefault();
-        let fecha = document.getElementById('fini').value;
-        fetch(`reg_prod_fecha?fecha=${fecha}`)
-          .then(response => response.json())
-          .then(datos =>{
-            console.log(datos)
-            //Maquinas
-            let mañana = 0;
-            let tarde = 0;
-            let noche = 0;
-            //Golpes
-            let gm = 0;
-            let gt = 0;
-            let gn = 0;
-            //Ruedas ok
-            let om = 0;
-            let ot = 0;
-            let on = 0;
-            //Tablas
-            let t1 = document.getElementById('table1');
-            let t2 = document.getElementById('table2');
-            let t3 = document.getElementById('table3');
-            let t4 = document.getElementById('table4');
-            let t5 = document.getElementById('table5');
-            //Vaciar Tablas
-            t1.innerHTML = "";
-            t2.innerHTML = "";
-            t3.innerHTML = "";
-            t4.innerHTML = "";
-            t5.innerHTML = "";
+      // Función para calcular la diferencia en minutos
+      const calcularTiempo = () => {
+        const desde = new Date(inputDesde.value);
+        const hasta = new Date(inputHasta.value);
 
-            datos.forEach(dato => {
-              feather.replace({ 'aria-hidden': 'true' });
-              if (dato.turno === 'MAÑANA') {
-                mañana++;
-                gm+=Number(dato.ap);
-                
-                
-                  t1.innerHTML+=`
-                <tr>
-                  <td>${dato.id}</td>
-                  <td>${dato.maquina}</td>
-                  <td>${dato.molde}</td>
-                  <td>${dato.molde2}</td>
-                  <td>${dato.molde3}</td>
-                  <td>${dato.molde4}</td>
-                  <td>${dato.ap}</td>
-                  <td>${dato.intermedia}</td>
-                  <td>${dato.scrap}</td>
-                  <td>${dato.tp}</td>
-                  <td>${dato.prog}</td>
-                  <td>${dato.observaciones}</td>
-                  <td>                  
-                  <a href="editrp21?id=${dato.id}&maquina=${dato.maquina}" class="btn btn-sm btn-primary">
-                      <i data-feather="edit"></i>
-                  </a>
+        if (isNaN(desde) || isNaN(hasta)) {
+          // Si no hay valores válidos en ambos inputs, limpiamos el tiempo
+          inputTiempo.value = '';
+          return;
+        }
 
-                  <a href="eliminarDato?id=${dato.id}" class="btn btn-sm btn-danger">
-                      <i data-feather="trash-2"></i>
-                  </a>
-                  </td>
-                </tr>
-                `
-                
-                
-                
-              } else if (dato.turno === 'TARDE') {
-                tarde++;
-                gt+=Number(dato.golpes);
-                ot+=Number(dato.ok);
-                if(dato.ok>68){
-                  t2.innerHTML+=`
-                <tr>
-                  <td>${dato.id}</td>
-                  <td>${dato.gima}</td>
-                  <td>${dato.Control_1}</td>
-                  <td>${dato.Control_2}</td>
-                  <td>${dato.Control_3}</td>
-                  <td>${dato.Control_4}</td>
-                  <td>${dato.golpes}</td>
-                  <td class="text-success"><strong>${dato.ok}</strong></td>
-                  <td>${dato.isla}</td>
-                  <td>${dato.rx}</td>
-                  <td>${dato.scrap}</td>
-                  <td>${dato.obs}</td>
-                </tr>
-                `
-                }else{
-                  t2.innerHTML+=`
-                <tr>
-                  <td>${dato.id}</td>
-                  <td>${dato.gima}</td>
-                  <td>${dato.Control_1}</td>
-                  <td>${dato.Control_2}</td>
-                  <td>${dato.Control_3}</td>
-                  <td>${dato.Control_4}</td>
-                  <td>${dato.golpes}</td>
-                  <td class="text-danger"><strong>${dato.ok}</strong></td>
-                  <td>${dato.isla}</td>
-                  <td>${dato.rx}</td>
-                  <td>${dato.scrap}</td>
-                  <td>${dato.obs}</td>
-                </tr>
-                `
-                }
-              } else if (dato.turno === 'NOCHE') {
-                noche++;
-                gn+=Number(dato.golpes);
-                on+=Number(dato.ok);
-                if(dato.ok>68){
-                  t3.innerHTML+=`
-                <tr>
-                  <td>${dato.id}</td>
-                  <td>${dato.gima}</td>
-                  <td>${dato.Control_1}</td>
-                  <td>${dato.Control_2}</td>
-                  <td>${dato.Control_3}</td>
-                  <td>${dato.Control_4}</td>
-                  <td>${dato.golpes}</td>
-                  <td class="text-success"><strong>${dato.ok}</strong></td>
-                  <td>${dato.isla}</td>
-                  <td>${dato.rx}</td>
-                  <td>${dato.scrap}</td>
-                  <td>${dato.obs}</td>
-                </tr>
-                `
-                }else{
-                  t3.innerHTML+=`
-                <tr>
-                  <td>${dato.id}</td>
-                  <td>${dato.gima}</td>
-                  <td>${dato.Control_1}</td>
-                  <td>${dato.Control_2}</td>
-                  <td>${dato.Control_3}</td>
-                  <td>${dato.Control_4}</td>
-                  <td>${dato.golpes}</td>
-                  <td class="text-danger"><strong>${dato.ok}</strong></td>
-                  <td>${dato.isla}</td>
-                  <td>${dato.rx}</td>
-                  <td>${dato.scrap}</td>
-                  <td>${dato.obs}</td>
-                </tr>
-                `
-                }
-              }
-            });
-            //Maquinas
-            let m = document.getElementById('m')
-            let t = document.getElementById('t')
-            let n = document.getElementById('n')
-            m.innerHTML = `Maquinas: <strong>${mañana}</strong>`;
-            t.innerHTML = `Maquinas: <strong>${tarde}</strong>`;
-            n.innerHTML = `Maquinas: <strong>${noche}</strong>`;
-            //Golpes
-            document.getElementById('gm').innerHTML = `Total Golpes:${mañana*75} | <strong>${gm}</strong>`;
-            document.getElementById('gt').innerHTML = `Total Golpes:${tarde*75} | <strong>${gt}</strong>`;
-            document.getElementById('gn').innerHTML = `Total Golpes:${noche*75} | <strong>${gn}</strong>`
-            //OK
-            document.getElementById('om').innerHTML = `Total OK:${mañana*68} | <strong>${om}</strong>`;
-            document.getElementById('ot').innerHTML = `Total OK:${mañana*68} | <strong>${ot}</strong>`;
-            document.getElementById('on').innerHTML = `Total OK:${mañana*68} | <strong>${on}</strong>`;
-            //Scrap
-            document.getElementById('sm').innerHTML = `Scrap: 4,5% | <strong>${((1-(om/gm))*100).toFixed(2)}%</strong>`;
-            document.getElementById('st').innerHTML = `Scrap: 4,5% | <strong>${((1-(ot/gt))*100).toFixed(2)}%</strong>`;
-            document.getElementById('sn').innerHTML = `Scrap: 4,5% | <strong>${((1-(on/gn))*100).toFixed(2)}%</strong>`;
+        // Calcular la diferencia en milisegundos
+        const diferenciaMs = hasta - desde;
 
-            
-           // Paso 1: Calcular la suma total de todos los golpes en el arreglo completo
-            const sumaTotalGolpes = datos.reduce((acc, item) => acc + item.golpes, 0);
+        if (diferenciaMs < 0) {
+          // Si la fecha "hasta" es menor que "desde", limpiamos el tiempo
+          inputTiempo.value = '';
+          return;
+        }
 
-            // Paso 2: Agrupar por 'gima' y calcular 'scrap' y 'ponderado'
-            const agrupadoPorGima = datos.reduce((acc, item) => {
-              const { gima, golpes, rx, isla, ok } = item;
+        // Convertir la diferencia a minutos
+        const diferenciaMinutos = Math.floor(diferenciaMs / 1000 / 60);
+        inputTiempo.value = diferenciaMinutos;
+      };
 
-              if (!acc[gima]) {
-                acc[gima] = {
-                  gima,
-                  golpes: 0,
-                  rx: 0,
-                  isla: 0,
-                  ok: 0,
-                  scrap: 0
-                };
-              }
+      // Escuchar cambios en los inputs "desde" y "hasta"
+      inputDesde.addEventListener('change', calcularTiempo);
+      inputHasta.addEventListener('change', calcularTiempo);
+      const selectDescripcion = document.getElementById('descripcion');
 
-              // Sumar valores
-              acc[gima].golpes += golpes;
-              acc[gima].rx += rx;
-              acc[gima].isla += isla;
-              acc[gima].ok += ok;
-              acc[gima].scrap = ((acc[gima].rx + acc[gima].isla) / acc[gima].golpes) * 100;
+      // Función para cargar los datos en el select
+      const cargarCodigosParada = async () => {
+        try {
+          // Realizar la solicitud al backend
+          const response = await fetch('/users/codigos_mecanizado');
+          if (!response.ok) {
+            throw new Error('Error al obtener los datos');
+          }
 
-              return acc;
-            }, {});
+          // Parsear los datos
+          const codigos = await response.json();
 
-            // Paso 3: Convertir a un arreglo y calcular 'ponderado'
-            const resultado = Object.values(agrupadoPorGima).map(item => {
-              const { gima, golpes, rx, isla,ok, scrap } = item;
-              // Ponderado calculado con la suma total de golpes de todas las filas
-              const ponderado = ((rx + isla) / sumaTotalGolpes) * 100;
+          // Limpiar el select
+          selectDescripcion.innerHTML = '';
 
-              return {
-                gima,
-                golpes,
-                rx,
-                isla,
-                ok,
-                scrap: `${scrap.toFixed(2)}%`,
-                ponderado // Mantener ponderado como número para el ordenamiento
-              };
-            });
+          // Agregar un option por cada elemento
+          codigos.forEach(codigo => {
+            const option = document.createElement('option');
+            option.value = codigo.codigo; // Asignar el código al value
+            option.textContent = `${codigo.codigo} - ${codigo.descripcion}`; // Mostrar "codigo - descripcion"
+            selectDescripcion.appendChild(option);
+          });
+        } catch (error) {
+          console.error(error);
+          selectDescripcion.innerHTML = '<option value="">Error al cargar los datos</option>';
+        }
+      };
 
-            // Paso 4: Ordenar por 'ponderado' de mayor a menor
-            const resultadoOrdenado = resultado.sort((a, b) => b.ponderado - a.ponderado);
+      // Llamar a la función para cargar los datos
+      cargarCodigosParada();
+      document.addEventListener('DOMContentLoaded', () => {
+      // ID del registro de producción (puedes obtenerlo dinámicamente si es necesario)
+      const idReg = document.getElementById('id').value;
 
-            // Paso 5: Formatear 'ponderado' a cadena con '%'
-            const resultadoFinal = resultadoOrdenado.map(item => ({
-              ...item,
-              ponderado: `${item.ponderado.toFixed(2)}%` // Convertir ponderado a cadena con '%'
-            }));
+      // Llamada al endpoint
+      fetch(`/users/produccion/mecanizado/paradaMaquina?idReg=${idReg}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error al obtener los datos');
+          }
+          return response.json();
+        })
+        .then(data => {
+          const tableBody = document.getElementById('tableParadas');
+          tableBody.innerHTML = ''; // Limpiar contenido previo, si lo hubiera
 
+          data.forEach(parada => {
+            const row = document.createElement('tr');
 
-            
-            // Armado de tabla
-            resultadoFinal.forEach(e =>{
-              t4.innerHTML += `
-              <tr>
-                  <td>${e.gima}</td>
-                  <td>${e.golpes}</td>
-                  <td>${e.isla}</td>
-                  <td>${e.rx}</td>
-                  <td>${e.ok}</td>
-                  <td>${e.scrap}</td>
-                  <td>${e.ponderado}</td>
-                  
-                </tr>
-              `
-            } )
-            // Paso 2: Tomar las 3 primeras gimas
-            const top3Gimas = resultadoOrdenado.slice(0, 3).map(item => item.gima);
+            // Crear las celdas de la fila
+            row.innerHTML = `
+              <td>${parada.id}</td>
+              <td>${parada.descripcion}</td>
+              <td>${parada.desde}</td>
+              <td>${parada.hasta}</td>
+              <td>${parada.tiempo} min</td>
+              <td>${parada.obs}</td>
+            `;
 
-            // Paso 3: Obtener las observaciones separadas por turno y ordenadas por ponderado
-            const observacionesPorTurno = top3Gimas.map(gima => {
-              // Filtrar las observaciones correspondientes a la gima y agruparlas por turno
-              const observaciones = datos
-                .filter(item => item.gima === gima)
-                .reduce((acc, item) => {
-                  const { turno, obs } = item;
-
-                  // Si no existe el turno, inicializar el arreglo
-                  if (!acc[turno]) {
-                    acc[turno] = [];
-                  }
-
-                  // Agregar la observación
-                  acc[turno].push(obs);
-
-                  return acc;
-                }, {});
-
-              return {
-                gima,
-                turnos: observaciones
-              };
-            });
-            observacionesPorTurno.forEach(e =>{
-              t5.innerHTML += `
-              <tr>
-                  <td>${e.gima}</td>
-                  <td>${e.turnos.MAÑANA}</td>
-                  <td>${e.turnos.TARDE}</td>
-                  <td>${e.turnos.NOCHE}</td>
-                  
-                  
-                </tr>
-              `
-            })
-            
-
-          })
-      })
-      
-
-   
-
-
-  
+            // Agregar la fila a la tabla
+            tableBody.appendChild(row);
+          });
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          const tableBody = document.getElementById('tableParadas');
+          tableBody.innerHTML = `<tr><td colspan="5">Error al cargar los datos</td></tr>`;
+        });
     
+        });
 
   </body>
 </html>
