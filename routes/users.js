@@ -1946,6 +1946,7 @@ router.get('/produccion/mecanizado/paradaMaquina', (req, res) => {
       let sql = `SELECT * FROM paradas_mecanizado WHERE id_regProd = ${conexion.escape(idReg)}`;
 
       conexion.query(sql, (error, results) => {
+        conexion.release();
         if (error) {
           return res.status(500).send('Error en la consulta a la base de datos');
         }
