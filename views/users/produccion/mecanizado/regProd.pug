@@ -263,7 +263,7 @@
                     </thead>
                     <tbody>
                         <!-- Filas dinámicas agrupadas -->
-                        <tr>
+                        <tr id="aisla1">
                             <td rowspan="2">ISLA 01</td>
                             <td>APROBADAS</td>
                             <td>--</td>
@@ -280,7 +280,7 @@
                             <td>--</td>
                             <td>--</td>
                         </tr>
-                        <tr>
+                        <tr id="pisla1">
                             <td>PROGRAMADAS</td>
                             <td>--</td>
                             <td>--</td>
@@ -915,7 +915,36 @@
                   });
         };
         const fetchData2 = ()=>{
+          const fecha = dateInput.value;
+              fetch(`/users/tablaDiaria_mec?fecha=${fecha}`)
+                  .then(response => response.json())
+                  .then(datos => {
+                    datos.forEach(e => {
+                     if(e.maquina =="Isla 1"){
+                      document.getElementById('aisla1').innerHTML ="";
+                      document.getElementById('aisla1').innerHTML = `
+                        
+                            <td rowspan="2">ISLA 01</td>
+                            <td>APROBADAS</td>
+                            <td>${e.c1_m}</td>
+                            <td>${e.c2_m}</td>
+                            <td>${e.c3_m}</td>
+                            <td>${e.c4_m}</td>
+                            <td>${e.c1_tarde}</td>
+                            <td>${e.c2_tarde}</td>
+                            <td>${e.c3_tarde}</td>
+                            <td>${e.c4_tarde}</td>
+                            <td>${e.c1_noche}</td>
+                            <td>${e.c2_noche}</td>
+                            <td>${e.c3_noche}</td>
+                            <td>${e.c4_noche}</td>
+                            <td>${e.totalap}</td>
+                        
+                      `
+                     }
+                    })
 
+                  })
         }
 
         const addDeleteEvent = () => {
@@ -938,9 +967,11 @@
         cons.addEventListener('click', (e) => {
             e.preventDefault();
             fetchData();
+            fetchData2();
         });
 
         fetchData();
+        fetchData2();
       });
   </body>
 </html>

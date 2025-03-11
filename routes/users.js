@@ -1221,6 +1221,23 @@ router.get('/codigos_mecanizado',(req,res)=>{
     })
   
 });
+router.get('/tablaDiaria_mec',(req,res)=>{
+  connectToDatabase((error, conexion) => {
+    if (error) {
+        return res.status(500).send('Error de conexión a la base de datos');
+    }
+    let sql1 = `call tablaDiaria_mec("${req.query.fecha}")`;
+    conexion.query(sql1,(error,result,files)=>{
+      conexion.release();
+        if(!error){
+           res.send(result[0]);
+        }else{
+            alert("No se pudo obtener datos de la tabla:"+error);
+        }
+    })
+    })
+  
+});
 
 // MODULOS DE PRODUCCION
 
