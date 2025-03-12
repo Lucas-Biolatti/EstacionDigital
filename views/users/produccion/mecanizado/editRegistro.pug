@@ -409,11 +409,14 @@
             table(class="table table-sm table-striped table-hover" )
               thead 
                 th id
-                th Descripcion 
+                th Descripcion
+                th Subdescripcion 
                 th Desde 
                 th hasta 
                 th tiempo 
                 th Observaciones
+                th Accion
+                
               tbody(id="tableParadas")
         </div>
           <div class="modal fade" id="addDataModal" tabindex="-1" aria-labelledby="addDataModalLabel" aria-hidden="true">
@@ -466,6 +469,10 @@
                   <div class="mb-3">
                     <label for="" class="form-label">Descripcion</label>
                     select(name="descripcion" class="form-select" id="descripcion")
+                  </div>
+                  <div class="mb-3">
+                    <label for="" class="form-label">Subdescripcion</label>
+                    select(name="subdescripcion" class="form-select" id="subdescripcion")
                   </div>
                   <div class="mb-3">
                     <label for="tiempo" class="form-label">Tiempo</label>
@@ -675,8 +682,9 @@
       inputDesde.addEventListener('change', calcularTiempo);
       inputHasta.addEventListener('change', calcularTiempo);
       const selectDescripcion = document.getElementById('descripcion');
+      const selectSubdescripcion = document.getElementById('subdescripcion');
 
-      // Función para cargar los datos en el select
+      // Función para cargar los datos en el select de descripción
       const cargarCodigosParada = async () => {
         try {
           // Realizar la solicitud al backend
@@ -688,20 +696,56 @@
           // Parsear los datos
           const codigos = await response.json();
 
-          // Limpiar el select
-          selectDescripcion.innerHTML = '';
+          // Crear un Set para obtener valores únicos de 'codigo'
+          const codigosUnicos = [...new Set(codigos.map(codigo => codigo.codigo))];
 
-          // Agregar un option por cada elemento
-          codigos.forEach(codigo => {
+          // Limpiar el select
+          selectDescripcion.innerHTML = '<option value="">Selecciona un código</option>';
+
+          // Agregar un option por cada código único
+          codigosUnicos.forEach(codigo => {
             const option = document.createElement('option');
-            option.value = codigo.codigo; // Asignar el código al value
-            option.textContent = `${codigo.codigo} - ${codigo.descripcion}`; // Mostrar "codigo - descripcion"
+            option.value = codigo; // Asignar el código al value
+            option.textContent = codigo; // Mostrar solo el código
             selectDescripcion.appendChild(option);
           });
+
+          // Agregar evento para actualizar el select de subdescripción
+          selectDescripcion.addEventListener('change', () => {
+            const codigoSeleccionado = selectDescripcion.value;
+
+            // Filtrar las descripciones asociadas al código seleccionado
+            const descripciones = codigos
+              .filter(codigo => codigo.codigo === codigoSeleccionado)
+              .map(codigo => codigo.descripcion);
+
+            // Actualizar el select de subdescripción
+            actualizarSubdescripcion(descripciones);
+          });
+
         } catch (error) {
           console.error(error);
           selectDescripcion.innerHTML = '<option value="">Error al cargar los datos</option>';
         }
+      };
+
+      // Función para actualizar el select de subdescripción
+      const actualizarSubdescripcion = (descripciones) => {
+        // Limpiar el select
+        selectSubdescripcion.innerHTML = '';
+
+        if (descripciones.length === 0) {
+          selectSubdescripcion.innerHTML = '<option value="">Sin opciones disponibles</option>';
+          return;
+        }
+
+        // Agregar un option por cada descripción
+        descripciones.forEach(descripcion => {
+          const option = document.createElement('option');
+          option.value = descripcion; // Asignar la descripción al value
+          option.textContent = descripcion; // Mostrar la descripción
+          selectSubdescripcion.appendChild(option);
+        });
       };
 
       // Llamar a la función para cargar los datos
@@ -729,10 +773,20 @@
             row.innerHTML = `
               <td>${parada.id}</td>
               <td>${parada.descripcion}</td>
+              <td>${parada.subdescipcion}</td>
               <td>${parada.desde}</td>
               <td>${parada.hasta}</td>
               <td>${parada.tiempo} min</td>
               <td>${parada.obs}</td>
+              <td>
+                  <a href="editParada?id=${parada.id}" class="btn btn-sm btn-primary">
+                      <i data-feather="edit"></i>
+                  </a>
+                  <a href="eliminarParada?id=${parada.id}" class="btn btn-sm btn-danger eliminar-dato" data-id="${parada.id}">
+                      <i data-feather="trash-2"></i>
+                  </a>
+              </td>
+
             `;
 
             // Agregar la fila a la tabla
@@ -742,7 +796,7 @@
         .catch(error => {
           console.error('Error:', error);
           const tableBody = document.getElementById('tableParadas');
-          tableBody.innerHTML = `<tr><td colspan="5">Error al cargar los datos</td></tr>`;
+          tableBody.innerHTML = `<tr><td colspan="8">Error al cargar los datos</td></tr>`;
         });
     
         });

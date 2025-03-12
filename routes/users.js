@@ -1921,16 +1921,17 @@ router.post('/produccion/mecanizado/parada_mecanizado',(req,res)=>{
   let tiempo = req.body.tiempo ? req.body.tiempo : 0; // Esto podría ser calculado si no se incluye en el formulario
   let idRegProd = req.body.id_regProd;
   let obs = req.body.obs ? req.body.obs : null;
+  let subdesc = req.body.subdescripcion ? req.body.subdescripcion : null; 
 
   // Consulta SQL para insertar los datos
   const query = `
     INSERT INTO paradas_mecanizado (
-      fecha, turno, maquina, desde, hasta, descripcion, tiempo, id_regProd, obs
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      fecha, turno, maquina, desde, hasta, descripcion, tiempo, id_regProd, obs, subdescripcion
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)
   `;
 
   // Ejecución de la consulta
-  conexion.query(query, [fecha, turno, maquina, desde, hasta, descripcion, tiempo, idRegProd, obs], (err, result) => {
+  conexion.query(query, [fecha, turno, maquina, desde, hasta, descripcion, tiempo, idRegProd, obs,subdesc], (err, result) => {
     conexion.release();
     if (err) {
       res.send(err);
@@ -1982,10 +1983,12 @@ router.get('/produccion/mecanizado/paradaMaquina', (req, res) => {
             obs: row.obs,
             tiempo: row.tiempo || tiempoCalculado, // Usar el tiempo calculado si está en 0
             descripcion: row.descripcion,
+            subdescipcion:row.subdescripcion,
           };
         });
 
         res.json(formattedResults);
+        console.log(formattedResults)
       });
     });
   } else {
