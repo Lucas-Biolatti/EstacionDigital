@@ -227,345 +227,90 @@
                           th Observaciones
                           th Accion
                       tbody(id="table3")
-          <div class="container mt-5">
-            <h2 class="text-center mb-4">Tabla de Producción</h2>
-            <div class="table-responsive">
-                <table class="table table-bordered table-striped table-hover text-center align-middle">
-                    <thead class="table-primary">
-                        <tr>
-                            <th rowspan="3">Máquina</th>
-                            <th rowspan="23">Descripción</th>
-                            <!-- Intervalos de 2 horas -->
-                            <th colspan="12">Producción por Intervalo</th>
-                            
-                            <th rowspan="3">Total</th>
-                        </tr>
-                        <tr>
-                            <th colspan="4">MAÑANA</th>
-                            <th colspan="4">TARDE</th>
-                            <th colspan="4">NOCHE</th>
-                        </tr>
-                        <tr>
-                            <!-- Horarios de intervalos -->
-                            <th>06:00-08:00</th>
-                            <th>08:00-10:00</th>
-                            <th>10:00-12:00</th>
-                            <th>12:00-14:00</th>
-                            <th>14:00-16:00</th>
-                            <th>16:00-18:00</th>
-                            <th>18:00-20:00</th>
-                            <th>20:00-22:00</th>
-                            <th>22:00-00:00</th>
-                            <th>00:00-02:00</th>
-                            <th>02:00-04:00</th>
-                            <th>04:00-06:00</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Filas dinámicas agrupadas -->
-                        <tr id="aisla1">
-                            <td rowspan="2">ISLA 01</td>
-                            <td>APROBADAS</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                        </tr>
-                        <tr id="pisla1">
-                            <td>PROGRAMADAS</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                        </tr>
-                        <tr>
-                            <td rowspan="2">ISLA 03</td>
-                            <td>APROBADAS</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                        </tr>
-                        <tr>
-                            <td>PROGRAMADAS</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                        </tr>
-                        <!-- Repetir para el resto de las máquinas -->
-                        <!-- ISLA 06, ISLA 07, etc. -->
-                        <tr>
-                            <td rowspan="2">ISLA 06</td>
-                            <td>APROBADAS</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                        </tr>
-                        <tr>
-                            <td>PROGRAMADAS</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                        </tr>
-                        <tr>
-                            <td rowspan="2">ISLA 07</td>
-                            <td>APROBADAS</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                        </tr>
-                        <tr>
-                            <td>PROGRAMADAS</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                        </tr>
-                        <tr>
-                            <td rowspan="2">ISLA 08</td>
-                            <td>APROBADAS</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                        </tr>
-                        <tr>
-                            <td>PROGRAMADAS</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                        </tr>
-                        <tr>
-                            <td rowspan="2">ISLA 09</td>
-                            <td>APROBADAS</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                        </tr>
-                        <tr>
-                            <td>PROGRAMADAS</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                        </tr>
-                        <tr>
-                            <td rowspan="2">ISLA 10</td>
-                            <td>APROBADAS</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                        </tr>
-                        <tr>
-                            <td>PROGRAMADAS</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                        </tr>
-                        <tr>
-                            <td rowspan="2">ISLA 11</td>
-                            <td>APROBADAS</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                        </tr>
-                        <tr>
-                            <td>PROGRAMADAS</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                        </tr>
-                        <tr>
-                            <td rowspan="2">TOTAL</td>
-                            <td>APROBADAS</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                        </tr>
-                        <tr>
-                            <td>PROGRAMADAS</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                            <td>--</td>
-                        </tr>
-                        <!-- Agregar más filas según sea necesario -->
-                    </tbody>
-                </table>
-            </div>
+          hr
+          <canvas id="totalesChart" width="300" height="100%"></canvas>
+          
+          <h2 class="text-center mb-4">Tabla de Producción</h2>
+            
+          <div class="table-responsive">
+              
+              <table class="table table-bordered table-striped table-hover text-center align-middle">
+                  <thead class="table-primary">
+                      <tr>
+                          <th rowspan="3">Máquina</th>
+                          <th rowspan="23">Descripción</th>
+                          <!-- Intervalos de 2 horas -->
+                          <th colspan="12">Producción por Intervalo</th>
+                          
+                          <th rowspan="3">Total</th>
+                      </tr>
+                      <tr>
+                          <th colspan="4">MAÑANA</th>
+                          <th colspan="4">TARDE</th>
+                          <th colspan="4">NOCHE</th>
+                      </tr>
+                      <tr>
+                          <!-- Horarios de intervalos -->
+                          <th>06:00-08:00</th>
+                          <th>08:00-10:00</th>
+                          <th>10:00-12:00</th>
+                          <th>12:00-14:00</th>
+                          <th>14:00-16:00</th>
+                          <th>16:00-18:00</th>
+                          <th>18:00-20:00</th>
+                          <th>20:00-22:00</th>
+                          <th>22:00-00:00</th>
+                          <th>00:00-02:00</th>
+                          <th>02:00-04:00</th>
+                          <th>04:00-06:00</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <!-- Filas dinámicas agrupadas -->
+                      <tr id="aisla1">
+                      </tr>
+                      <tr id="pisla1">
+                      </tr>
+                      <tr id="aisla3">
+                      </tr>
+                      <tr id="pisla3">
+                      </tr>
+                      <tr id="aisla6">
+                      </tr>
+                      <tr id="pisla6">
+                      </tr>
+                      <tr id="aisla7">
+                      </tr>
+                      <tr id="pisla7">
+                      </tr>
+                      <tr id="aisla8">
+                      </tr>
+                      <tr id="pisla8">
+                      </tr>
+                      <tr id="aisla9">
+                      </tr>
+                      <tr id="pisla9">
+                      </tr>
+                      <tr id="aisla10">
+                      </tr>
+                      <tr id="pisla10">
+                      </tr>
+                      <tr id="aisla11">
+                      </tr>
+                      <tr id="pisla11">
+                      </tr>
+                      
+                      <tr id="total">
+                          
+                      </tr>
+                      <tr id="ptotal">
+                          
+                      </tr>
+                      
+                      <!-- Agregar más filas según sea necesario -->
+                  </tbody>
+              </table>
+            
         </main>
 
       </div>
@@ -914,38 +659,165 @@
                       addDeleteEvent(); // Llamar al evento después de generar las filas
                   });
         };
-        const fetchData2 = ()=>{
+        let chart;
+        const fetchData2 = () => {
           const fecha = dateInput.value;
-              fetch(`/users/tablaDiaria_mec?fecha=${fecha}`)
-                  .then(response => response.json())
-                  .then(datos => {
-                    datos.forEach(e => {
-                     if(e.maquina =="Isla 1"){
-                      document.getElementById('aisla1').innerHTML ="";
-                      document.getElementById('aisla1').innerHTML = `
-                        
-                            <td rowspan="2">ISLA 01</td>
-                            <td>APROBADAS</td>
-                            <td>${e.c1_m}</td>
-                            <td>${e.c2_m}</td>
-                            <td>${e.c3_m}</td>
-                            <td>${e.c4_m}</td>
-                            <td>${e.c1_tarde}</td>
-                            <td>${e.c2_tarde}</td>
-                            <td>${e.c3_tarde}</td>
-                            <td>${e.c4_tarde}</td>
-                            <td>${e.c1_noche}</td>
-                            <td>${e.c2_noche}</td>
-                            <td>${e.c3_noche}</td>
-                            <td>${e.c4_noche}</td>
-                            <td>${e.totalap}</td>
-                        
-                      `
-                     }
-                    })
+          fetch(`/users/tablaDiaria_mec?fecha=${fecha}`)
+              .then(response => response.json())
+              .then(datos => {
+                  const islas = ["Isla 1", "Isla 3", "Isla 6", "Isla 7", "Isla 8", "Isla 9", "Isla 10", "Isla 11"];
+                  const totales = {
+                      aprobadas: Array(13).fill(0), // Inicializamos con 13 posiciones en 0
+                      programadas: Array(13).fill(0), // Una por cada columna
+                  };
 
-                  })
-        }
+                  datos.forEach(e => {
+                      if (islas.includes(e.maquina)) {
+                          const idIsla = e.maquina.toLowerCase().replace(" ", "");
+                          
+                          // Generar filas de "Aprobadas"
+                          document.getElementById(`a${idIsla}`).innerHTML = `
+                              <td rowspan="2">${e.maquina.toUpperCase()}</td>
+                              <td>APROBADAS</td>
+                              <td>${e.c1_m}</td>
+                              <td>${e.c2_m}</td>
+                              <td>${e.c3_m}</td>
+                              <td>${e.c4_m}</td>
+                              <td>${e.c1_tarde}</td>
+                              <td>${e.c2_tarde}</td>
+                              <td>${e.c3_tarde}</td>
+                              <td>${e.c4_tarde}</td>
+                              <td>${e.c1_noche}</td>
+                              <td>${e.c2_noche}</td>
+                              <td>${e.c3_noche}</td>
+                              <td>${e.c4_noche}</td>
+                              <td>${e.totalap}</td>
+                          `;
+
+                          // Generar filas de "Programadas"
+                          document.getElementById(`p${idIsla}`).innerHTML = `
+                              <td>PROGRAMADAS</td>
+                              <td>${e.p1_m}</td>
+                              <td>${e.p2_m}</td>
+                              <td>${e.p3_m}</td>
+                              <td>${e.p4_m}</td>
+                              <td>${e.p1_tarde}</td>
+                              <td>${e.p2_tarde}</td>
+                              <td>${e.p3_tarde}</td>
+                              <td>${e.p4_tarde}</td>
+                              <td>${e.p1_noche}</td>
+                              <td>${e.p2_noche}</td>
+                              <td>${e.p3_noche}</td>
+                              <td>${e.p4_noche}</td>
+                              <td>${e.totalprog}</td>
+                          `;
+                      }
+                      // Sumar las columnas de "aprobadas" para cada máquina
+                      totales.aprobadas[0] += parseInt(e.c1_m || 0);
+                      totales.aprobadas[1] += parseInt(e.c2_m || 0);
+                      totales.aprobadas[2] += parseInt(e.c3_m || 0);
+                      totales.aprobadas[3] += parseInt(e.c4_m || 0);
+                      totales.aprobadas[4] += parseInt(e.c1_tarde || 0);
+                      totales.aprobadas[5] += parseInt(e.c2_tarde || 0);
+                      totales.aprobadas[6] += parseInt(e.c3_tarde || 0);
+                      totales.aprobadas[7] += parseInt(e.c4_tarde || 0);
+                      totales.aprobadas[8] += parseInt(e.c1_noche || 0);
+                      totales.aprobadas[9] += parseInt(e.c2_noche || 0);
+                      totales.aprobadas[10] += parseInt(e.c3_noche || 0);
+                      totales.aprobadas[11] += parseInt(e.c4_noche || 0);
+                      totales.aprobadas[12] += parseInt(e.totalap || 0);
+
+                      // Sumar las columnas de "programadas" para cada máquina
+                      totales.programadas[0] += parseInt(e.p1_m || 0);
+                      totales.programadas[1] += parseInt(e.p2_m || 0);
+                      totales.programadas[2] += parseInt(e.p3_m || 0);
+                      totales.programadas[3] += parseInt(e.p4_m || 0);
+                      totales.programadas[4] += parseInt(e.p1_tarde || 0);
+                      totales.programadas[5] += parseInt(e.p2_tarde || 0);
+                      totales.programadas[6] += parseInt(e.p3_tarde || 0);
+                      totales.programadas[7] += parseInt(e.p4_tarde || 0);
+                      totales.programadas[8] += parseInt(e.p1_noche || 0);
+                      totales.programadas[9] += parseInt(e.p2_noche || 0);
+                      totales.programadas[10] += parseInt(e.p3_noche || 0);
+                      totales.programadas[11] += parseInt(e.p4_noche || 0);
+                      totales.programadas[12] += parseInt(e.totalprog || 0);
+                  });
+
+                  // Mostrar totales
+                  document.getElementById('total').innerHTML = `
+                      <td rowspan="2">TOTAL</td>
+                      <td>APROBADAS</td>
+                      ${totales.aprobadas.map(val => `<td>${val}</td>`).join('')}
+                  `;
+                  document.getElementById('ptotal').innerHTML = `
+                      <tr>
+                          <td>PROGRAMADAS</td>
+                          ${totales.programadas.map(val => `<td>${val}</td>`).join('')}
+                      </tr>
+                  `;
+
+                  // Crear o actualizar el gráfico
+                  const ctx = document.getElementById('totalesChart').getContext('2d');
+                  if (!chart) {
+                      chart = new Chart(ctx, {
+                          type: 'line',
+                          data: {
+                              labels: [
+                                  '06 a 08', '08 a 10', '10 a 12', '12 a 14',
+                                  '14 a 16', '16 a 18', '18 a 20', '20 a 22',
+                                  '22 a 00', '00 a 02', '02 a 04', '04 a 06',
+                                  'Total'
+                              ],
+                              datasets: [
+                                  {
+                                      label: 'Aprobadas',
+                                      data: totales.aprobadas.slice(0,-1),
+                                      borderColor: 'rgba(75, 192, 192, 1)',
+                                      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                      borderWidth: 2,
+                                      fill: true,
+                                  },
+                                  {
+                                      label: 'Programadas',
+                                      data: totales.programadas.slice(0,-1),
+                                      borderColor: 'rgba(255, 99, 132, 1)',
+                                      backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                      borderWidth: 2,
+                                      fill: true,
+                                  }
+                              ]
+                          },
+                          options: {
+                              responsive: true,
+                              plugins: {
+                                  legend: {
+                                      position: 'top',
+                                  },
+                              },
+                              scales: {
+                                  x: {
+                                      title: {
+                                          display: true,
+                                          text: 'Categorías',
+                                      }
+                                  },
+                                  y: {
+                                      beginAtZero: true,
+                                      title: {
+                                          display: true,
+                                          text: 'Cantidad',
+                                      }
+                                  }
+                              }
+                          }
+                      });
+                  } else {
+                      chart.data.datasets[0].data = totales.aprobadas.slice(0,-1);
+                      chart.data.datasets[1].data = totales.programadas.slice(0,-1);
+                      chart.update();
+                  }
+              });
+      };
 
         const addDeleteEvent = () => {
             // Delegación de eventos para los enlaces "eliminar-dato"
@@ -968,6 +840,7 @@
             e.preventDefault();
             fetchData();
             fetchData2();
+            chart.update();
         });
 
         fetchData();
