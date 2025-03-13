@@ -1997,4 +1997,74 @@ router.get('/produccion/mecanizado/paradaMaquina', (req, res) => {
     });
   }
 });
+router.get('/produccion/mecanizado/paradahs', (req, res) => {
+  if (req.session.loggedin && req.session.rol === "users" && req.session.sector ==="mecanizado") {
+      connectToDatabase((error, conexion) => {
+          if (error) {
+              return res.status(500).send('Error de conexión a la base de datos');
+          }
+          
+          const fecha = req.query.fecha; // Fecha recibida desde el frontend
+          const startHour = 6; // Inicio del día (06:00 AM)
+          const endHour = 30; // Fin del día (05:59 AM del día siguiente)
+
+          // Consultar los datos de la tabla
+          const sql = `
+              SELECT maquina, desde, hasta, descripcion 
+              FROM paradas_mecanizado 
+              WHERE DATE(desde) = '${fecha}' OR DATE(hasta) = '${fecha}';
+          `;
+
+          conexion.query(sql, (err, results) => {
+              if (err) {
+                  return res.status(500).send('Error al ejecutar la consulta');
+              }
+
+              // Procesar datos
+              const machines = {};
+
+              // Inicializar intervalos por máquina
+              results.forEach(({ maquina }) => {
+                  if (!machines[maquina]) {
+                      machines[maquina] = Array.from({ length: 288 }, () => 1); // 1 = funcionando
+                  }
+              });
+
+              // Asignar paradas (0) a los intervalos de 5 minutos
+              results.forEach(({ maquina, desde, hasta }) => {
+                  const start = new Date(desde);
+                  const end = new Date(hasta);
+
+                  for (let minute = startHour * 60; minute < endHour * 60; minute += 5) {
+                      const currentIntervalStart = new Date(start).setHours(
+                          Math.floor(minute / 60) % 24,
+                          minute % 60,
+                          0,
+                          0
+                      );
+                      const currentIntervalEnd = new Date(start).setHours(
+                          Math.floor((minute + 5) / 60) % 24,
+                          (minute + 5) % 60,
+                          0,
+                          0
+                      );
+
+                      // Si hay intersección entre la parada y el intervalo de tiempo
+                      if (start < currentIntervalEnd && end > currentIntervalStart) {
+                          const index = (minute - startHour * 60) / 5;
+                          machines[maquina][index] = 0; // Marcar como parada
+                      }
+                  }
+              });
+
+              // Enviar los datos procesados al frontend
+              res.json(machines);
+          });
+      });
+  } else {
+      res.render('login', {
+          mensaje: `No está logeado o no tiene autorización para este sitio. Verifique sus credenciales.`,
+      });
+  }
+});
 module.exports = router;

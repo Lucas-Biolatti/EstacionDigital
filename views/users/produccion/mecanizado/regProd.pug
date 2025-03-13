@@ -310,6 +310,8 @@
                       <!-- Agregar más filas según sea necesario -->
                   </tbody>
               </table>
+          <h4>Estado de Máquinas (Funcionamiento vs Paradas)</h1>
+          <canvas id="machineChart" width="800" height="400"></canvas>
             
         </main>
 
@@ -817,7 +819,66 @@
                       chart.update();
                   }
               });
-      };
+        };
+        const fetchData3 = () => {
+        const fecha = dateInput.value;
+        fetch(`/users/produccion/mecanizado/paradahs?fecha=${fecha}`)
+            .then(response => response.json())
+            .then(data => {
+                // Procesar los datos para el gráfico
+                const labels = data.map(item => item.categoria); // Ajustar según los datos recibidos
+                const valores = data.map(item => item.valor); // Ajustar según los datos recibidos
+
+                // Crear o actualizar el gráfico
+                const ctx3 = document.getElementById('grafico3').getContext('2d');
+                if (!chart3) {
+                    chart3 = new Chart(ctx3, {
+                        type: 'bar', // Tipo de gráfico
+                        data: {
+                            labels: labels,
+                            datasets: [
+                                {
+                                    label: 'Datos de Gráfico 3',
+                                    data: valores,
+                                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                                    borderColor: 'rgba(54, 162, 235, 1)',
+                                    borderWidth: 1,
+                                },
+                            ],
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                },
+                            },
+                            scales: {
+                                x: {
+                                    title: {
+                                        display: true,
+                                        text: 'Categorías',
+                                    },
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                    title: {
+                                        display: true,
+                                        text: 'Valores',
+                                    },
+                                },
+                            },
+                        },
+                    });
+                } else {
+                    chart3.data.labels = labels;
+                    chart3.data.datasets[0].data = valores;
+                    chart3.update();
+                }
+            })
+            .catch(error => console.error('Error al cargar los datos para fetchData3:', error));
+          };
+      
 
         const addDeleteEvent = () => {
             // Delegación de eventos para los enlaces "eliminar-dato"
@@ -834,17 +895,19 @@
                             }
                         });
                     });
-                };
+        };
 
         cons.addEventListener('click', (e) => {
             e.preventDefault();
             fetchData();
             fetchData2();
             chart.update();
+             fetchData3();
         });
 
         fetchData();
         fetchData2();
+         fetchData3();
       });
   </body>
 </html>
