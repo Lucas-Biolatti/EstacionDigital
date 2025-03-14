@@ -9,7 +9,9 @@
     <link href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link href="/assets/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="/stylesheets/dashboard.css" rel="stylesheet">
-    
+    <style> 
+      
+    </style>
 
   </head>
   <body>
@@ -310,8 +312,22 @@
                       <!-- Agregar más filas según sea necesario -->
                   </tbody>
               </table>
-          <h4>Estado de Máquinas (Funcionamiento vs Paradas)</h1>
-          <canvas id="machineChart" width="800" height="400"></canvas>
+          <h4>Paradas de Máquinas</h1>
+          <div class="container mt-4">
+              <div class="row">
+                  <div class="col-md-6 col-lg-4">
+                      <canvas id="grafico1"></canvas>
+                  </div>
+                  <div class="col-md-6 col-lg-4">
+                      <canvas id="grafico2"></canvas>
+                  </div>
+                  <div class="col-md-6 col-lg-4">
+                      <canvas id="grafico3"></canvas>
+                  </div>
+                  
+              </div>
+          </div>
+          
             
         </main>
 
@@ -425,6 +441,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="/assets/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
 
     script.
       feather.replace({ 'aria-hidden': 'true' });
@@ -820,81 +837,72 @@
                   }
               });
         };
+        let chart3;
+
         const fetchData3 = () => {
-        const fecha = dateInput.value;
-        fetch(`/users/produccion/mecanizado/paradahs?fecha=${fecha}`)
-            .then(response => response.json())
-            .then(data => {
-                // Procesar los datos para el gráfico
-                const labels = data.map(item => item.categoria); // Ajustar según los datos recibidos
-                const valores = data.map(item => item.valor); // Ajustar según los datos recibidos
+            const fecha = dateInput.value;
 
-                // Crear o actualizar el gráfico
-                const ctx3 = document.getElementById('grafico3').getContext('2d');
-                if (!chart3) {
-                    chart3 = new Chart(ctx3, {
-                        type: 'bar', // Tipo de gráfico
-                        data: {
-                            labels: labels,
-                            datasets: [
-                                {
-                                    label: 'Datos de Gráfico 3',
-                                    data: valores,
-                                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                                    borderColor: 'rgba(54, 162, 235, 1)',
-                                    borderWidth: 1,
-                                },
-                            ],
-                        },
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    position: 'top',
-                                },
+            fetch(`/users/produccion/mecanizado/paradahs?fecha=${fecha}`)
+                .then(response => response.json())
+                .then(dat => {
+                    // Procesar los datos para el gráfico
+                    const labels = dat.map(e => e.descripcion);
+                    const dataValues = dat.map(e => e.tiempo);
+                    const total = dataValues.reduce((sum, val) => sum + Number(val), 0); // Calcular total
+
+                    console.log(total)
+                    // Crear o actualizar el gráfico
+                    const ctx3 = document.getElementById('grafico3').getContext('2d');
+                    
+                    if (!chart3) {
+                        chart3 = new Chart(ctx3, {
+                            type: 'doughnut', // Gráfico de dona
+                            data: {
+                                labels: labels, // Descripciones
+                                datasets: [
+                                    {
+                                        label: 'Tiempos de Parada',
+                                        data: dataValues, // Valores de tiempo
+                                        backgroundColor: [
+                                            '#FF6384',
+                                            '#36A2EB',
+                                            '#FFCE56',
+                                            '#4BC0C0',
+                                            '#9966FF',
+                                            '#FF9F40',
+                                        ], // Colores para cada segmento
+                                    },
+                                ],
                             },
-                            scales: {
-                                x: {
-                                    title: {
-                                        display: true,
-                                        text: 'Categorías',
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        position: 'top',
+                                    },
+                                    datalabels: {
+                                        formatter: (value, ctx) => {
+                                            const percentage = ((value / total) * 100).toFixed(2);
+                                            return `${percentage}%`; // Mostrar valor y porcentaje
+                                        },
+                                        color: '#000',
+                                        font: {
+                                            weight: 'bold',
+                                        },
                                     },
                                 },
-                                y: {
-                                    beginAtZero: true,
-                                    title: {
-                                        display: true,
-                                        text: 'Valores',
-                                    },
-                                },
                             },
-                        },
-                    });
-                } else {
-                    chart3.data.labels = labels;
-                    chart3.data.datasets[0].data = valores;
-                    chart3.update();
-                }
-            })
-            .catch(error => console.error('Error al cargar los datos para fetchData3:', error));
-          };
-      
-
-        const addDeleteEvent = () => {
-            // Delegación de eventos para los enlaces "eliminar-dato"
-            document.querySelectorAll('.eliminar-dato').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-
-
-                const confirmacion = confirm("¿Estás seguro de que deseas eliminar este registro?");
-                if (confirmacion) {
-                    window.location.href = link.getAttribute('href');
-                } else {
-                                console.log("Eliminación cancelada");
-                            }
+                            plugins: [ChartDataLabels], // Registrar el plugin
                         });
-                    });
+                    } else {
+                        // Actualizar datos si el gráfico ya existe
+                        chart3.data.labels = labels;
+                        chart3.data.datasets[0].data = dataValues;
+                        chart3.update();
+                    }
+                })
+                .catch(error => console.log('Error al cargar los datos para fetchData3:', error));
+        
         };
 
         cons.addEventListener('click', (e) => {
@@ -902,6 +910,7 @@
             fetchData();
             fetchData2();
             chart.update();
+            chart3.update();
              fetchData3();
         });
 
