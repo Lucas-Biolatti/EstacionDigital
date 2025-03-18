@@ -1997,6 +1997,43 @@ router.get('/produccion/mecanizado/paradaMaquina', (req, res) => {
     });
   }
 });
+router.post('/produccion/mecanizado/editParada',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="users" && req.session.sector=="mecanizado") {
+    connectToDatabase((error, conexion) => {
+      let fecha = req.body.fecha_p;
+  let turno = req.body.turno_p;
+  let maquina = req.body.maquina_p;
+  let desde = req.body.desde;
+  let hasta = req.body.hasta ?  req.body.hasta : null;
+  let descripcion = req.body.descripcion;
+  let tiempo = req.body.tiempo ? req.body.tiempo : 0; // Esto podría ser calculado si no se incluye en el formulario
+  let idRegProd = req.body.id_regProd;
+  let obs = req.body.obs ? req.body.obs : null;
+  let subdesc = req.body.subdescripcion ? req.body.subdescripcion : null; 
+
+  // Consulta SQL para insertar los datos
+  const query = `UPDATE paradas_mecanizado
+SET fecha=?,turno=?,maquina=?,desde=?,hasta=?,descripcion=?,tiempo=?,idRegProd=?,obs=?,subdescripcion=? WHERE id=?`
+
+  // Ejecución de la consulta
+  conexion.query(query, [fecha, turno, maquina, desde, hasta, descripcion, tiempo, idRegProd, obs,subdesc], (err, result) => {
+    conexion.release();
+    if (err) {
+      res.send(err);
+    }else{
+      res.redirect(`/users/produccion/mecanizado/editRegistro?id=${idRegProd}`)
+    }
+    
+  });
+
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+
+  
+})
 router.get('/produccion/mecanizado/paradahs', (req, res) => {
   if (req.session.loggedin && req.session.rol === "users" && req.session.sector ==="mecanizado") {
       connectToDatabase((error, conexion) => {
@@ -2022,4 +2059,40 @@ router.get('/produccion/mecanizado/paradahs', (req, res) => {
       });
   }
 });
+router.get('/produccion/mecanizado/editParada',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="users" && req.session.sector=="mecanizado") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+        let id = req.query.id
+        let idRegProd = req.query.idRegProd;
+        let sql = `SELECT * FROM paradas_mecanizado WHERE id=${id};`;
+        conexion.query(sql,(error,result)=>{
+          if (!error) {
+              const formattedResults = result.map(row => {
+              const tiempoCalculado = Math.floor((new Date(row.hasta) - new Date(row.desde)) / (1000 * 60)); // Tiempo en minutos
+              return {
+                id: row.id,
+                id_regProd: row.id_regProd,
+                fecha: new Date(row.fecha).toLocaleDateString('es-AR'), // Formatear la fecha
+                maquina: row.maquina,
+                desde: new Date(row.desde).toLocaleString('es-AR'), // Formatear la hora
+                hasta: new Date(row.hasta).toLocaleString('es-AR'),
+                turno: row.turno,
+                obs: row.obs,
+                tiempo: row.tiempo || tiempoCalculado, // Usar el tiempo calculado si está en 0
+                descripcion: row.descripcion,
+                subdescipcion:row.subdescripcion,
+              };
+            });
+            res.render('users/produccion/mecanizado/editParada',{result:formattedResults})
+          }
+        })
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+})
 module.exports = router;

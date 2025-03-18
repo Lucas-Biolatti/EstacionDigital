@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Polimetal SA - Mecanizado</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/dashboard/">
+    <link href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link href="/assets/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/stylesheets/dashboard.css" rel="stylesheet">
+    <style> 
+      
+    </style>
+
+  </head>
+  <body>
+    
+    <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+      <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="/">POLIMETAL S.A</a>
+      <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class="navbar-nav">
+        <div class="nav-item text-nowrap">
+          <a class="nav-link px-3" href="#">Sign out</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="container-fluid">
+      <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+          <div class="position-sticky pt-3">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="/users/produccion">
+                  <span data-feather="home"></span>
+                    | Inicio
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="regProd">
+                  <span data-feather="file"></span>
+                   |Registros de Produccion
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="bar-chart-2"></span>
+                   |Registro de paradas
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="users"></span>
+                   |Customers
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="bar-chart-2"></span>
+                   |Reports
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="layers"></span>
+                   |Integrations
+                </a>
+              </li>
+            </ul>
+
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+              <span>Saved reports</span>
+              <a class="link-secondary" href="#" aria-label="Add a new report">
+                <span data-feather="plus-circle"></span>
+              </a>
+            </h6>
+            <ul class="nav flex-column mb-2">
+              <li class="nav-item">
+                <a class="nav-link" href="moldes">
+                  <span data-feather="file-text"></span>
+                   |Moldes entre fechas
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="modelos">
+                  <span data-feather="file-text"></span>
+                   |Modelos entre fechas
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="tornillos">
+                  <span data-feather="file-text"></span>
+                   |Tornillos
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="produccionDia">
+                  <span data-feather="file-text"></span>
+                   |Produccion del Dia
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="tecnicos">
+                  <span data-feather="file-text"></span>
+                   |Seguimiento de Tecnicos
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                 
+                 
+            <h5 class="modal-title" id="addDataModalLabel">Editar Parada</h5>
+                
+            
+            <form id="turnoForm" method="POST" action="parada_mecanizado">
+                <div class="common-section">
+                <h3>Nueva parada de maquina</h3>
+                <div class="mb-3">
+                    <label for="fecha_p" class="form-label">Fecha</label>
+                    input(type="date" class="form-control" id="fecha_p" name="fecha_p" required value=result[0].fecha)
+                </div>
+                <div class="mb-3">
+                    <label for="turno_p" class="form-label">Turno</label>
+                    <select class="form-select" id="turno_p" name="turno_p" required>
+                    option(value=result[0].turno)=result[0].turno
+                    <option value="MAÑANA">Mañana</option>
+                    <option value="TARDE">Tarde</option>
+                    <option value="NOCHE">Noche</option>
+                    </select>
+                
+                <div class="mb-3">
+                <label for="maquina_p" class="form-label">Seleccionar Máquinas</label>
+                select#maquina_p(name="maquina_p" class="form-select")
+                    option(value=result[0].maquina)=result[0].maquina
+                    option(value="") -
+                    option(value="Isla 1") Isla 1
+                    option(value="Isla 3") Isla 3
+                    option(value="Isla 6") Isla 6
+                    option(value="Isla 7") Isla 7
+                    option(value="Isla 8") Isla 8
+                    option(value="Isla 9") Isla 9
+                    option(value="Isla 10") Isla 10
+                    option(value="Isla 11") Isla 11
+                
+                </div>
+                h5 Detalles de la parada
+                <div class="mb-3">
+                <label for="desde" class="form-label">Desde</label>
+                input(type="datetime-local", name="desde", id="desde" class="form-control" value=result[0].desde)
+                </div>
+                <div class="mb-3">
+                <label for="hasta" class="form-label">Hasta</label>
+                input(type="datetime-local", name="hasta", id="hasta" class="form-control" value=result[0].hasta)
+                </div>
+                <div class="mb-3">
+                <label for="" class="form-label">Descripcion</label>
+                select(name="descripcion" class="form-select" id="descripcion" value=result[0].descripcion)
+                </div>
+                <div class="mb-3">
+                <label for="" class="form-label">Subdescripcion</label>
+                select(name="subdescripcion" class="form-select" id="subdescripcion" value=result[0].subdescripcion)
+                </div>
+                <div class="mb-3">
+                <label for="tiempo" class="form-label">Tiempo</label>
+                input(type="number", name="tiempo", id="tiempo" class="form-control" value=result[0].tiempo)
+                </div>
+                input(type="hidden", name="id_regProd" value=result[0].idRegProd)
+                <div class="mb-3">
+                <label for="obs" class="form-label">Observaciones</label>
+                textarea(name="obs" class="form-control" id="obs")=value=result[0].obs
+                </div>
+
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </form>
+                
+             
+        </main>
+    </body>
+</html>
