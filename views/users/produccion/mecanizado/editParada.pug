@@ -119,9 +119,9 @@
             <h5 class="modal-title" id="addDataModalLabel">Editar Parada</h5>
                 
             
-            <form id="turnoForm" method="POST" action="parada_mecanizado">
-                <div class="common-section">
-                <h3>Nueva parada de maquina</h3>
+            <form id="turnoForm" method="POST" action="editParada">
+                input(type="hidden", name="id" value=result[0].id)
+                input(type="hidden", name="id_regProd" value=result[0].id_regProd)
                 <div class="mb-3">
                     <label for="fecha_p" class="form-label">Fecha</label>
                     input(type="date" class="form-control" id="fecha_p" name="fecha_p" required value=result[0].fecha)
@@ -161,7 +161,8 @@
                 </div>
                 <div class="mb-3">
                 <label for="" class="form-label">Descripcion</label>
-                select(name="descripcion" class="form-select" id="descripcion" value=result[0].descripcion)
+                select(name="descripcion" class="form-select" id="descripcion" )
+                  option(value=result[0].descripcion)=result[0].descripcion 
                 </div>
                 <div class="mb-3">
                 <label for="" class="form-label">Subdescripcion</label>
@@ -174,7 +175,7 @@
                 input(type="hidden", name="id_regProd" value=result[0].idRegProd)
                 <div class="mb-3">
                 <label for="obs" class="form-label">Observaciones</label>
-                textarea(name="obs" class="form-control" id="obs")=value=result[0].obs
+                textarea(name="obs" class="form-control" id="obs")=result[0].obs
                 </div>
 
                 <button type="submit" class="btn btn-primary">Guardar</button>
@@ -182,5 +183,112 @@
                 
              
         </main>
+      script. 
+        document.addEventListener('DOMContentLoaded', () => {
+
+          const inputDesde = document.getElementById('desde');
+          const inputHasta = document.getElementById('hasta');
+          const inputTiempo = document.getElementById('tiempo');
+
+          // Función para calcular la diferencia en minutos
+          const calcularTiempo = () => {
+            const desde = new Date(inputDesde.value);
+            const hasta = new Date(inputHasta.value);
+
+            if (isNaN(desde) || isNaN(hasta)) {
+              // Si no hay valores válidos en ambos inputs, limpiamos el tiempo
+              inputTiempo.value = '';
+              return;
+            }
+
+            // Calcular la diferencia en milisegundos
+            const diferenciaMs = hasta - desde;
+
+            if (diferenciaMs < 0) {
+              // Si la fecha "hasta" es menor que "desde", limpiamos el tiempo
+              inputTiempo.value = '';
+              return;
+            }
+
+            // Convertir la diferencia a minutos
+            const diferenciaMinutos = Math.floor(diferenciaMs / 1000 / 60);
+            inputTiempo.value = diferenciaMinutos;
+          };
+
+          // Escuchar cambios en los inputs "desde" y "hasta"
+          inputDesde.addEventListener('change', calcularTiempo);
+          inputHasta.addEventListener('change', calcularTiempo);
+          const selectDescripcion = document.getElementById('descripcion');
+          const selectSubdescripcion = document.getElementById('subdescripcion');
+
+          // Función para cargar los datos en el select de descripción
+          const cargarCodigosParada = async () => {
+            try {
+              // Realizar la solicitud al backend
+              const response = await fetch('/users/codigos_mecanizado');
+              if (!response.ok) {
+                throw new Error('Error al obtener los datos');
+              }
+
+              // Parsear los datos
+              const codigos = await response.json();
+
+              // Crear un Set para obtener valores únicos de 'codigo'
+              const codigosUnicos = [...new Set(codigos.map(codigo => codigo.codigo))];
+
+              // Limpiar el select
+              selectDescripcion.innerHTML = '<option value="">Selecciona un código</option>';
+
+              // Agregar un option por cada código único
+              codigosUnicos.forEach(codigo => {
+                const option = document.createElement('option');
+                option.value = codigo; // Asignar el código al value
+                option.textContent = codigo; // Mostrar solo el código
+                selectDescripcion.appendChild(option);
+              });
+
+              // Agregar evento para actualizar el select de subdescripción
+              selectDescripcion.addEventListener('change', () => {
+                const codigoSeleccionado = selectDescripcion.value;
+
+                // Filtrar las descripciones asociadas al código seleccionado
+                const descripciones = codigos
+                  .filter(codigo => codigo.codigo === codigoSeleccionado)
+                  .map(codigo => codigo.descripcion);
+
+                // Actualizar el select de subdescripción
+                actualizarSubdescripcion(descripciones);
+              });
+
+            } catch (error) {
+              console.error(error);
+              selectDescripcion.innerHTML = '<option value="">Error al cargar los datos</option>';
+            }
+          };
+
+          // Función para actualizar el select de subdescripción
+          const actualizarSubdescripcion = (descripciones) => {
+            // Limpiar el select
+            selectSubdescripcion.innerHTML = '';
+
+            if (descripciones.length === 0) {
+              selectSubdescripcion.innerHTML = '<option value="">Sin opciones disponibles</option>';
+              return;
+            }
+
+            // Agregar un option por cada descripción
+            descripciones.forEach(descripcion => {
+              const option = document.createElement('option');
+              option.value = descripcion; // Asignar la descripción al value
+              option.textContent = descripcion; // Mostrar la descripción
+              selectSubdescripcion.appendChild(option);
+            });
+          };
+
+          // Llamar a la función para cargar los datos
+          cargarCodigosParada();
+        })
+
+        
     </body>
 </html>

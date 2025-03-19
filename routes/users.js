@@ -1997,43 +1997,65 @@ router.get('/produccion/mecanizado/paradaMaquina', (req, res) => {
     });
   }
 });
-router.post('/produccion/mecanizado/editParada',(req,res)=>{
-  if (req.session.loggedin && req.session.rol=="users" && req.session.sector=="mecanizado") {
+router.post('/produccion/mecanizado/editParada', (req, res) => {
+  if (req.session.loggedin && req.session.rol === "users" && req.session.sector === "mecanizado") {
     connectToDatabase((error, conexion) => {
-      let fecha = req.body.fecha_p;
-  let turno = req.body.turno_p;
-  let maquina = req.body.maquina_p;
-  let desde = req.body.desde;
-  let hasta = req.body.hasta ?  req.body.hasta : null;
-  let descripcion = req.body.descripcion;
-  let tiempo = req.body.tiempo ? req.body.tiempo : 0; // Esto podría ser calculado si no se incluye en el formulario
-  let idRegProd = req.body.id_regProd;
-  let obs = req.body.obs ? req.body.obs : null;
-  let subdesc = req.body.subdescripcion ? req.body.subdescripcion : null; 
+      if (error) {
+        res.status(500).send("Error al conectar con la base de datos.");
+        return;
+      }
 
-  // Consulta SQL para insertar los datos
-  const query = `UPDATE paradas_mecanizado
-SET fecha=?,turno=?,maquina=?,desde=?,hasta=?,descripcion=?,tiempo=?,idRegProd=?,obs=?,subdescripcion=? WHERE id=?`
+      const fecha = req.body.fecha_p || null;
+      const turno = req.body.turno_p || null;
+      const maquina = req.body.maquina_p || null;
+      const desde = req.body.desde || null;
+      const hasta = req.body.hasta || null;
+      const descripcion = req.body.descripcion || null;
+      const tiempo = req.body.tiempo || 0;
+      const idRegProd = req.body.id_regProd || null; // Importante: Validar nulo explícitamente
+      const obs = req.body.obs || null;
+      const subdesc = req.body.subdescripcion || null;
+      const id = req.body.id;
 
-  // Ejecución de la consulta
-  conexion.query(query, [fecha, turno, maquina, desde, hasta, descripcion, tiempo, idRegProd, obs,subdesc], (err, result) => {
-    conexion.release();
-    if (err) {
-      res.send(err);
-    }else{
-      res.redirect(`/users/produccion/mecanizado/editRegistro?id=${idRegProd}`)
-    }
-    
-  });
+      const query = `
+        UPDATE paradas_mecanizado 
+        SET 
+          fecha = ?,
+          turno = ?,
+          maquina = ?,
+          desde = ?,
+          hasta = ?,
+          descripcion = ?,
+          tiempo = ?,
+          
+          obs = ?,
+          subdescripcion = ?
+        WHERE 
+          id = ?;
+      `;
 
-      })
+      const valores = [fecha, turno, maquina, desde, hasta, descripcion, tiempo, obs, subdesc, id];
+
+      // Depuración
+      console.log("Consulta SQL:", query);
+      console.log("Valores:", valores);
+
+      conexion.query(query, valores, (err, result) => {
+        conexion.release();
+        if (err) {
+          console.error("Error al ejecutar la consulta:", err);
+          res.status(500).send("Error en la consulta.");
+        } else {
+          res.redirect(`/users/produccion/mecanizado/editRegistro?id=${idRegProd[0]}`);
+        }
+      });
+    });
   } else {
-    res.render('login',{
-      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+    res.render('login', {
+      mensaje: "No está logeado o no tiene autorización para este sitio. Verifique sus credenciales."
+    });
   }
-
-  
-})
+});
 router.get('/produccion/mecanizado/paradahs', (req, res) => {
   if (req.session.loggedin && req.session.rol === "users" && req.session.sector ==="mecanizado") {
       connectToDatabase((error, conexion) => {
@@ -2070,21 +2092,36 @@ router.get('/produccion/mecanizado/editParada',(req,res)=>{
         let sql = `SELECT * FROM paradas_mecanizado WHERE id=${id};`;
         conexion.query(sql,(error,result)=>{
           if (!error) {
+              // hs inicio
+          let diahi = (result[0].desde.getUTCDate() < 10 ? '0' : '') + result[0].desde.getUTCDate();
+          let meshi = (result[0].desde.getMonth() + 1 < 10 ? '0' : '') + (result[0].desde.getMonth() + 1);
+          let fhi = result[0].desde.getUTCFullYear() + "-" + meshi + "-" + diahi + "T" + 
+                    (result[0].desde.getHours() < 10 ? '0' : '') + result[0].desde.getHours() + ":" + 
+                    (result[0].desde.getMinutes() < 10 ? '0' : '') + result[0].desde.getMinutes();
+
+          // hs fin
+          let diahf = (result[0].hasta.getUTCDate() < 10 ? '0' : '') + result[0].hasta.getUTCDate();
+          let meshf = (result[0].hasta.getMonth() + 1 < 10 ? '0' : '') + (result[0].hasta.getMonth() + 1);
+          let fhf = result[0].hasta.getUTCFullYear() + "-" + meshf + "-" + diahf + "T" + 
+          (result[0].hasta.getHours() < 10 ? '0' : '') + result[0].hasta.getHours() + ":" + 
+          (result[0].hasta.getMinutes() < 10 ? '0' : '') + result[0].hasta.getMinutes();
               const formattedResults = result.map(row => {
               const tiempoCalculado = Math.floor((new Date(row.hasta) - new Date(row.desde)) / (1000 * 60)); // Tiempo en minutos
               return {
                 id: row.id,
                 id_regProd: row.id_regProd,
-                fecha: new Date(row.fecha).toLocaleDateString('es-AR'), // Formatear la fecha
+                fecha: fechaEdit(row.fecha), // Formatear la fecha
                 maquina: row.maquina,
-                desde: new Date(row.desde).toLocaleString('es-AR'), // Formatear la hora
-                hasta: new Date(row.hasta).toLocaleString('es-AR'),
+                
+                desde: fhi, // Formatear la hora
+                hasta: fhf,
                 turno: row.turno,
                 obs: row.obs,
                 tiempo: row.tiempo || tiempoCalculado, // Usar el tiempo calculado si está en 0
                 descripcion: row.descripcion,
                 subdescipcion:row.subdescripcion,
               };
+              console.log(formattedResults)
             });
             res.render('users/produccion/mecanizado/editParada',{result:formattedResults})
           }
