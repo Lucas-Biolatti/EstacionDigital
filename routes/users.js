@@ -2036,9 +2036,7 @@ router.post('/produccion/mecanizado/editParada', (req, res) => {
 
       const valores = [fecha, turno, maquina, desde, hasta, descripcion, tiempo, obs, subdesc, id];
 
-      // Depuración
-      console.log("Consulta SQL:", query);
-      console.log("Valores:", valores);
+     
 
       conexion.query(query, valores, (err, result) => {
         conexion.release();
@@ -2064,8 +2062,18 @@ router.get('/produccion/mecanizado/paradahs', (req, res) => {
           }
           
           let fecha = req.query.fecha
-          let sql = `SELECT descripcion,SUM(tiempo) AS tiempo FROM paradas_mecanizado
-            WHERE fecha = '${fecha}' GROUP BY descripcion ORDER BY SUM(tiempo) desc`;
+          let sql = `SELECT 
+                        maquina,
+                        descripcion,
+                        subdescripcion,
+                        SUM(tiempo) AS total_tiempo
+                    FROM 
+                        paradas_mecanizado
+                    WHERE fecha='${fecha}'
+                    GROUP BY 
+                        maquina, descripcion, subdescripcion
+                    ORDER BY 
+                        maquina ASC, descripcion ASC, subdescripcion ASC;`;
           conexion.query(sql,(error,result)=>{
             conexion.release();
             if (!error) {
@@ -2132,4 +2140,22 @@ router.get('/produccion/mecanizado/editParada',(req,res)=>{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 })
+router.get('/produccion/mecanizado/eliminarParada',(req,res)=>{
+  
+  if (req.session.loggedin && req.session.rol=="users" && req.session.sector=="mecanizado") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+        let sql = `DELETE FROM paradas_mecanizado WHERE id=${req.query.id}`
+        conexion.query(sql,(error)=>{
+          conexion.release();
+          res.render('users/produccion/mecanizado/regProd',{nombre:`${req.session.apellido}, ${req.session.nombre}`,mensaje:`se Elimino correctamente el registro N° ${req.query.id}`})
+        })
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+  })
 module.exports = router;

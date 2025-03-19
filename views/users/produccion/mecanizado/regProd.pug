@@ -9,9 +9,9 @@
     <link href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link href="/assets/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="/stylesheets/dashboard.css" rel="stylesheet">
-    <style> 
-      
-    </style>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.3.1/css/rowGroup.dataTables.min.css">
+    
 
   </head>
   <body>
@@ -312,21 +312,17 @@
                       <!-- Agregar más filas según sea necesario -->
                   </tbody>
               </table>
-          <h4>Paradas de Máquinas</h1>
-          <div class="container mt-4">
-              <div class="row">
-                  <div class="col-md-6 col-lg-4">
-                      <canvas id="grafico1"></canvas>
-                  </div>
-                  <div class="col-md-6 col-lg-4">
-                      <canvas id="grafico2"></canvas>
-                  </div>
-                  <div class="col-md-6 col-lg-4">
-                      <canvas id="grafico3"></canvas>
-                  </div>
-                  
-              </div>
-          </div>
+          
+          h4 Tabla de Paradas
+          table#tabla-dinamica
+            thead
+              tr
+                th Máquina
+                th Descripción
+                th Subdescripción
+                th Tiempo Total
+            tbody
+              
           
             
         </main>
@@ -435,6 +431,11 @@
         </div>
       </div>
     </div>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/rowgroup/1.3.1/js/dataTables.rowGroup.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" ></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -841,7 +842,23 @@
 
         const fetchData3 = () => {
             const fecha = dateInput.value;
-
+            if ($.fn.dataTable.isDataTable('#tabla-dinamica')) {
+                $('#tabla-dinamica').DataTable().destroy();
+            }
+             // Inicializar DataTable con la configuración deseada
+              const tabla = $('#tabla-dinamica').DataTable({
+                  paging: true,
+                  searching: true,
+                  ordering: true,
+                  responsive: true,
+                  rowGroup: {
+                      dataSrc: 0, // Agrupar por la primera columna (Máquina)
+                      
+                  },
+                  language: {
+                      url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
+                  }
+              });
             fetch(`/users/produccion/mecanizado/paradahs?fecha=${fecha}`)
                 .then(response => response.json())
                 .then(dat => {
@@ -849,8 +866,22 @@
                     const labels = dat.map(e => e.descripcion);
                     const dataValues = dat.map(e => e.tiempo);
                     const total = dataValues.reduce((sum, val) => sum + Number(val), 0); // Calcular total
+                    
+                    // Reiniciar la tabla
+                    tabla.clear();
+                    dat.forEach(row => {
+                      tabla.row.add([
+                        row.maquina,
+                        row.descripcion,
+                        row.subdescripcion,
+                        row.total_tiempo
+                      ]);
+                    });
+                      // Redibujar la tabla
+                    tabla.draw();
 
-                    console.log(total)
+                    
+                   
                     // Crear o actualizar el gráfico
                     const ctx3 = document.getElementById('grafico3').getContext('2d');
                     
