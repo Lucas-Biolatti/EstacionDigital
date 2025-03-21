@@ -2150,7 +2150,7 @@ router.get('/produccion/mecanizado/eliminarParada',(req,res)=>{
         let sql = `DELETE FROM paradas_mecanizado WHERE id=${req.query.id}`
         conexion.query(sql,(error)=>{
           conexion.release();
-          res.render('users/produccion/mecanizado/regProd',{nombre:`${req.session.apellido}, ${req.session.nombre}`,mensaje:`se Elimino correctamente el registro N° ${req.query.id}`})
+          res.redirect('users/produccion/mecanizado/editRegistro?id=${req.}',{nombre:`${req.session.apellido}, ${req.session.nombre}`,mensaje:`se Elimino correctamente el registro N° ${req.query.id}`})
         })
       })
   } else {
