@@ -838,6 +838,22 @@
                   }
               });
         };
+        const addDeleteEvent = () => {
+            // Delegación de eventos para los enlaces "eliminar-dato"
+            document.querySelectorAll('.eliminar-dato').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+
+
+                const confirmacion = confirm("¿Estás seguro de que deseas eliminar este registro?");
+                if (confirmacion) {
+                    window.location.href = link.getAttribute('href');
+                } else {
+                                console.log("Eliminación cancelada");
+                            }
+                        });
+                    });
+                };
         let chart3;
 
         const fetchData3 = () => {
@@ -883,9 +899,9 @@
                     
                    
                     // Crear o actualizar el gráfico
-                    const ctx3 = document.getElementById('grafico3').getContext('2d');
+                    //const ctx3 = document.getElementById('grafico3').getContext('2d');
                     
-                    if (!chart3) {
+                    /*if (!chart3) {
                         chart3 = new Chart(ctx3, {
                             type: 'doughnut', // Gráfico de dona
                             data: {
@@ -930,7 +946,7 @@
                         chart3.data.labels = labels;
                         chart3.data.datasets[0].data = dataValues;
                         chart3.update();
-                    }
+                    }*/
                 })
                 .catch(error => console.log('Error al cargar los datos para fetchData3:', error));
         
@@ -941,7 +957,7 @@
             fetchData();
             fetchData2();
             chart.update();
-            chart3.update();
+            //chart3.update();
              fetchData3();
         });
 
