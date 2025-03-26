@@ -2063,17 +2063,18 @@ router.get('/produccion/mecanizado/paradahs', (req, res) => {
           
           let fecha = req.query.fecha
           let sql = `SELECT 
-                        maquina,
-                        descripcion,
-                        subdescripcion,
-                        SUM(tiempo) AS total_tiempo
+                      maquina,
+                      turno,
+                      descripcion,
+                      subdescripcion,
+                      SUM(tiempo) AS total_tiempo
                     FROM 
-                        paradas_mecanizado
+                      paradas_mecanizado
                     WHERE fecha='${fecha}'
                     GROUP BY 
-                        maquina, descripcion, subdescripcion
+                      maquina,turno,descripcion
                     ORDER BY 
-                        maquina ASC, descripcion ASC, subdescripcion ASC;`;
+                      maquina ASC,turno ASC`;
           conexion.query(sql,(error,result)=>{
             conexion.release();
             if (!error) {
@@ -2150,7 +2151,7 @@ router.get('/produccion/mecanizado/eliminarParada',(req,res)=>{
         let sql = `DELETE FROM paradas_mecanizado WHERE id=${req.query.id}`
         conexion.query(sql,(error)=>{
           conexion.release();
-          res.redirect(`users/produccion/mecanizado/editRegistro?id=${req.query.idReg}`)
+          res.redirect(`/users/produccion/mecanizado/editRegistro?id=${req.query.idReg}`)
         })
       })
   } else {

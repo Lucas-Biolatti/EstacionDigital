@@ -753,7 +753,22 @@
       document.addEventListener('DOMContentLoaded', () => {
       // ID del registro de producción (puedes obtenerlo dinámicamente si es necesario)
       const idReg = document.getElementById('id').value;
+      const addDeleteEvent = () => {
+            // Delegación de eventos para los enlaces "eliminar-dato"
+            document.querySelectorAll('.eliminar-dato').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
 
+
+                const confirmacion = confirm("¿Estás seguro de que deseas eliminar este registro?");
+                if (confirmacion) {
+                    window.location.href = link.getAttribute('href');
+                } else {
+                                console.log("Eliminación cancelada");
+                            }
+                        });
+                    });
+                };
       // Llamada al endpoint
       fetch(`/users/produccion/mecanizado/paradaMaquina?idReg=${idReg}`)
         .then(response => {
@@ -792,6 +807,7 @@
             // Agregar la fila a la tabla
             tableBody.appendChild(row);
           });
+          addDeleteEvent();
         })
         .catch(error => {
           console.error('Error:', error);

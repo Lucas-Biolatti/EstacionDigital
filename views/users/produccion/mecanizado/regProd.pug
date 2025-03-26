@@ -318,6 +318,7 @@
             thead
               tr
                 th Máquina
+                th Turno
                 th Descripción
                 th Subdescripción
                 th Tiempo Total
@@ -872,7 +873,7 @@
                       
                   },
                   language: {
-                      url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
+                      "url": "https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
                   }
               });
             fetch(`/users/produccion/mecanizado/paradahs?fecha=${fecha}`)
@@ -888,6 +889,7 @@
                     dat.forEach(row => {
                       tabla.row.add([
                         row.maquina,
+                        row.turno,
                         row.descripcion,
                         row.subdescripcion,
                         row.total_tiempo

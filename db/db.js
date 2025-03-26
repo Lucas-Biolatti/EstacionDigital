@@ -1,8 +1,20 @@
 
 const mysql = require('mysql2');
 
-const pool = mysql.createPool({
+/*const pool = mysql.createPool({
     host: '172.16.4.199',
+    user: 'lbiolatti',
+    password: 'diego2015',
+    database: 'EstacionDigital',
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0,
+    connectTimeout: 10000, // Tiempo máximo para establecer conexión
+    acquireTimeout: 30000, // Tiempo máximo para obtener una conexión del pool
+    keepAliveInitialDelay: 10000, // Mantén viva la conexión
+});*/
+const pool = mysql.createPool({
+    host: '172.16.41.49',
     user: 'lbiolatti',
     password: 'diego2015',
     database: 'EstacionDigital',
