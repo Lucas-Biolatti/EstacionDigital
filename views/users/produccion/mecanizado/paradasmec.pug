@@ -125,17 +125,57 @@
                     | #{mensaje}
                 else
                     | <!-- No se muestra nada si no hay mensaje -->
-                <div class="d-flex justify-content-between align-items-center">
+                <div class="container mt-4">
+                <!-- Sección para cambiar la consulta -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
                     <div class="btn-group me-2">
                         <label class="form-label me-2" for="fini">Desde</label>
                         <input type="date" name="fini" class="form-control" id="fini">
-                        <label class="form-label me-2" for="fini">Hasta</label>
-                        <input type="date" name="fini" class="form-control" id="ffin">
+                        <label class="form-label me-2" for="ffin">Hasta</label>
+                        <input type="date" name="ffin" class="form-control" id="ffin">
                         <button type="button" class="btn btn-sm btn-outline-secondary me-2" id="consultar">
-                            <span data-feather="search"></span>  Consultar
+                            <span data-feather="search"></span> Consultar
                         </button>
-                        
+                    </div>
                 </div>
+
+                <!-- Contenedor principal -->
+                <div class="row">
+                    <!-- Gráfico -->
+                    <div class="col-lg-6 col-12 mb-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">Disponibilidad entre Máquinas</h5>
+                                <canvas id="lineChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Tabla -->
+                    <div class="col-lg-6 col-12 mb-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">Datos de Producción</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Máquina</th>
+                                                <th>TP</th>
+                                                <th>Paradas</th>
+                                                <th>T</th>
+                                                <th>Disponibilidad</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="dataTableBody">
+                                            <!-- Contenido dinámico -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
                     
         </main>
       </div>
@@ -150,7 +190,101 @@
     
     script.
       feather.replace({ 'aria-hidden': 'true' })
-      
+      // Variables de referencia
+        const consultarBtn = document.getElementById('consultar');
+        const finiInput = document.getElementById('fini');
+        const ffinInput = document.getElementById('ffin');
+        let chartInstance;
+
+        // Evento para el botón consultar
+        consultarBtn.addEventListener('click', () => {
+            const fini = finiInput.value;
+            const ffin = ffinInput.value;
+
+            if (!fini || !ffin) {
+                alert('Por favor, selecciona un rango de fechas.');
+                return;
+            }
+
+            // Fetch de datos
+            fetch(`/users/produccion/mecanizado/paradas_mec?fini=${fini}&ffin=${ffin}`)
+                .then(response => response.json())
+                .then(data => {
+                    clearTableAndChart();
+                    populateTable(data);
+                    createChart(data);
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        });
+
+        // Limpiar tabla y gráfico
+        function clearTableAndChart() {
+            // Limpiar la tabla
+            const tableBody = document.getElementById('dataTableBody');
+            tableBody.innerHTML = '';
+
+            // Destruir gráfico existente si lo hay
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+        }
+
+        // Rellenar la tabla
+        function populateTable(data) {
+            const tableBody = document.getElementById('dataTableBody');
+            tableBody.innerHTML = '';
+            data.forEach(item => {
+                const row = `
+                    <tr>
+                        <td>${item.maquina}</td>
+                        <td>${item.tp}</td>
+                        <td>${item.paradas}</td>
+                        <td>${item.t}</td>
+                        <td>${item.disp}</td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        // Crear el gráfico
+        function createChart(data) {
+            const labels = data.map(item => item.maquina);
+            const disponibilidad = data.map(item => item.disp);
+
+            const ctx = document.getElementById('lineChart').getContext('2d');
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Disponibilidad',
+                        data: disponibilidad,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderWidth: 2,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Disponibilidad entre Máquinas'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
         
       
 

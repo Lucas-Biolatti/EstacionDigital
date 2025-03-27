@@ -2173,4 +2173,26 @@ router.get('/produccion/mecanizado/paradas',function (req,res){
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 })
+router.get('/produccion/mecanizado/paradas_mec',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="users" &&   req.session.sector==="mecanizado"||req.session.rol=="gerencia") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+        let fini = req.query.fini;
+        let ffin = req.query.ffin;
+        const sql=`CALL mec_paradasEntreFecha('${fini}','${ffin}')`
+        conexion.query(sql,(error,result)=>{
+          if (!error) {
+            res.send(result[0]);
+          } else{
+            res.send("Error en la consulta:" + error)
+          }
+        })
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+})
 module.exports = router;
