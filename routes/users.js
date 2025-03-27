@@ -1826,7 +1826,7 @@ let observaciones = req.body.observaciones ? req.body.observaciones : null;
 // Página 2: Control 1
 let modelo = req.body.modelo ? req.body.modelo : null;
 let kit = req.body.kit ? req.body.kit : null;
-let tiempo_prog = req.body.tiempo_prog ? req.body.tiempo_prog : 0;
+let tiempo_prog = req.body.tiempo_prog ? req.body.tiempo_prog : 120;
 let programadas = req.body.programadas ? req.body.programadas : 0;
 let aprobadas = req.body.aprobadas ? req.body.aprobadas : 0;
 let op_int = req.body.op_int ? req.body.op_int : 0;
@@ -1835,7 +1835,7 @@ let scrap = req.body.scrap ? req.body.scrap : 0;
 // Página 3: Control 2
 let modelo2 = req.body.modelo2 ? req.body.modelo2 : null;
 let kit2 = req.body.kit2 ? req.body.kit2 : null;
-let tiempo_prog2 = req.body.tiempo_prog2 ? req.body.tiempo_prog2 : 0;
+let tiempo_prog2 = req.body.tiempo_prog2 ? req.body.tiempo_prog2 : 120;
 let programadas2 = req.body.programadas2 ? req.body.programadas2 : 0;
 let aprobadas2 = req.body.aprobadas2 ? req.body.aprobadas2 : 0;
 let op_int2 = req.body.op_int2 ? req.body.op_int2 : 0;
@@ -1844,7 +1844,7 @@ let scrap2 = req.body.scrap2 ? req.body.scrap2 : 0;
 // Página 4: Control 3
 let modelo3 = req.body.modelo3 ? req.body.modelo3 : null;
 let kit3 = req.body.kit3 ? req.body.kit3 : null;
-let tiempo_prog3 = req.body.tiempo_prog3 ? req.body.tiempo_prog3 : 0;
+let tiempo_prog3 = req.body.tiempo_prog3 ? req.body.tiempo_prog3 : 120;
 let programadas3 = req.body.programadas3 ? req.body.programadas3 : 0;
 let aprobadas3 = req.body.aprobadas3 ? req.body.aprobadas3 : 0;
 let op_int3 = req.body.op_int3 ? req.body.op_int3 : 0;
@@ -1853,7 +1853,7 @@ let scrap3 = req.body.scrap3 ? req.body.scrap3 : 0;
 // Página 5: Control 4
 let modelo4 = req.body.modelo4 ? req.body.modelo4 : null;
 let kit4 = req.body.kit4 ? req.body.kit4 : null;
-let tiempo_prog4 = req.body.tiempo_prog4 ? req.body.tiempo_prog4 : 0;
+let tiempo_prog4 = req.body.tiempo_prog4 ? req.body.tiempo_prog4 : 120;
 let programadas4 = req.body.programadas4 ? req.body.programadas4 : 0;
 let aprobadas4 = req.body.aprobadas4 ? req.body.aprobadas4 : 0;
 let op_int4 = req.body.op_int4 ? req.body.op_int4 : 0;
@@ -2159,4 +2159,18 @@ router.get('/produccion/mecanizado/eliminarParada',(req,res)=>{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
   })
+//Vista de Paradas
+router.get('/produccion/mecanizado/paradas',function (req,res){
+  if (req.session.loggedin && req.session.rol=="users" &&   req.session.sector==="mecanizado"||req.session.rol=="gerencia") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+        res.render('users/produccion/mecanizado/paradasmec')
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+})
 module.exports = router;
