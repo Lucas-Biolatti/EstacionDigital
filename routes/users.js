@@ -2100,6 +2100,7 @@ router.get('/produccion/mecanizado/editParada',(req,res)=>{
         let idRegProd = req.query.idRegProd;
         let sql = `SELECT * FROM paradas_mecanizado WHERE id=${id};`;
         conexion.query(sql,(error,result)=>{
+          conexion.release();
           if (!error) {
               // hs inicio
           let diahi = (result[0].desde.getUTCDate() < 10 ? '0' : '') + result[0].desde.getUTCDate();
@@ -2162,12 +2163,8 @@ router.get('/produccion/mecanizado/eliminarParada',(req,res)=>{
 //Vista de Paradas
 router.get('/produccion/mecanizado/paradas',function (req,res){
   if (req.session.loggedin && req.session.rol=="users" &&   req.session.sector==="mecanizado"||req.session.rol=="gerencia") {
-    connectToDatabase((error, conexion) => {
-      if (error) {
-          return res.status(500).send('Error de conexión a la base de datos');
-      }
-        res.render('users/produccion/mecanizado/paradasmec')
-      })
+    
+      res.render('users/produccion/mecanizado/paradasmec')
   } else {
     res.render('login',{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
@@ -2183,6 +2180,7 @@ router.get('/produccion/mecanizado/paradas_mec',(req,res)=>{
         let ffin = req.query.ffin;
         const sql=`CALL mec_paradasEntreFecha('${fini}','${ffin}')`
         conexion.query(sql,(error,result)=>{
+          conexion.release();
           if (!error) {
             res.send(result[0]);
           } else{
@@ -2212,8 +2210,9 @@ router.get('/produccion/mecanizado/paradas_desc',(req,res)=>{
           GROUP BY descripcion
           ORDER BY t desc`
         conexion.query(sql,(error,result)=>{
+          conexion.release();
           if (!error) {
-            res.send(result[0]);
+            res.send(result);
           } else{
             res.send("Error en la consulta:" + error)
           }
@@ -2239,10 +2238,12 @@ router.get('/produccion/mecanizado/paradas_subdesc',(req,res)=>{
           WHERE fecha <= '${ffin}'
           AND fecha >= '${fini}'
           GROUP BY subdescripcion
-          ORDER BY t desc`
+          ORDER BY t desc
+          LIMIT 10`
         conexion.query(sql,(error,result)=>{
+          conexion.release();
           if (!error) {
-            res.send(result[0]);
+            res.send(result);
           } else{
             res.send("Error en la consulta:" + error)
           }

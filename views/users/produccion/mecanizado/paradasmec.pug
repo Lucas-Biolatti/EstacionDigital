@@ -14,7 +14,8 @@
     script(src="https://code.jquery.com/jquery-3.6.0.min.js")
     script(src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js")
 
-    
+    <link href="../javascripts/dashboard.js">
+    <link href="../assets/dist/js/bootstrap.bundle.min.js">
 
 
     <link href="/assets/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -136,7 +137,7 @@
               <!-- Contenedor principal -->
               <div class="row">
                   <!-- Gráfico 1 -->
-                  <div class="col-lg-4 col-12 mb-4">
+                  <div class="col-lg-6 col-12 mb-4">
                       <div class="card shadow-sm">
                           <div class="card-body">
                               <h5 class="card-title">Disponibilidad entre Máquinas</h5>
@@ -145,19 +146,19 @@
                       </div>
                   </div>
                   <!-- Gráfico 2 -->
-                  <div class="col-lg-4 col-12 mb-4">
+                  <div class="col-lg-6 col-12 mb-4">
                       <div class="card shadow-sm">
                           <div class="card-body">
-                              <h5 class="card-title">Gráfico 2</h5>
+                              <h5 class="card-title">Codigos de Paradas</h5>
                               <canvas id="lineChart2"></canvas>
                           </div>
                       </div>
                   </div>
                   <!-- Gráfico 3 -->
-                  <div class="col-lg-4 col-12 mb-4">
+                  <div class="col-lg-12 col-12 mb-4">
                       <div class="card shadow-sm">
                           <div class="card-body">
-                              <h5 class="card-title">Gráfico 3</h5>
+                              <h5 class="card-title">Sub Codigos de Paradas</h5>
                               <canvas id="lineChart3"></canvas>
                           </div>
                       </div>
@@ -166,15 +167,15 @@
                   <div class="col-12 mb-4">
                       <div class="card shadow-sm">
                           <div class="card-body">
-                              <h5 class="card-title">Datos de Producción</h5>
+                              <h5 class="card-title">Detalle de Paradas</h5>
                               <div class="table-responsive">
                                   <table class="table table-striped">
                                       <thead>
                                           <tr>
                                               <th>Máquina</th>
-                                              <th>TP</th>
-                                              <th>Paradas</th>
-                                              <th>T</th>
+                                              <th>Tiempo PRogramado</th>
+                                              <th>Cantidad de Paradas</th>
+                                              <th>Tirmpo de parada</th>
                                               <th>Disponibilidad</th>
                                           </tr>
                                       </thead>
@@ -196,8 +197,7 @@
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" ></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="../javascripts/dashboard.js"></script>
-    <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     
     script.
@@ -210,114 +210,138 @@
 
         // Evento para el botón consultar
         consultarBtn.addEventListener('click', () => {
-            const fini = finiInput.value;
-            const ffin = ffinInput.value;
+          const fini = finiInput.value;
+          const ffin = ffinInput.value;
 
-            if (!fini || !ffin) {
-                alert('Por favor, selecciona un rango de fechas.');
-                return;
-            }
+          if (!fini || !ffin) {
+              alert('Por favor, selecciona un rango de fechas.');
+              return;
+          }
 
-            // Fetch de datos
-            fetch(`/users/produccion/mecanizado/paradas_mec?fini=${fini}&ffin=${ffin}`)
-                .then(response => response.json())
-                .then(data => {
-                    clearTableAndCharts();
-                    populateTable(data);
-                    createCharts(data);
-                })
-                .catch(error => console.error('Error fetching data:', error));
-        });
+          // Limpiar tabla y gráficos antes de cargar nuevos datos
+          clearTableAndCharts();
 
-        // Limpiar tabla y gráficos
-        function clearTableAndCharts() {
-            // Limpiar la tabla
-            const tableBody = document.getElementById('dataTableBody');
-            tableBody.innerHTML = '';
+          // Fetch de datos
+          fetch(`/users/produccion/mecanizado/paradas_mec?fini=${fini}&ffin=${ffin}`)
+              .then(response => response.json())
+              .then(data => {
+                  populateTable(data);
+                  createCharts(data);
+              })
+              .catch(error => console.error('Error fetching data:', error));
 
-            // Destruir gráficos existentes
-            Object.values(chartInstances).forEach(chart => {
-                if (chart) {
-                    chart.clear();
-                    chart.destroy();
-                }
-            });
-            chartInstances = {};
-        }
+          fetch(`/users/produccion/mecanizado/paradas_desc?fini=${fini}&ffin=${ffin}`)
+              .then(response => response.json())
+              .then(data2 => {
+                  createCharts2(data2);
+                  console.log(data2);
+              })
+              .catch(error => console.error('Error fetching data2:', error));
 
-        // Crear gráficos
-        function createCharts(data) {
-            createChart('lineChart', data.map(item => item.maquina), data.map(item => parseFloat(item.disp)), 'Disponibilidad (%)', 'Disponibilidad entre Máquinas');
-            createChart('lineChart2', data.map(item => item.maquina), data.map(item => parseFloat(item.tp)), 'TP', 'Tiempo de Producción');
-            createChart('lineChart3', data.map(item => item.maquina), data.map(item => parseFloat(item.paradas)), 'Paradas', 'Cantidad de Paradas');
-        }
+          fetch(`/users/produccion/mecanizado/paradas_subdesc?fini=${fini}&ffin=${ffin}`)
+              .then(response => response.json())
+              .then(data3 => {
+                  createCharts3(data3);
+                  console.log(data3);
+              })
+              .catch(error => console.error('Error fetching data3:', error));
+      });
 
-        function createChart(canvasId, labels, data, label, title) {
-            const ctx = document.getElementById(canvasId).getContext('2d');
-            chartInstances[canvasId] = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: label,
-                        data: data,
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                        borderWidth: 2,
-                        tension: 0.4,
-                        pointRadius: 5,
-                        pointBackgroundColor: 'rgba(54, 162, 235, 1)',
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top',
-                        },
-                        title: {
-                            display: true,
-                            text: title
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: label
-                            }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Máquinas'
-                            }
-                        }
-                    }
-                }
-            });
-        }
+      // Limpiar tabla y gráficos
+      function clearTableAndCharts() {
+          // Limpiar la tabla
+          const tableBody = document.getElementById('dataTableBody');
+          tableBody.innerHTML = '';
 
-        // Rellenar la tabla
-        function populateTable(data) {
-            const tableBody = document.getElementById('dataTableBody');
-            tableBody.innerHTML = '';
-            data.forEach(item => {
-                const row = `
-                    <tr>
-                        <td>${item.maquina}</td>
-                        <td>${item.tp}</td>
-                        <td>${item.paradas}</td>
-                        <td>${item.t}</td>
-                        <td>${item.disp}</td>
-                    </tr>
-                `;
-                tableBody.innerHTML += row;
-            });
-        }
-        
+          // Destruir gráficos existentes
+          Object.values(chartInstances).forEach(chart => {
+              if (chart) {
+                  chart.clear();
+                  chart.destroy();
+              }
+          });
+          chartInstances = {};
+      }
+
+      // Crear gráficos
+      function createCharts(data) {
+          createChart('lineChart', data.map(item => item.maquina), data.map(item => parseFloat(item.disp)), 'Disponibilidad (%)', 'Disponibilidad entre Máquinas', 'line');
+      }
+
+      function createCharts2(data) {
+          createChart('lineChart2', data.map(item => item.descripcion), data.map(item => item.t), 'Codigos', 'Minutos por Codigo', 'bar');
+      }
+
+      function createCharts3(data) {
+          createChart('lineChart3', data.map(item => item.subdescripcion), data.map(item => item.t), 'Paradas', 'Minutos por Paradas', 'bar');
+      }
+
+      // Crear un gráfico genérico
+      function createChart(canvasId, labels, data, label, title, type) {
+          const ctx = document.getElementById(canvasId).getContext('2d');
+          chartInstances[canvasId] = new Chart(ctx, {
+              type: type,
+              data: {
+                  labels: labels,
+                  datasets: [{
+                      label: label,
+                      data: data,
+                      borderColor: 'rgba(54, 162, 235, 1)',
+                      backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                      borderWidth: 2,
+                      tension: 0.4,
+                      pointRadius: 5,
+                      pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                  }]
+              },
+              options: {
+                  responsive: true,
+                  plugins: {
+                      legend: {
+                          display: true,
+                          position: 'top',
+                      },
+                      title: {
+                          display: true,
+                          text: title,
+                      }
+                  },
+                  scales: {
+                      y: {
+                          beginAtZero: true,
+                          title: {
+                              display: true,
+                              text: label,
+                          }
+                      },
+                      x: {
+                          title: {
+                              display: true,
+                              text: 'Máquinas',
+                          }
+                      }
+                  }
+              }
+          });
+      }
+
+      // Rellenar la tabla
+      function populateTable(data) {
+          const tableBody = document.getElementById('dataTableBody');
+          tableBody.innerHTML = '';
+          data.forEach(item => {
+              const row = `
+                  <tr>
+                      <td>${item.maquina}</td>
+                      <td>${item.tp}</td>
+                      <td>${item.paradas}</td>
+                      <td>${item.t}</td>
+                      <td>${item.disp}</td>
+                  </tr>
+              `;
+              tableBody.innerHTML += row;
+          });
+      }
       
 
         
