@@ -1717,7 +1717,7 @@ router.get('/produccion/inyeccion/montaje',(req,res)=>{
 
 //MECANIZADO
 router.get('/produccion/mecanizado/regProd',(req,res)=>{
-  if (req.session.loggedin && req.session.rol === "users" && req.session.sector==="mecanizado") {
+  if (req.session.loggedin && req.session.rol === "users" && req.session.sector==="mecanizado" ||req.session.rol=="gerencia") {
     res.render('users/produccion/mecanizado/regProd',{nombre:`${req.session.apellido}, ${req.session.nombre}`})
   } else {
     res.render('login',{
@@ -1763,7 +1763,7 @@ router.post('/produccion/mecanizado/iniciarTurno',(req,res)=>{
   }
 })
 router.get('/produccion/mecanizado/reg_prod_fecha',(req,res)=>{
-  if (req.session.loggedin && req.session.rol=="users" && req.session.sector=="mecanizado") {
+  if (req.session.loggedin && req.session.rol=="users" && req.session.sector=="mecanizado" ||req.session.rol=="gerencia") {
     connectToDatabase((error, conexion) => {
       if (error) {
           return res.status(500).send('Error de conexión a la base de datos');
@@ -1785,7 +1785,7 @@ router.get('/produccion/mecanizado/reg_prod_fecha',(req,res)=>{
   }
 })
 router.get('/produccion/mecanizado/editRegistro',(req,res)=>{
-  if (req.session.loggedin && req.session.rol=="users" && req.session.sector=="mecanizado") {
+  if (req.session.loggedin && req.session.rol=="users" && req.session.sector=="mecanizado" ||req.session.rol=="gerencia") {
     connectToDatabase((error, conexion) => {
       if (error) {
           return res.status(500).send('Error de conexión a la base de datos');
@@ -1948,7 +1948,7 @@ router.post('/produccion/mecanizado/parada_mecanizado',(req,res)=>{
   }
 })
 router.get('/produccion/mecanizado/paradaMaquina', (req, res) => {
-  if (req.session.loggedin && req.session.rol === "users" && req.session.sector === "mecanizado") {
+  if (req.session.loggedin && req.session.rol === "users" && req.session.sector === "mecanizado" ||req.session.rol=="gerencia") {
     connectToDatabase((error, conexion) => {
       if (error) {
         return res.status(500).send('Error de conexión a la base de datos');
@@ -2055,7 +2055,7 @@ router.post('/produccion/mecanizado/editParada', (req, res) => {
   }
 });
 router.get('/produccion/mecanizado/paradahs', (req, res) => {
-  if (req.session.loggedin && req.session.rol === "users" && req.session.sector ==="mecanizado") {
+  if (req.session.loggedin && req.session.rol === "users" && req.session.sector ==="mecanizado" ||req.session.rol=="gerencia") {
       connectToDatabase((error, conexion) => {
           if (error) {
               return res.status(500).send('Error de conexión a la base de datos');

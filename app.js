@@ -14,6 +14,7 @@ var SeguridadRouter = require('./routes/Seguridad');
 var MantenimientoRouter = require('./routes/Mantenimiento');
 var AdminRouter = require('./routes/Admin');
 var QsbRouter = require('./routes/Qsb');
+var GerenciaRouter = require('./routes/Gerencia');
 const flash = require('connect-flash');
 
 var app = express();
@@ -56,6 +57,7 @@ app.use('/Seguridad',SeguridadRouter);
 app.use('/Mantenimiento',MantenimientoRouter);
 app.use('/Admin',AdminRouter);
 app.use('/Qsb',QsbRouter);
+app.use('/Gerencia',GerenciaRouter);
 
 
 // catch 404 and forward to error handler

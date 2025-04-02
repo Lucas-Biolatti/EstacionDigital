@@ -1,0 +1,1 @@
+2025-04-01T23:52:08.978Z - Error de conexión a la base de datos: Error: connect ETIMEDOUT
