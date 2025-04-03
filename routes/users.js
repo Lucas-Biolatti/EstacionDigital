@@ -2254,4 +2254,85 @@ router.get('/produccion/mecanizado/paradas_subdesc',(req,res)=>{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 })
+
+//CCTT DEPOSITO
+router.get('/produccion/cctt/deposito', (req, res) => {
+  if (req.session.loggedin && req.session.rol=="users" || req.session.rol=="gerencia") {
+    
+    res.render('users/produccion/cctt/deposito')
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+ });
+//estado de deposito
+router.get('/produccion/cctt/pallets', (req, res) => {
+  if (req.session.loggedin && req.session.rol=="users" || req.session.rol=="gerencia") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      conexion.query('SELECT * FROM pallets', (err, results) => {
+        conexion.release();
+        if (err) {
+            res.status(500).json({ error: err });
+            return;
+        }
+        res.json(results);
+    });
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+ });
+ // Agregar un pallet
+router.post('/produccion/cctt/pallets', (req, res) => {
+  
+if (req.session.loggedin && req.session.rol=="users" || req.session.rol=="gerencia") {
+  connectToDatabase((error, conexion) => {
+    if (error) {
+        return res.status(500).send('Error de conexión a la base de datos');
+    }
+    const { codigo_pieza, cantidad, fila, posicion, altura,pieza,kit } = req.body;
+    conexion.query('INSERT INTO pallets (codigo_pieza, cantidad, fila, posicion, altura) VALUES (?, ?, ?, ?, ?)', 
+    [codigo_pieza, cantidad, fila, posicion, altura,pieza,kit], (err, result) => {
+        conexion.release();
+        if (err) {
+            res.status(500).json({ error: err });
+            return;
+        }
+        res.json({ id: result.insertId, message: 'Pallet agregado' });
+    });
+    })
+} else {
+  res.render('login',{
+    mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+}
+ 
+});
+// Eliminar un pallet
+router.delete('/produccion/cctt/pallets/:id', (req, res) => {
+  if (req.session.loggedin && req.session.rol=="users" || req.session.rol=="gerencia") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+      const { id } = req.params;
+      conexion.query('DELETE FROM pallets WHERE id = ?', [id], (err, result) => {
+        conexion.release();
+          if (err) {
+              res.status(500).json({ error: err });
+              return;
+          }
+          res.json({ message: 'Pallet eliminado' });
+      });
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+  
+});
+
 module.exports = router;

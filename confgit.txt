@@ -28,7 +28,7 @@ const sql2 = `UPDATE datos_matriceria SET fecha=${req.body.fecha}, molde=${req.b
 
 const { connectToDatabase } = require('../db/db');
 
-if (req.session.loggedin && req.session.rol=="Qsb") {
+if (req.session.loggedin && req.session.rol=="users" || req.session.rol=="gerencia") {
     connectToDatabase((error, conexion) => {
       if (error) {
           return res.status(500).send('Error de conexión a la base de datos');
