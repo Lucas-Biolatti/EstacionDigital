@@ -40,13 +40,15 @@ html(lang="es")
                 margin-right: 5px; /* Espaciado entre los números y la grilla */
             }
             .fila-numero {
-                width: 30px; /* Tamaño fijo para alinear con las filas de la grilla */
-                height: 50px; /* Debe coincidir con la altura de las celdas */
+                width: 30px; /* Mantiene el ancho fijo */
+                height: 80px; /* Coincide con la altura de las celdas */
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 font-weight: bold;
                 border: 1px solid #000;
+                box-sizing: border-box;
+                margin-bottom:5px;
             }
             .grid-container {
                 display: grid;
@@ -98,9 +100,38 @@ html(lang="es")
             th {
                 background-color: #f2f2f2;
             }
+            .search-container {
+                margin: 10px 0;
+                text-align: center;
+            }
+
+            #searchInput {
+                padding: 5px;
+                width: 200px;
+            }
+
+            #searchButton {
+                padding: 5px 10px;
+                cursor: pointer;
+            }
+
+            .highlight {
+                border: 3px solid red;
+            }
+            .search-message {
+                margin: 10px 0;
+                color: red;
+                font-weight: bold;
+                display: none; /* Ocultarlo inicialmente */
+            }
     
     body
         h1 Gestión de Stock - Depósito
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Buscar código...">
+            <button id="searchButton">Buscar</button>
+        </div>
+        <div id="searchMessage" class="search-message"></div>
         div.container
             div
                 div.grid-wrapper
@@ -116,24 +147,59 @@ html(lang="es")
                     tbody#stockTable
         
         // Modal para agregar pallets
-        div#modal.modal.fade(tabindex="-1", aria-labelledby="modalLabel", aria-hidden="true")
-            div.modal-dialog
-                div.modal-content
-                    div.modal-header
-                        h5#modalLabel.modal-title Agregar Pallet
-                        button.btn-close(type="button", data-bs-dismiss="modal", aria-label="Cerrar")
-                    div.modal-body
-                        div.mb-3
-                            label.form-label(for="codigo_pieza") Código de pieza:
-                            input#codigo_pieza.form-control(type="text", placeholder="Ingrese código de pieza")
-                        div.mb-3
-                            label.form-label(for="altura") Altura:
-                            select#altura.form-select
-                                option(value="baja") Baja
-                                option(value="alta") Alta
-                    div.modal-footer
-                        button#guardarPallet.btn.btn-primary Guardar
-                        button.btn.btn-secondary(type="button", data-bs-dismiss="modal") Cerrar
+        <div class="modal fade" id="modal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Agregar Pallet</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="modalForm">
+                    <div class="mb-3">
+                        <label for="selectPieza" class="form-label">Pieza</label>
+                        <select id="selectPieza" class="form-select" required></select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="selectKit" class="form-label">Kit</label>
+                        <select id="selectKit" class="form-select" required>
+                        <option value="k1">K1</option>
+                        <option value="k2">K2</option>
+                        <option value="k3">K3</option>
+                        <option value="k4">K4</option>
+                        <option value="k5">K5</option>
+                        <option value="k6">K6</option>
+                        <option value="k7">K7</option>
+                        <option value="k8">K8</option>
+                        <option value="k9">K9</option>
+                        <option value="k10">K10</option>
+                        <option value="k11">K11</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="codigo_pieza" class="form-label">Código de Pieza</label>
+                        <input id="codigo_pieza" type="text" class="form-control" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="altura" class="form-label">Altura</label>
+                        <select id="altura" class="form-select" required>
+                        <option value="baja">Baja</option>
+                        <option value="alta">Alta</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cantidad" class="form-label">Cantidad</label>
+                        <input id="cantidad" type="number" class="form-control" min="1" required>
+                    </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" id="guardarPallet" class="btn btn-primary">Guardar</button>
+                </div>
+                </div>
+            </div>
+            </div>
         
         script(src="https://code.jquery.com/jquery-3.5.1.js")
         script(src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js")
@@ -146,6 +212,45 @@ html(lang="es")
         
        
         script.
+            document.getElementById('searchButton').addEventListener('click', () => {
+                const searchValue = document.getElementById('searchInput').value.trim().toLowerCase();
+                const searchMessage = document.getElementById('searchMessage');
+
+                // Elimina los resaltados previos
+                document.querySelectorAll('.cell').forEach(cell => {
+                    cell.classList.remove('highlight');
+                });
+
+                searchMessage.style.display = 'none'; // Oculta el mensaje al iniciar una nueva búsqueda
+
+                if (searchValue) {
+                    let matchFound = false; // Variable para rastrear si hay coincidencias
+
+                    // Busca y resalta las celdas que contienen el texto
+                    document.querySelectorAll('.cell').forEach(cell => {
+                        const lowText = cell.querySelector('.half[data-altura="baja"]')?.textContent.toLowerCase() || '';
+                        const highText = cell.querySelector('.half[data-altura="alta"]')?.textContent.toLowerCase() || '';
+
+                        if (lowText.includes(searchValue) || highText.includes(searchValue)) {
+                            cell.classList.add('highlight');
+                            matchFound = true;
+                        }
+                    });
+
+                    // Si no hay coincidencias, muestra el mensaje
+                    if (!matchFound) {
+                        searchMessage.textContent = 'No se encontraron coincidencias.';
+                        searchMessage.style.display = 'block';
+                    }
+                }
+            });
+
+            // Permite buscar presionando Enter en el input
+            document.getElementById('searchInput').addEventListener('keyup', (e) => {
+                if (e.key === 'Enter') {
+                    document.getElementById('searchButton').click();
+                }
+            });
             const filas = 34;
             const columnas = 8;
             const grid = document.getElementById('grid');
@@ -228,23 +333,50 @@ html(lang="es")
             }
 
             document.addEventListener('DOMContentLoaded', () => {
+                fetchModelos(); // Cargar los datos al inicio
                 fetchPallets();
 
                 document.getElementById('guardarPallet').addEventListener('click', async () => {
-                    const codigo_pieza = codigoPiezaInput.value.trim();
-                    const altura = alturaSelect.value;
-                    if (!codigo_pieza) return;
+                    const pieza = document.getElementById('selectPieza').value;
+                    const kit = document.getElementById('selectKit').value;
+                    const codigo_pieza = document.getElementById('codigo_pieza').value;
+                    const altura = document.getElementById('altura').value;
+                    const cantidad = parseInt(document.getElementById('cantidad').value, 10);
+
+                    if (!pieza || !kit || !codigo_pieza || cantidad <= 0) return;
 
                     await fetch('/users/produccion/cctt/pallets', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ codigo_pieza, cantidad: 1, fila: selectedFila, posicion: selectedCol, altura })
+                        body: JSON.stringify({ pieza, kit, codigo_pieza, cantidad, fila: selectedFila, posicion: selectedCol, altura })
                     });
 
                     modal.hide();
                     fetchPallets();
                 });
             });
+
+            // Fetch para precargar los modelos y los códigos de pieza
+            async function fetchModelos() {
+                const response = await fetch('/users/modelos'); // Cambiar la ruta según tu API
+                const modelos = await response.json();
+
+                const selectPieza = document.getElementById('selectPieza');
+                selectPieza.innerHTML = modelos.map(modelo => `<option value="${modelo.modelo}">${modelo.modelo}</option>`).join('');
+
+                selectPieza.addEventListener('change', () => {
+                    const selectedModel = modelos.find(modelo => modelo.modelo === selectPieza.value);
+                    if (selectedModel) {
+                        document.getElementById('codigo_pieza').value = selectedModel.proyecto;
+                    }
+                });
+
+                // Precargar el primer modelo al abrir el modal
+                if (modelos.length > 0) {
+                    selectPieza.value = modelos[0].modelo;
+                    document.getElementById('codigo_pieza').value = modelos[0].proyecto;
+                }
+            }
 
             function openModal(fila, col, altura) {
                 selectedFila = fila;
