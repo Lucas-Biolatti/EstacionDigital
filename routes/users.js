@@ -2295,7 +2295,7 @@ if (req.session.loggedin && req.session.rol=="users" || req.session.rol=="gerenc
         return res.status(500).send('Error de conexión a la base de datos');
     }
     const { codigo_pieza, cantidad, fila, posicion, altura,pieza,kit } = req.body;
-    conexion.query('INSERT INTO pallets (codigo_pieza, cantidad, fila, posicion, altura) VALUES (?, ?, ?, ?, ?)', 
+    conexion.query('INSERT INTO pallets (codigo_pieza, cantidad, fila, posicion, altura, pieza, kit) VALUES (?, ?, ?, ?, ?,?,?)', 
     [codigo_pieza, cantidad, fila, posicion, altura,pieza,kit], (err, result) => {
         conexion.release();
         if (err) {

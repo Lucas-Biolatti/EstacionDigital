@@ -66,6 +66,7 @@ html(lang="es")
                 cursor: pointer;
                 background-color: lightgray;
                 position: relative;
+                font-size: 0.5rem;
             }
             .half {
                 width: 100%;
@@ -212,6 +213,7 @@ html(lang="es")
         
        
         script.
+            //Opcion de busqueda dentro de las celdas
             document.getElementById('searchButton').addEventListener('click', () => {
                 const searchValue = document.getElementById('searchInput').value.trim().toLowerCase();
                 const searchMessage = document.getElementById('searchMessage');
@@ -260,7 +262,7 @@ html(lang="es")
             const alturaSelect = document.getElementById('altura');
             let selectedFila, selectedCol;
             const stockTable = document.getElementById('stockTable');
-
+            //Armado del Grid y ordenamiento de datos
             function renderGrid(pallets) {
                 grid.style.setProperty('--columnas', columnas);
                 grid.style.gridTemplateColumns = `repeat(${columnas}, 1fr)`; 
@@ -293,7 +295,7 @@ html(lang="es")
 
                         if (palletLow) {
                             lowPart.classList.add('occupied-low');
-                            lowPart.textContent = `${palletLow.codigo_pieza} - cant: ${palletLow.cantidad}`;
+                            lowPart.textContent = `${palletLow.codigo_pieza} - ${palletLow.pieza} ${palletLow.kit} cant: ${palletLow.cantidad}`;
                             stockSummary[palletLow.codigo_pieza] = (stockSummary[palletLow.codigo_pieza] || 0) + palletLow.cantidad;
                             lowPart.onclick = () => removePallet(palletLow.id);
                         } else {
@@ -302,7 +304,7 @@ html(lang="es")
 
                         if (palletHigh) {
                             highPart.classList.add('occupied-high');
-                            highPart.textContent = `${palletHigh.codigo_pieza} - cant: ${palletHigh.cantidad}`;
+                            highPart.textContent = `${palletHigh.codigo_pieza} - ${palletHigh.pieza} ${palletHigh.kit} cant: ${palletHigh.cantidad}`;
                             stockSummary[palletHigh.codigo_pieza] = (stockSummary[palletHigh.codigo_pieza] || 0) + palletHigh.cantidad;
                             highPart.onclick = () => removePallet(palletHigh.id);
                         } else {
@@ -316,7 +318,7 @@ html(lang="es")
                 }
                 renderStockSummary(stockSummary);
             }
-
+            //Manejo del Stock
             function renderStockSummary(stockSummary) {
                 stockTable.innerHTML = '';
                 for (const [codigo, cantidad] of Object.entries(stockSummary)) {
@@ -325,13 +327,13 @@ html(lang="es")
                     stockTable.appendChild(row);
                 }
             }
-
+            //Trae los datos de la BD
             async function fetchPallets() {
                 const response = await fetch('/users/produccion/cctt/pallets');
                 const pallets = await response.json();
                 renderGrid(pallets);
             }
-
+            //MAneja los datos que van en las celdas
             document.addEventListener('DOMContentLoaded', () => {
                 fetchModelos(); // Cargar los datos al inicio
                 fetchPallets();
@@ -349,8 +351,9 @@ html(lang="es")
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ pieza, kit, codigo_pieza, cantidad, fila: selectedFila, posicion: selectedCol, altura })
+                        
                     });
-
+                    console.log(pieza, kit, codigo_pieza)
                     modal.hide();
                     fetchPallets();
                 });
@@ -377,7 +380,7 @@ html(lang="es")
                     document.getElementById('codigo_pieza').value = modelos[0].proyecto;
                 }
             }
-
+            //Manejo del formulario modal
             function openModal(fila, col, altura) {
                 selectedFila = fila;
                 selectedCol = col;
@@ -385,17 +388,14 @@ html(lang="es")
                 codigoPiezaInput.value = '';
                 modal.show();
             }
-
-
-                
-
-                    async function removePallet(id) {
-                        if (!confirm('¿Eliminar este pallet?')) return;
-                        await fetch(`/users/produccion/cctt/pallets/${id}`, { method: 'DELETE' });
-                        fetchPallets();
-                    }
+            //Manejo para eliminar palet del stock
+            async function removePallet(id) {
+                if (!confirm('¿Eliminar este pallet?')) return;
+                await fetch(`/users/produccion/cctt/pallets/${id}`, { method: 'DELETE' });
+                fetchPallets();
+            }
 
                 
                     
 
-                    fetchPallets();
+            fetchPallets();
