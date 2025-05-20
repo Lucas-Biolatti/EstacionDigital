@@ -59,7 +59,7 @@ html(lang="es")
                                         td= i.idSector
                                         td= i.Descripcion
                                         td 
-                                            a(href="/users/ordenMtto?id="+i.idSector+"&nombre="+i.Descripcion)
+                                            a(href="ordenMtto?id="+i.idSector+"&nombre="+i.Descripcion)
                                                 button(class="button btn-primary") Nueva Orden  
                                             a(href="listarOrden?id="+i.idSector+"&nombre="+i.Descripcion)
                                                 button(class="button btn-success") Ver Todas  
