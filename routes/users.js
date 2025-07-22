@@ -6,6 +6,19 @@ var conexion = require('../db/db');
 const fs = require('fs');
 const { connectToDatabase } = require('../db/db');
 const { nextTick } = require('process');
+const multer = require('multer');
+const path = require('path');
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage: storage });
 /* GET users listing. */
 function fecha(x){
   let f = new Date(x);
@@ -843,15 +856,16 @@ router.get('/agregarTarjeta',(req,res)=>{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 });
-router.post('/agregarTarjeta',(req,res)=>{
+router.post('/agregarTarjeta', upload.single('foto'), (req, res) => {
   if (req.session.loggedin) {
     connectToDatabase((error, conexion) => {
       if (error) {
-          return res.status(500).send('Error de conexión a la base de datos');
+        return res.status(500).send('Error de conexión a la base de datos');
       }
-      const sql="INSERT INTO tarjetasAm (sector,fecha,tipo,detecto,equipo,prioridad,disposicion,descripcion) VALUES (?,?,?,?,?,?,?,?)";
-    
-      conexion.query(sql,[
+
+      const sql = "INSERT INTO tarjetasAm (sector, fecha, tipo, detecto, equipo, prioridad, disposicion, descripcion, foto) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+      conexion.query(sql, [
         req.body.sector,
         req.body.fecha,
         req.body.tipo,
@@ -859,20 +873,21 @@ router.post('/agregarTarjeta',(req,res)=>{
         req.body.equipo,
         req.body.prioridad,
         req.body.disposicion,
-        req.body.descripcion],(error)=>{
-          conexion.release();
-          if (!error) {
-              res.redirect(`autonomo?mensaje=✔Se Agrego correctamente la Tarjeta en el sector ${req.body.sector}✔`);
-          }else{
-              res.redirect(`autonomo?mensaje=🚫No Se Pudo Agregar la Tarjeta🚫`)
-          }
-      })
-
-      })
-    
+        req.body.descripcion,
+        req.file ? req.file.filename : null
+      ], (error) => {
+        conexion.release();
+        if (!error) {
+          res.redirect(`autonomo?mensaje=✔Se Agrego correctamente la Tarjeta en el sector ${req.body.sector}✔`);
+        } else {
+          res.redirect(`autonomo?mensaje=🚫No Se Pudo Agregar la Tarjeta🚫`);
+        }
+      });
+    });
   } else {
-    res.render('login',{
-      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+    res.render('login', {
+      mensaje: `No está logeado o no tiene autorización para este sitio. Verifique sus credenciales`
+    });
   }
 });
 router.get('/listadoTarjetas',(req,res)=>{
@@ -1069,7 +1084,9 @@ router.delete('/eliminarTarjeta',(req,res)=>{
     res.render('login',{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
-})
+});
+
+
 
 //DATOS PARA USAR CON FETCH
 router.get('/items',(req,res)=>{
@@ -1161,13 +1178,26 @@ router.get('/ordenes',(req,res)=>{
   
 });
 router.get('/tarjetas',(req,res)=>{
-  const sql="select * from tarjetasAm where 1"
+  if (req.session.loggedin && req.session.rol=="users" || req.session.rol=="gerencia") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+        const sql="select * from tarjetasAm where 1"
   conexion.query(sql,(error,fields)=>{
     conexion.release();
       if (!error) {
           res.send(fields);
-      }
+      }else{{
+        console.log(error);
+      }}
   })
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+  
 });
 router.get('/montadores',(req,res)=>{
   connectToDatabase((error, conexion) => {

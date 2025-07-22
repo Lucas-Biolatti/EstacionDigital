@@ -185,7 +185,7 @@ router.get('/datosSector',(req,res)=>{
             return res.status(500).send('Error de conexión a la base de datos');
         }
 
-        const sql = "SELECT sector_resp,COUNT(id) AS cantidad FROM planAccionQsb WHERE estado != 'Completado' GROUP BY sector ORDER BY cantidad desc";
+        const sql = "SELECT sector_resp,COUNT(id) AS cantidad FROM planAccionQsb WHERE estado != 'Completado' GROUP BY sector_resp ORDER BY cantidad desc";
         conexion.query(sql, (error, results) => {
           conexion.release();
             if (!error) {
