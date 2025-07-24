@@ -53,7 +53,7 @@ html(lang="es")
                 hr
                 
                 
-                form(action="agregarTarjeta", method="post") 
+                form(action="agregarTarjeta", method="post" enctype="multipart/form-data") 
                     .row 
                         .col-sm-4
                             input(type="hidden", name="id" value=id)
@@ -73,7 +73,7 @@ html(lang="es")
                         .col-sm-4 
                             label(for="equipo" class="form-label") Equipo 
                             select(name="equipo" class="form-select" id="equipo" required)
-                                option ...Elija un equipo...
+                                option(value="" disabled) ...Elija un equipo...
                                 each i in result
                                     option= i.Descripcion
                         .col-sm-4 

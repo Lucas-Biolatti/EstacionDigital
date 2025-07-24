@@ -6,19 +6,9 @@ var conexion = require('../db/db');
 const fs = require('fs');
 const { connectToDatabase } = require('../db/db');
 const { nextTick } = require('process');
-const multer = require('multer');
 const path = require('path');
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/');
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname));
-    }
-});
-
-const upload = multer({ storage: storage });
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 /* GET users listing. */
 function fecha(x){
   let f = new Date(x);
@@ -930,7 +920,8 @@ router.get('/listadoTarjetas',(req,res)=>{
                       fecha_cierre:fcierre,
                       ejecutor:results[i].ejecutor,
                       acciones:results[i].acciones,
-                      duracion:results[i].duracion
+                      duracion:results[i].duracion,
+                      foto:results[i].foto
                   }
   
               resultadosazul.push(resultado) 
@@ -964,7 +955,8 @@ router.get('/listadoTarjetas',(req,res)=>{
                        fecha_cierre:fcierre,
                        ejecutor:results[i].ejecutor,
                        acciones:results[i].acciones,
-                       duracion:results[i].duracion
+                       duracion:results[i].duracion,
+                       foto:results[i].foto
                    }
    
                resultadosrojo.push(resultado) 
@@ -999,6 +991,7 @@ router.get('/editarTarjeta',(req,res)=>{
       let sql = "select * from tarjetasAm where id=?"
       let equipos = [];
       conexion.query("select * from equipo where sectorDesc = ?",[sector],(error,resultados)=>{
+          conexion.release();
          for (let i = 0; i < resultados.length; i++) {
               equipos.push(resultados[i]);    
           }
@@ -1027,13 +1020,24 @@ router.get('/editarTarjeta',(req,res)=>{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 });
-router.put('/editarTarjeta',(req,res)=>{
+router.post('/editarTarjeta',upload.single('foto'),(req,res)=>{
   if (req.session.loggedin) {
     connectToDatabase((error, conexion) => {
       if (error) {
           return res.status(500).send('Error de conexión a la base de datos');
       }
-      const sql="UPDATE tarjetasAm SET sector=?, fecha=?, tipo=?, detecto=?, equipo=?, prioridad=?, disposicion=?, descripcion=? WHERE id=?"
+      const nuevaFoto = req.file ? req.file.filename : req.body.fotoActual;
+      if (req.file && req.body.fotoActual) {
+        const rutaVieja = path.join(__dirname, '../uploads/', req.body.fotoActual);
+        fs.unlink(rutaVieja, (err) => {
+          if (err) {
+            console.error('No se pudo eliminar la imagen anterior:', err.message);
+          } else {
+            console.log('Imagen anterior eliminada:', req.body.fotoActual);
+          }
+        });
+      }
+      const sql="UPDATE tarjetasAm SET sector=?, fecha=?, tipo=?, detecto=?, equipo=?, prioridad=?, disposicion=?, descripcion=?,foto=? WHERE id=?"
     
       conexion.query(sql,[
         req.body.sector,
@@ -1044,6 +1048,7 @@ router.put('/editarTarjeta',(req,res)=>{
         req.body.prioridad,
         req.body.disposicion,
         req.body.descripcion,
+        nuevaFoto,
         req.body.id],(error)=>{
           conexion.release();
           if (!error) {
@@ -1085,6 +1090,29 @@ router.delete('/eliminarTarjeta',(req,res)=>{
       mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
   }
 });
+router.get('/resolverTarjeta',(req,res)=>{
+  if (req.session.loggedin && req.session.rol=="users" || req.session.rol=="gerencia") {
+    connectToDatabase((error, conexion) => {
+      if (error) {
+          return res.status(500).send('Error de conexión a la base de datos');
+      }
+        let id = req.query.id;
+        const sql = `SELECT * FROM tarjetasAm WHERE id = ${id}`;
+        conexion.query(sql,(err,result)=>{
+          conexion.release();
+          res.render('./users/autonomo/resolverTarjeta',{
+            result:result,
+            f:fecha(result[0].fecha),
+            fecha_cierre:result[0].fecha_cierre
+
+          })
+        }) 
+      })
+  } else {
+    res.render('login',{
+      mensaje:`No esta logeado o no tiene autorizacion para este sitio. Verifique sus credenciales`});
+  }
+})
 
 
 

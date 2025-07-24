@@ -50,38 +50,38 @@ html(lang="es")
                 hr
                 
                 
-                form(action="editarTarjeta?_method=PUT", method="post") 
+                form(action="editarTarjeta", method="post" enctype="multipart/form-data") 
                     .row 
-                        .col-4
+                        .col-sm-4
                             input(type="hidden", name="id" value=id)
                             input(type="hidden", name="sector" value=sector) 
                             label(for="fecha" class="form-label") Fecha
                             input(type="date", name="fecha" id="fecha" class="form-control" value=fecha required )
-                        .col-4 
+                        .col-sm-4 
                             label(for="tipo" class="form-label") Tipo
                             select(name="tipo" id="tipo" class="form-select" required)
                                 option(selected)=results[0].tipo
                                 option Mantenimiento Autonomo
                                 option Mantenimiento Profesional
-                        .col-4
+                        .col-sm-4
                             label(for="detecto" class="form-label") Detecto 
                             input(type="text" class="form-control" id="detecto" name="detecto" required value=results[0].detecto) 
                     br
                     .row 
-                        .col-4 
+                        .col-sm-4 
                             label(for="equipo" class="form-label") Equipo 
                             select(name="equipo" class="form-select" id="equipo" required)
                                 option(selected)=results[0].equipo
                                 each i in equipos
                                     option= i.Descripcion
-                        .col-4  
+                        .col-sm-4  
                             label(for="prioridad" class="form-label") Prioridad 
                             select(name="prioridad" id="prioridad" class="form-select" required)
                                 option(selected)=results[0].prioridad
                                 option A 
                                 option B
                                 option C
-                        .col-4
+                        .col-sm-4
                             label(for="disposicion" class="form-label") Disposicion de Maquina 
                             select(name="disposicion" id="disposicion" class="form-select" required)
                                 option(selected)=results[0].disposicion
@@ -92,9 +92,18 @@ html(lang="es")
                     h3 Descripción
                     hr
                     .row
-                        .col-12 
+                        .col-sm-6 
                             label(for="descripcion" class="form-label") Descripcion de la reparacion 
                             input(type="text" id="descripcion" class="form-control" name="descripcion" required value=results[0].descripcion)
+                        .col-sm-3 
+                            if results[0].foto
+                                p Imagen actual:
+                                a(href="/"+results[0].foto target="_blank")
+                                    img(src="/"+results[0].foto alt="Imagen actual" width="100")
+                                input(type="hidden", name="fotoActual", value=results[0].foto)
+                        .col-sm-3 
+                            label(for="foto" class="form-label") Imagen de lo detectado 
+                            input#foto(type="file", name="foto", class="form-control" )
                     br
                     div(class="d-grid gap-2 col-6 mx-auto mt-3 mb-5")
                         button(class="btn btn-success" type="submit") Modificar

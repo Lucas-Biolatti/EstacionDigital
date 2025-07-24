@@ -80,10 +80,12 @@ html(lang="es")
                         th Prioridad 
                         th Disposicion 
                         th Descripcion 
+                        th Foto
                         th Fecha de cierre 
                         th Ejecutor 
                         th Acciones 
                         th Duracion 
+                        
                         th Acciones
                     tbody
                         each i in azul 
@@ -96,6 +98,9 @@ html(lang="es")
                                 td= i.prioridad
                                 td= i.disposicion
                                 td= i.descripcion
+                                td
+                                    a(href="/"+i.foto target="_blank")
+                                        img(src="/"+i.foto alt="Foto" width="100")
                                 td= i.fecha_cierre
                                 td= i.ejecutor
                                 td= i.acciones
@@ -131,6 +136,7 @@ html(lang="es")
                         th Prioridad 
                         th Disposicion 
                         th Descripcion 
+                        th Foto
                         th Fecha de cierre 
                         th Ejecutor 
                         th Acciones 
@@ -147,6 +153,9 @@ html(lang="es")
                                 td= i.prioridad
                                 td= i.disposicion
                                 td= i.descripcion
+                                td
+                                    a(href="/"+i.foto target="_blank")
+                                        img(src="/"+i.foto alt="Foto" width="100")
                                 td= i.fecha_cierre
                                 td= i.ejecutor
                                 td= i.acciones
